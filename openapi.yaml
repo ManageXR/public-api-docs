@@ -298,6 +298,10 @@ components:
       basicAuth:
          type: http
          scheme: basic
+         description: |
+           Basic authentication with API Key ID as the username and API Key Secret as the password.
+           - **Username**: The API Key ID.
+           - **Password**: The API Key Secret.
 
 security:
    - basicAuth: []
