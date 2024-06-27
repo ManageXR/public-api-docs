@@ -41,7 +41,7 @@
     },
     {
       "name": "Feedback",
-      "url": "feedback"
+      "url": "/feedback"
     }
   ],
   "navigation": [
