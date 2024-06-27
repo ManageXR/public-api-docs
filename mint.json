@@ -82,7 +82,7 @@
       "group": "Commands",
       "pages": [
         "cli-reference/command/upload-app",
-        "api-reference/command/upload-file"
+        "cli-reference/command/upload-file"
       ]
     }
   ],
