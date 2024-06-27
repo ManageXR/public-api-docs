@@ -44,19 +44,7 @@
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "introduction"
       ]
     },
     {
