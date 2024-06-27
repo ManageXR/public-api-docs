@@ -5,7 +5,7 @@
     "dark": "/logo/mxr-dark-bg.svg",
     "light": "/logo/mxr-light-bg.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/mxr-fav.svg",
   "colors": {
     "primary": "#7761E5",
     "light": "#947FFF",
