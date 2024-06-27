@@ -22,12 +22,12 @@
       "url": "mailto:support@managexr.com"
     },
      {
-      "name": "Join Slack",
-      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
+      "name": "Sign In",
+      "url": "https://console.managexr.com/"
     }
   ],
   "topbarCtaButton": {
-    "name": "Web Console",
+    "name": "Get a Demo",
     "url": "https://console.managexr.com/"
   },
   "tabs": [
