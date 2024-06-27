@@ -59,7 +59,7 @@ paths:
                               online:
                                  type: boolean
                                  example: true
-                                 description: Whether the device is online
+                                 description: True if the device is online
                               osVersion:
                                  type: string
                                  example: 12
@@ -67,7 +67,7 @@ paths:
                               outOfDate:
                                  type: boolean
                                  example: false
-                                 description: The device is not compliant with its configuration on ManageXR
+                                 description: True if device is not compliant with its configuration on ManageXR
                               registerDate:
                                  type: string
                                  format: date-time
