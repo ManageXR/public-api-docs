@@ -34,6 +34,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "CLI Reference",
+      "url": "cli-reference"
     }
   ],
   "navigation": [
@@ -66,6 +70,12 @@
       "pages": [
         "api-reference/endpoint/get",
         "api-reference/endpoint/create"
+      ]
+    },
+    {
+      "group": "CLI Reference",
+      "pages": [
+        "cli-reference/introduction"
       ]
     }
   ],
