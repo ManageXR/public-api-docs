@@ -3,7 +3,7 @@ title: 'upload-app'
 description: 'Upload an app to your ManageXR organization'
 icon: 'grid'
 ---
-
+## Usage
 ```
 Usage: mxr-cli upload-app <apk-file>
 
@@ -43,3 +43,19 @@ Options:
                                                                        [boolean]
   -h, --help                             Show help                     [boolean]
 ```
+## Examples
+### 1. upload-app using JSON file auth
+```
+mxr-cli upload-app /path/to/apkfile.apk --api-key-file /path/to/api_key.json
+```
+### 2. upload-app using environment variable auth
+```
+MXR_API_KEY_ID="xxx" MXR_API_KEY_SECRET="xxx" mxr-cli upload-app /path/to/apkfile.apk
+```
+### 2. upload-app using command options
+In this example, we include an obb with the application
+
+```
+mxr-cli upload-app /path/to/apkfile.apk --obb-file  /path/to/obbfile.obb --title "Cool new app" --description "This app is amazing" --release-channel "Dev" --api-key-file /path/to/api_key.json
+```
+
