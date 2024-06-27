@@ -293,6 +293,50 @@ paths:
          responses:
             '200':
                description: Success
+   /organizations/{orgId}/devices/{deviceId}:
+      patch:
+         summary: Edit Device
+         description: Update device metadata and configuration 
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: deviceId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID (serial number) of the device.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           required: false
+                           description: Updated name of device
+                        configurationId:
+                           type: string
+                           required: false
+                           description: Updated id of configuration applied to device 
+                        notes:
+                           type: string
+                           required: false
+                           description: Updated device notes
+                  examples:
+                     example-update_name:
+                        summary: Update device name
+                        value:
+                           name: Taylor's Quest 3
+         responses:
+            '200':
+               description: Success
 components:
    securitySchemes:
       basicAuth:
