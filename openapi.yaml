@@ -299,7 +299,7 @@ components:
          type: http
          scheme: basic
          description: |
-           Basic authentication with API Key ID as the username and API Key Secret as the password.
+           API key based authentication where <encoded-value> is the Base64 encoding of `API_KEY_ID`:`API_KEY_SECRET`
            - **Username**: The API Key ID.
            - **Password**: The API Key Secret.
 
