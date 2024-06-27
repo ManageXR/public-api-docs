@@ -42,14 +42,25 @@ path/to/mxr-cli <command> [options]
 On Mac and Linux machines, you may need to grant executable permissions to the binary before you can run it. To do this, run ```chmod +x path/to/mxr-cli```.
 </Note>
 
-### Authenticate Requests
+### Authentication
 
-To authenticate each request, add an Authorization header with the contents:
+Each command must include valid authentication. Authenticate commands using ManageXR API Keys. 
+1. **Create an API Key**
+2. **Choose an authentication method for your commands**
 
-```
-Authorization: Basic <encoded-value>
-```
-where `<encoded-value>` is the Base64 encoding of `api_key_id:api_key_secret`. 
+    **a. Set environment variables**  for `MXR_API_KEY_ID` and `MXR_API_KEY_SECRET`
 
-If you're sending requests via curl or something like axios, you won't need to encode the id:secret pair.
+    _or_
+
+    **b. Provide a JSON file** as an `--api-key-file` argument to the command
+
+    JSON file format:
+    ```
+    { 
+      "id": "api_key_id", 
+      "secret": "api_key_secret" 
+    }
+    ```
+
+
 
