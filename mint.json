@@ -77,6 +77,13 @@
       "pages": [
         "cli-reference/introduction"
       ]
+    },
+        {
+      "group": "Commands",
+      "pages": [
+        "cli-reference/command/upload-app",
+        "api-reference/command/upload-file"
+      ]
     }
   ],
   "footerSocials": {
