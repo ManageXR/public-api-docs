@@ -261,17 +261,17 @@ paths:
                            type: object
                            description: Additional parameters for specific device commands
                   examples:
-                     example-1:
+                     sync:
                         summary: Sync command
                         value:
                            action: SYNC
-                     example-2:
+                     launch-ap:
                         summary: Launch App command
                         value:
                            action: LAUNCH_APP
                            data:
                               packageName: com.example.app
-                     example-3:
+                     launch-app-with-params:
                         summary: Launch app with parameters
                         value:
                            action: LAUNCH_APP
@@ -284,7 +284,7 @@ paths:
                                  arrayValue: [1.23, 4.56]
                                  mapValue:
                                     key: value
-                     example-4:
+                     launch-webxr-link:
                         summary: Launch webxr link
                         value:
                            action: LAUNCH_WEB_URL
