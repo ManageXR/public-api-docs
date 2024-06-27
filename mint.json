@@ -4,7 +4,7 @@
   "openapi": ["/openapi.yml"],
   "logo": {
     "dark": "/logo/mxr-dark-bg-developer.svg",
-    "light": "/logo/mxr-light-bg-developer.svg"
+    "light": "/logo/mxr-light-bg-with-developer.svg"
   },
   "favicon": "/mxr-fav.svg",
   "colors": {
