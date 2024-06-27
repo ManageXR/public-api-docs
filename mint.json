@@ -3,8 +3,8 @@
   "name": "ManageXR API",
   "openapi": ["/openapi.yml"],
   "logo": {
-    "dark": "/logo/mxr-dark-bg-developer.svg",
-    "light": "/logo/mxr-light-bg-with-developer.svg"
+    "dark": "/logo/mxr-dark-bg.svg",
+    "light": "/logo/mxr-light-bg.svg"
   },
   "favicon": "/mxr-fav.svg",
   "colors": {
