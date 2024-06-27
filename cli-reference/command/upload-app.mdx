@@ -52,10 +52,26 @@ mxr-cli upload-app /path/to/apkfile.apk --api-key-file /path/to/api_key.json
 ```
 MXR_API_KEY_ID="xxx" MXR_API_KEY_SECRET="xxx" mxr-cli upload-app /path/to/apkfile.apk
 ```
-### 2. upload-app using command options
-In this example, we include an obb with the application
+### 3. upload-app using command options
+This example uses the following options
+- `--obb-file` to upload an obb with the apk
+- `--title` to set the app title in ManageXR as "Cool new app"
+- `--description` to set the app description in ManageXR as  "This app is amazing"
+- `--release-channel` to publish the new app version to the "Dev" release channel
+
+and a JSON file for auth.
 
 ```
 mxr-cli upload-app /path/to/apkfile.apk --obb-file  /path/to/obbfile.obb --title "Cool new app" --description "This app is amazing" --release-channel "Dev" --api-key-file /path/to/api_key.json
+```
+
+### 4. upload-app with bundled files
+Upload an app with [bundled files](https://help.managexr.com/en/articles/8013220-bundle-files-with-your-app) and choose the location where the files should be installed on devices
+
+- `--bundle-directory` uploads files stored at /path/to/directory on local machine as bundled files
+- `/path/on/device` Optional path to location on device where bundled files will be installed. E.g., `Android/obb/com.your.app`
+
+```
+mxr-cli upload-app /path/to/apkFile.apk --bundle-directory /path/to/directory /path/on/device --api-key-file /path/to/api_key.json
 ```
 
