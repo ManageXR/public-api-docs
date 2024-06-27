@@ -20,7 +20,13 @@
     {
       "name": "Support",
       "url": "mailto:support@managexr.com"
+    },
+     {
+      "name": "Join Slack",
+      "icon": "slack",
+      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
     }
+
   ],
   "topbarCtaButton": {
     "name": "Web Console",
@@ -30,18 +36,6 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    }
-  ],
-    "anchors": [
-    {
-      "name": "Help Center",
-      "icon": "book-open-cover",
-      "url": "https://help.managexr.com"
-    },
-    {
-      "name": "Slack Community",
-      "icon": "slack",
-      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
     }
   ],
   "navigation": [
@@ -65,7 +59,7 @@
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "API Reference",
       "pages": [
         "api-reference/introduction"
       ]
