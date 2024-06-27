@@ -4,7 +4,7 @@ info:
    description: API documentation for ManageXR
    version: 1.0.0
 servers:
-   - url: https://api.managexr.com
+   - url: https://managexrapi.com
      description: ManageXR API Server
 paths:
    /organizations/{orgId}/devices:
