@@ -1,5 +1,33 @@
 ---
 title: 'upload-file'
-description: 'Description of your new file.'
+description: 'Upload a file to your ManageXR organization'
 icon: 'file'
 ---
+## Usage
+```
+Usage: mxr-cli upload-file <file-path>
+
+Positionals:
+  file-path, f  Path to file to upload                                  [string]
+
+Options:
+  -k, --api-key-file  Path to JSON file containing ManageXR API Key id and
+                      secret                                            [string]
+  -n, --name          Set file name in ManageXR. If not set, will use the
+                      existing file name.                               [string]
+  -d, --description   Set file description in ManageXR.                 [string]
+  -h, --help          Show help                                        [boolean]
+
+```
+## Examples
+### 1. upload-file using JSON file auth
+```
+mxr-cli upload-file /path/to/file.ext --api-key-file /path/to/api_key.json
+```
+### 2. upload-file and set the file's name and description on ManageXR
+```
+mxr-cli upload-file /path/to/file.ext --name "Fun File" --description "This is the best file ever" --api-key-file /path/to/api_key.json
+```
+
+
+
