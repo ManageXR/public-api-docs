@@ -1,33 +1,46 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'ManageXR API basics'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Base URL
 
-## Welcome
+The ManageXR API provides a RESTful way to access your organization and device data. We enforce HTTPS.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+All requests contain the following base URL:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://managexrapi.com
+```
 
 ## Authentication
+#### Create an API Key
+Go to Organization Settings > API Keys to generate a key
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+<Note>
+Email developers@managexr.com for early access to a single API key that allows you to control multiple organizations
+</Note>
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+#### Authenticate Requests
+
+To authenticate each request, add an Authorization header with the contents:
+
 ```
+Authorization: Basic encoded-credentials
+```
+where `encoded-credentials` is the Base64 encoding of `api_key_id:api_key_secret`. 
+
+If you're sending requests via curl or something like axios, you won't need to encode the id:secret pair.
+
+
+
+## Quotas & Limits
+
+API requests are subject to the following limits:
+- 10 requests per second per organization
+
+- 2.5 million requests per month per organization
+
+ 
+
+You will be given direct feedback if you are over quota and your requests will fail. If you have requirements above this and would like to discuss expanding your quota, contact us at support@managexr.com.
