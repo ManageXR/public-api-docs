@@ -38,17 +38,14 @@
     {
       "name": "CLI Reference",
       "url": "cli-reference"
-    },
-    {
-      "name": "Feedback",
-      "url": "/feedback"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
       "pages": [
-        "introduction"
+        "introduction",
+        "feedback"
       ]
     },
     {
