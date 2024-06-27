@@ -10,7 +10,7 @@ paths:
    /organizations/{orgId}/devices:
       get:
          summary: Get devices
-         description: Retrieve a list of all devices managed by a specific organization.
+         description: Retrieve all devices managed by an organization
          parameters:
             - name: orgId
               in: path
