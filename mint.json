@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "ManageXR API",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/mxr-dark-bg.svg",
+    "light": "/logo/mxr-light-bg.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
@@ -29,6 +29,18 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    }
+  ],
+    "anchors": [
+    {
+      "name": "Help Center",
+      "icon": "book-open-cover",
+      "url": "https://help.managexr.com"
+    },
+    {
+      "name": "Slack Community",
+      "icon": "slack",
+      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
     }
   ],
   "navigation": [
@@ -64,18 +76,6 @@
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
       ]
-    }
-  ],
-  "anchors": [
-    {
-      "name": "Help Center",
-      "icon": "book-open-cover",
-      "url": "https://help.managexr.com"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
     }
   ],
   "footerSocials": {
