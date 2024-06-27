@@ -41,12 +41,11 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Guides",
       "pages": [
         "essentials/markdown",
         "essentials/code",
