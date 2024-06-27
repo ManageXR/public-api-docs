@@ -320,15 +320,15 @@ paths:
                         name:
                            type: string
                            required: false
-                           description: Updated name of device
+                           description: Name of device
                         configurationId:
                            type: string
                            required: false
-                           description: Updated id of configuration applied to device 
+                           description: ID of configuration applied to device 
                         notes:
                            type: string
                            required: false
-                           description: Updated device notes
+                           description: Device notes
                   examples:
                      example-update_name:
                         summary: Update device name
