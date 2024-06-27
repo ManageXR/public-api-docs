@@ -1,5 +1,45 @@
 ---
 title: 'upload-app'
-description: 'Description of your new file.'
+description: 'Upload an app to your ManageXR organization'
 icon: 'grid'
 ---
+
+```
+Usage: mxr-cli upload-app <apk-file>
+
+Positionals:
+  apk-file, a  Path to APK file to upload                               [string]
+
+Options:
+  -k, --api-key-file                     Path to JSON file containing ManageXR
+                                         API Key id and secret          [string]
+  -o, --obb-file                         Path to OBB file associated with the
+                                         apk                            [string]
+  -t, --title                            Set app title in ManageXR. If not set,
+                                         will use previous app version's name or
+                                         parse name from APK.           [string]
+  -d, --description                      Set app description in ManageXR. If not
+                                         set, will use previous version's
+                                         description or leave blank.    [string]
+  -r, --release-channel                  Name of release channel. If release
+                                         channel with this name exists, the
+                                         release channel will be updated to
+                                         target this app version. If release
+                                         channel with this name does not exist,
+                                         create a new release channel targeting
+                                         this app version.              [string]
+      --version-label, --vl              An optional label to differentiate an
+                                         app from others with the same version
+                                         code and name.                 [string]
+  -v, --verbose                          If set, log additional output on
+                                         errors.                       [boolean]
+      --bundle-directory, --bd           Path to a local directory containing
+                                         files to upload as a bundle with the
+                                         App. Optionally, also a destination
+                                         path on the device for the files to be
+                                         uploaded to.                    [array]
+      --always-upload-all-files, --auaf  Skip MD5 checksums and always upload
+                                         all files in the bundle directory.
+                                                                       [boolean]
+  -h, --help                             Show help                     [boolean]
+```
