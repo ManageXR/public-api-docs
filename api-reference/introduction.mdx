@@ -26,9 +26,9 @@ Email developers@managexr.com for early access to a single API key that allows y
 To authenticate each request, add an Authorization header with the contents:
 
 ```
-Authorization: Basic encoded-credentials
+Authorization: Basic <encoded-value>
 ```
-where `encoded-credentials` is the Base64 encoding of `api_key_id:api_key_secret`. 
+where `<encoded-value>` is the Base64 encoding of `api_key_id:api_key_secret`. 
 
 If you're sending requests via curl or something like axios, you won't need to encode the id:secret pair.
 
