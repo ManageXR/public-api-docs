@@ -5,7 +5,7 @@ description: 'Use the ManageXR CLI to automate app uploads and deployments'
 
 ## Overview
 
-The ManageXR CLI is a useful tool to automate the process of uploading applications to ManageXR. You can use the CLI in your CI/CD pipeline to upload new app versions to your ManageXR organization and even publish the versions to named [release channels](https://help.managexr.com/en/articles/5518816-release-channels).
+The ManageXR CLI is a useful tool to automate the process of uploading applications to ManageXR. You can use the CLI in your CI/CD pipeline to upload new app versions to your ManageXR organization and publish versions to [release channels](https://help.managexr.com/en/articles/5518816-release-channels).
 
 ## Getting Started
 The `mxr-cli` is available as an NPM package or a binary executable. 
@@ -41,4 +41,16 @@ path/to/mxr-cli <command> [options]
 
 <Note>
 On Mac and Linux machines, you may need to grant executable permissions to the binary before you can run it. To do this, run ```chmod +x path/to/mxr-cli```.
-</Note>
+
+
+### Authenticate Requests
+
+To authenticate each request, add an Authorization header with the contents:
+
+```
+Authorization: Basic <encoded-value>
+```
+where `<encoded-value>` is the Base64 encoding of `api_key_id:api_key_secret`. 
+
+If you're sending requests via curl or something like axios, you won't need to encode the id:secret pair.
+
