@@ -38,6 +38,10 @@
     {
       "name": "CLI Reference",
       "url": "cli-reference"
+    },
+    {
+      "name": "Feedback",
+      "url": "feedback"
     }
   ],
   "navigation": [
@@ -51,7 +55,6 @@
       "group": "API Reference",
       "pages": [
         "api-reference/introduction",
-        "api-reference/feedback"
       ]
     },
     {
