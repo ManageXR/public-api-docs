@@ -68,19 +68,14 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
+      "name": "Help Center",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "https://help.managexr.com"
     },
     {
       "name": "Community",
       "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://join.slack.com/t/managexr-community/shared_invite/zt-2k0eq623k-hIUw2ScvEXDM1oUnBdSVRw"
     }
   ],
   "footerSocials": {
