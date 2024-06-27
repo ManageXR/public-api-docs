@@ -1,0 +1,316 @@
+openapi: 3.1.0
+info:
+   title: ManageXR API
+   description: API documentation for ManageXR
+   version: 1.0.0
+servers:
+   - url: https://api.managexr.com
+     description: ManageXR API Server
+paths:
+   /organizations/{orgId}/devices:
+      get:
+         summary: Get devices
+         description: Retrieve a list of all devices managed by a specific organization.
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: Authorization
+              in: header
+              required: true
+              schema:
+                 type: string
+              description: Bearer token for authorization
+         responses:
+            '200':
+               description: A list of devices
+               content:
+                  application/json:
+                     schema:
+                        type: array
+                        items:
+                           type: object
+                           properties:
+                              serial:
+                                 type: string
+                                 example: 2G0YC1ZF630NZA
+                                 description: The serial number of the device. Also serves as the ID on ManageXR.
+                              name:
+                                 type: string
+                                 example: Device_0024
+                                 description: The name given to the device on ManageXR
+                              mac:
+                                 type: string
+                                 example: CE:AF:07:47:E0:AE
+                                 description: Device MAC address
+                              model:
+                                 type: string
+                                 example: Quest 3
+                                 description: Device model
+                              manufacturer:
+                                 type: string
+                                 example: Oculus
+                                 description: Device manufacturer. Note, Meta devices report as Oculus
+                              notes:
+                                 type: string
+                                 example: With Taylor L
+                                 description: The notes given to a device on ManageXR
+                              batteryLevel:
+                                 type: number
+                                 example: 34
+                                 description: The battery level of the device
+                              online:
+                                 type: boolean
+                                 example: true
+                                 description: Whether the device is online
+                              osVersion:
+                                 type: string
+                                 example: 12
+                                 description: The Android operating system version
+                              outOfDate:
+                                 type: boolean
+                                 example: false
+                                 description: The device is not compliant with its configuration on ManageXR
+                              registerDate:
+                                 type: string
+                                 format: date-time
+                                 example: Tue, 27 Feb 2024 07:28:03 GMT
+                                 description: Date the device was registered on ManageXR
+                              updating:
+                                 type: boolean
+                                 example: false
+                                 description: True if the device is currently downloading content or firmware
+                              factoryResetStatus:
+                                 type: string
+                                 enum:
+                                    - QUEUED
+                                    - COMPLETE
+                                    - null
+                                 example: null
+                                 description: This status is set when an admin sends a factory reset command to a device. Null if no factory reset command has been sent.
+                              firmwareVersion:
+                                 type: string
+                                 example: 65.0.0.546.341
+                                 description: Device firmware version
+                              configuration:
+                                 type: object
+                                 properties:
+                                    name:
+                                       type: string
+                                       description: 'Configuration name'
+                                    id:
+                                       type: string
+                                       description: 'Configuration id'
+                                 example:
+                                    name: Test Configuration
+                                    id: OZ04csIYkA0EArkeu1vX
+                                 description: The configuration applied to the device on ManageXR
+                              tags:
+                                 type: array
+                                 example: [{ id: sFidGmedeQofSBcvRcyn, name: History }]
+                                 description: The tags applied to the device on ManageXR. Null if device has no tags.
+                              tutorialModeEnabled:
+                                 type: boolean
+                                 example: false
+                                 description: True if device is in Tutorial Mode
+                              kioskModeOverride:
+                                 type: boolean
+                                 example: false
+                                 description: True if device has Kiosk Mode/ManageXR Home Screen disabled
+                              lastSync:
+                                 type: string
+                                 format: date-time
+                                 example: Tue, 18 Jun 2024 21:46:34 GMT
+                                 description: The last time the device checked in with ManageXR. Online devices check in every 15 minutes.
+                              ram:
+                                 type: object
+                                 properties:
+                                    available:
+                                       type: number
+                                       description: Available RAM in bytes
+                                    total:
+                                       type: number
+                                       description: Total RAM in bytes
+                                 example:
+                                    available: 3704000512
+                                    total: 8108634112
+                                 description: Device RAM in bytes
+                              location:
+                                 type: object
+                                 example:
+                                    city: San Francisco
+                                    region: California
+                                    country: United States
+                                    continent: North America
+                                    timeZone: America/Los_Angeles
+                                 description: Device location as determined by its IP address and provided by ipstack.com
+                              connectedWifiNetwork:
+                                 type: object
+                                 properties:
+                                    ssid:
+                                       type: string
+                                       description: The ssid of the last connected wifi network
+                                 example:
+                                    ssid: TheElectricCity
+                                 description: Information about the last connected wifi network
+                              storage:
+                                 type: object
+                                 properties:
+                                    available:
+                                       type: number
+                                 example:
+                                    available: 107079929856
+                                 description: The available storage on the device in bytes
+                     examples:
+                        example-1:
+                           summary: Example response
+                           value:
+                              - serial: 2G0YC1ZF630NZA
+                                name: Oculus Quest 2
+                                mac: 0816D76C3AE5
+                                model: Quest 2
+                                manufacturer: Oculus
+                                notes: with Phil P
+                                batteryLevel: 81
+                                online: false
+                                osVersion: 10
+                                outOfDate: true
+                                registerDate: Thu, 08 Jun 2023 21:16:39 GMT
+                                updating: false
+                                factoryResetStatus: null
+                                firmwareVersion: 65.0.0.546.341
+                                configuration:
+                                   name: Quality Assurance
+                                   id: SpGcLo99xqMkj9dyNvBd
+                                tags: []
+                                tutorialModeEnabled: false
+                                kioskModeOverride: false
+                                lastSync: Mon, 24 Jun 2024 19:33:21 GMT
+                                ram:
+                                   available: 4276592640
+                                   total: 8151437312
+                                location:
+                                   city: Galt
+                                   region: California
+                                   country: United States
+                                   continent: North America
+                                   timeZone: America/Los_Angeles
+                                connectedWifiNetwork:
+                                   ssid: Comcast
+                                storage:
+                                   available: 235923423232
+                              - serial: PA7950RGGC06043
+                                name: Carolina
+                                mac: 0816D56C3AE4
+                                model: Quest 2
+                                manufacturer: Oculus
+                                notes: null
+                                batteryLevel: 81
+                                online: false
+                                osVersion: 10
+                                outOfDate: true
+                                registerDate: Thu, 08 Jun 2023 21:16:39 GMT
+                                updating: false
+                                factoryResetStatus: QUEUED
+                                firmwareVersion: 4.0.7
+                                configuration:
+                                   name: Customer Success
+                                   id: SpGcLo99xqMkj9dyNvBd
+                                tags: null
+                                tutorialModeEnabled: false
+                                kioskModeOverride: false
+                                lastSync: Mon, 24 Jun 2024 19:33:21 GMT
+                                ram:
+                                   available: 4276592640
+                                   total: 8151437312
+                                location:
+                                   city: Ílhavo
+                                   region: Aveiro
+                                   country: Portugal
+                                   continent: Europe
+                                   timeZone: Europe/Lisbon
+                                connectedWifiNetwork:
+                                   ssid: Carol
+                                storage:
+                                   available: 51294728192
+   /organizations/{orgId}/devices/{deviceId}/command:
+      post:
+         summary: Send command
+         description: Send command to a specific device by id.
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: deviceId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID (serial number) of the device.
+            - name: Authorization
+              in: header
+              required: true
+              schema:
+                 type: string
+              description: Bearer token for authorization
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        action:
+                           type: string
+                           description: Name of device command, e.g., SYNC, DISABLE_KIOSK, ENABLE_KIOSK, LAUNCH_APP, PLAY_VIDEO, RESTART
+                        data:
+                           type: object
+                           description: Additional parameters for specific device commands
+                  examples:
+                     example-1:
+                        summary: Sync command
+                        value:
+                           action: SYNC
+                     example-2:
+                        summary: Launch App command
+                        value:
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                     example-3:
+                        summary: Launch app with parameters
+                        value:
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                              launchParams:
+                                 userId: AX3EIUf89
+                                 booleanValue: true
+                                 floatValue: 100.29
+                                 arrayValue: [1.23, 4.56]
+                                 mapValue:
+                                    key: value
+                     example-4:
+                        summary: Launch webxr link
+                        value:
+                           action: LAUNCH_WEB_URL
+                           data:
+                              url: https://google.com
+         responses:
+            '200':
+               description: Success
+components:
+   securitySchemes:
+      bearerAuth:
+         type: http
+         scheme: bearer
+         bearerFormat: JWT
+
+security:
+   - bearerAuth: []
