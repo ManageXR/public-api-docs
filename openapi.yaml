@@ -331,7 +331,7 @@ paths:
                            description: Device notes
                   examples:
                      example-update:
-                        summary: Update device name
+                        summary: Update device name, configuration, and notes
                         value:
                            name: Taylor Quest 3
                            configurationId: yw5VSRLRoRDhNRhm0Nl
