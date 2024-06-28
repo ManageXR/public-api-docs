@@ -333,7 +333,7 @@ paths:
                      example-update_name:
                         summary: Update device name
                         value:
-                           name: Taylor's Quest 3
+                           name: Taylor Quest 3
          responses:
             '200':
                description: Success
