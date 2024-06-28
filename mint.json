@@ -20,15 +20,11 @@
     {
       "name": "Support",
       "url": "mailto:support@managexr.com"
-    },
-     {
-      "name": "Sign In",
-      "url": "https://console.managexr.com/"
     }
   ],
   "topbarCtaButton": {
-    "name": "Get a Demo",
-    "url": "https://www.managexr.com/demo/"
+    "name": "Sign In",
+    "url": "https://console.managexr.com/"
   },
   "tabs": [
     {
