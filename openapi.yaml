@@ -330,10 +330,12 @@ paths:
                            required: false
                            description: Device notes
                   examples:
-                     example-update_name:
+                     example-update:
                         summary: Update device name
                         value:
                            name: Taylor Quest 3
+                           configurationId: yw5VSRLRoRDhNRhm0Nl
+                           notes: At conference
          responses:
             '200':
                description: Success
