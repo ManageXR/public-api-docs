@@ -355,7 +355,7 @@ paths:
                            items: 
                               type: string
                               example: 'k7FQPc24o4Y7M0FK'
-                              description: The id of a tag you want to add to set on a device.
+                              description: The id of a tag you want to set on the device
                   examples:
                      example-update:
                         summary: Update device name, configuration, and notes
