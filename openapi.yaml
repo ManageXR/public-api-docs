@@ -264,10 +264,10 @@ paths:
                               - PLAY_VIDEO
                               - RESTART
                            description: |
-                              Name of device command. Possible values are:
-                              - SYNC: Synchronize the device with the server.
-                              - DISABLE_KIOSK: Disable kiosk mode on the device.
-                              - ENABLE_KIOSK: Enable kiosk mode on the device.
+                              Name of device command. Available commands:
+                              - SYNC: Force device to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
+                              - DISABLE_KIOSK: Disable Kiosk Mode / ManageXR Home Screen on the device. Grant users access to the default system menus.
+                              - ENABLE_KIOSK: Enable Kiosk Mode / ManageXR Home Screen on the device. No-op if configuration uses Default Device Menus. 
                               - LAUNCH_APP: Launch a specific application on the device.
                               - PLAY_VIDEO: Play a video on the device.
                               - RESTART: Restart the device.
