@@ -349,6 +349,13 @@ paths:
                            type: string
                            required: false
                            description: Device notes
+                        tagIds: 
+                           type: array
+                           required: false
+                           items: 
+                              type: string
+                              example: 'k7FQPc24o4Y7M0FK'
+                              description: The id of a tag you want to add to set on a device.
                   examples:
                      example-update:
                         summary: Update device name, configuration, and notes
