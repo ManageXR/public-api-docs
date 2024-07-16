@@ -352,10 +352,10 @@ paths:
                         tagIds: 
                            type: array
                            required: false
-                           description: 'Array of ids of tags to apply to device. Overwrites any existing tags'
+                           description: Array of tag ids to apply to device. Replaces any existing tags
                            items: 
                               type: string
-                              example:'k7FQPc24o4Y7M0FK'
+                              example: 'k7FQPc24o4Y7M0FK'
                               description: The id of a tag you want to set on the device
                   examples:
                      example-update:
