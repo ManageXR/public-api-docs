@@ -273,7 +273,7 @@ paths:
                               - PLAY_VIDEO: Play a video on the device. Requires the data field to be populated with: { videoId: string }
                               - PAUSE_VIDEO: Pause video on the device. Requires the data field to be populated with: { videoId: string }
                               - RESTART: Restart the device.
-                              - UNINSTALL: Uninstall an App on the device. Requires the data field to be populated with: {
+                              - UNINSTALL_APP: Uninstall an App on the device. Requires the data field to be populated with: {
                               packageName: string }
                               - ENABLE_TUTORIAL_MODE: Enables Tutorial Mode on the device to launch an app on boot. 
                               - DISABLE_TUTORIAL_MODE: Disables Tutorial Mode on the device.
