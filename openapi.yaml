@@ -264,7 +264,7 @@ paths:
                               - PLAY_VIDEO
                               - RESTART
                            description: |
-                               Name of device command. Possible values are:
+                              Name of device command. Possible values are:
                               - SYNC: Synchronize the device with the server.
                               - DISABLE_KIOSK: Disable kiosk mode on the device.
                               - ENABLE_KIOSK: Enable kiosk mode on the device.
