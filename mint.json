@@ -70,6 +70,12 @@
         "cli-reference/command/upload-app",
         "cli-reference/command/upload-file"
       ]
+    },
+    {
+      "group": "Unity SDK Reference",
+      "pages": [
+        "sdk-reference/introduction"
+      ]
     }
   ],
   "footerSocials": {
