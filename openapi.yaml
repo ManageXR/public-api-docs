@@ -261,8 +261,12 @@ paths:
                               - DISABLE_KIOSK
                               - ENABLE_KIOSK
                               - LAUNCH_APP
+                              - LAUNCH_WEBXR
                               - PLAY_VIDEO
+                              - PAUSE_VIDEO
                               - RESTART
+                              - ENABLE_TUTORIAL_MODE
+                              - DISABLE_TUTORIAL_MODE
                            description: |
                               Name of device command. Available commands:
                               - SYNC: Force device to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
