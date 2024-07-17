@@ -113,7 +113,7 @@ paths:
                               kioskModeOverride:
                                  type: boolean
                                  example: false
-                                 description: True if device has Kiosk Mode/ManageXR Home Screen disabled. If this is true, the device is not locked into the ManageXR Home Screen or Kiosk App and users have full access to the native system menus. https://help.managexr.com/en/articles/5416931-temporarily-disable-kiosk-mode-home-screen 
+                                 description: True if device has Kiosk Mode/ManageXR Home Screen disabled. When true, the device is not locked into the ManageXR Home Screen or Kiosk App and users have full access to the native system menus. [Learn more](https://help.managexr.com/en/articles/5416931-temporarily-disable-kiosk-mode-home-screen) 
                               lastSync:
                                  type: string
                                  format: date-time
