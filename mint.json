@@ -63,6 +63,12 @@
       ]
     },
     {
+      "group": "Unity SDK Reference",
+      "pages": [
+        "sdk-reference/introduction"
+      ]
+    },
+    {
       "group": "CLI Reference",
       "pages": [
         "cli-reference/introduction"
