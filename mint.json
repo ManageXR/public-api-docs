@@ -34,6 +34,10 @@
     {
       "name": "CLI Reference",
       "url": "cli-reference"
+    },
+    {
+      "name": "Unity SDK Reference",
+      "url": "sdk-reference"
     }
   ],
   "navigation": [
