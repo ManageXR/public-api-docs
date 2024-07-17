@@ -28,15 +28,15 @@
   },
   "tabs": [
     {
-      "name": "API Reference",
+      "name": "API",
       "url": "api-reference"
     },
     {
-      "name": "CLI Reference",
+      "name": "CLI",
       "url": "cli-reference"
     },
     {
-      "name": "Unity SDK Reference",
+      "name": "Unity SDK",
       "url": "sdk-reference"
     }
   ],
