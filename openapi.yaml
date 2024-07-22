@@ -233,7 +233,10 @@ paths:
    /organizations/{orgId}/devices/set-pause-updates:
       post:
          summary: Set pause updates for devices
-         description: Pause or resume configuration updates for specified devices in an organization. Pausing configuration updates stops a device from syncing with its latest Configuration. When pauseUpdates is true on a device, user-initiated changes to its Configuration and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to the device.
+         description: |
+            Pause or resume configuration updates for devices.
+
+            Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
          parameters:
            - name: orgId
              in: path
