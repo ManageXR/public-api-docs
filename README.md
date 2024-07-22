@@ -42,6 +42,7 @@ Changes are deployed automatically to docs.managexr.com once merged into the mai
 
 
 ## Tips and Tricks
+- Search [Mintlify help docs](https://mintlify.com/docs/development)
 - The essentials directory contains helpful examples of markdown in action  
 - To use mutliple lines in an OpenAPI description, use the | character. CMD+F | in openapi.yaml for examples. 
-- Not sure how to format? Ask ChatGPT. It is very good at spitting out the correct openapi format or identifying whether a formatting option is possible. 
+- Not sure how to format? Look for existing examples in openapi.yaml. Otherwise, ask ChatGPT. It is pretty good at spitting out the correct openapi format or identifying whether a formatting option is possible.
