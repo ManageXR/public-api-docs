@@ -26,7 +26,7 @@ mintlify dev --port 3333
 - Page loads as a 404 - Make sure you are running in a folder with `mint.json`
   
 ## Adding Endpoints to the Api-Reference
-The API Reference contains all of the information about the ManageXR Public API. To add a new endpoint, you will need to make the following updates: 
+The API Reference contains all of the information about the ManageXR Public API. To add a new endpoint, make the following changes: 
 
 1. **Update openapi.yaml** to include info about the endpoint. Format according to OpenAPI 3.1.0 specifications.
 2. **Create an mdx file** within api-reference>endpoint. Include a title and an openapi url. See existing examples in the directory. It is important that the openapi url matches the openapi.yaml specification for the endpoint.
