@@ -2,7 +2,7 @@
 
 Learn how to set up the ManageXR public API documentation repo on your machine and best practices for updating our external API docs. 
 
-### Getting Started
+## Getting Started
 
 Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. Use the same level of Node as the mighty-api repo (e.g., 20.11.1). To install mintlify tools, use the following command
 
@@ -20,6 +20,11 @@ To view it on a port other than 3000, use a flag e.g.,
 ```
 mintlify dev --port 3333
 ```
+### Troubleshooting
+
+- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
+- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+  
 ## Adding Endpoints to the Api-Reference
 The API Reference contains all of the information about the ManageXR Public API. To add a new endpoint, you will need to make the following updates: 
 
@@ -35,12 +40,8 @@ Changes are deployed automatically to docs.managexr.com once merged into the mai
 - Submit a PR for doc changes along with your API PR
 - Do not merge doc changes until after API release
 
-#### Troubleshooting
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
-
-#### Tips and Tricks
+## Tips and Tricks
 - The essentials directory contains helpful examples of markdown in action  
 - To use mutliple lines in an OpenAPI description, use the | character. CMD+F | in openapi.yaml for examples. 
 - Not sure how to format? Ask ChatGPT. It is very good at spitting out the correct openapi format or identifying whether a formatting option is possible. 
