@@ -1,4 +1,4 @@
-# ManageXR API docs via Mintlify
+# ManageXR API docs via [Mintlify](https://mintlify.com/)
 
 Learn how to set up the ManageXR public API documentation repo on your machine and best practices for updating our external API docs. 
 
