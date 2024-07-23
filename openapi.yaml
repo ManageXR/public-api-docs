@@ -329,9 +329,9 @@ paths:
                               description: | 
                                  Override the device experience set on the Configuration. 
 
-                                 Disable Kiosk - Disable Kiosk Mode / ManageXR Home Screen on the device. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on device to `true`.
+                                 `DISABLE_KIOSK` - Disable Kiosk Mode / ManageXR Home Screen on the device. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on device to `true`.
 
-                                 Enable Kiosk - Re-Enable Kiosk Mode / ManageXR Home Screen on the device. Sets `kioskModeOverride` flag on device to `false`.
+                                 `ENABLE_KIOSK` - Re-Enable Kiosk Mode / ManageXR Home Screen on the device. Sets `kioskModeOverride` flag on device to `false`.
 
                                  _Note_, if the Configuration applied to a device uses Default Device Menus, the kioskModeOverride flag is a no-op.
                               enum: 
