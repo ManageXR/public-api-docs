@@ -306,6 +306,9 @@ paths:
                                        The id of the video to play or pause. 
                                        
                                        To find a videoId, go to the video in your VR Content library on the Web Console and retrieve it from the url parameters (e.g. console.managexr.com/o/{orgId}/vr-content/edit/video/**FeWVcu7Rq4X3rmwGZGM6**).                   
+                                 playFromBeginning: 
+                                    type: boolean
+                                    description: (Optional) Plays video from the beginning. If falsy and the video is already open, play resumes from position.
                       - title: Launch Web Url
                         type: object
                         properties:
