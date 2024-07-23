@@ -29,7 +29,7 @@ mintlify dev --port 3333
 The API Reference contains all of the information about the ManageXR Public API. To add a new endpoint, make the following changes: 
 
 1. **Update openapi.yaml** to include info about the endpoint. Format according to OpenAPI 3.1.0 specifications.
-2. **Create an mdx file** within api-reference>endpoint. Include a title and an openapi url. See existing examples in the directory. It is important that the openapi url matches the openapi.yaml specification for the endpoint.
+2. **Create an mdx file** within api-reference>endpoint. Include a title and an openapi url. See existing examples in the directory. It is important that the openapi url matches the openapi.yaml specification for the endpoint. Mintlify also has options to [generate these automatically](https://mintlify.com/docs/api-playground/openapi/setup#autogenerate-files-recommended).
 3. **Update mint.json** to include the endpoint mdx page in the documentation. Put the file in the appropriate group e.g., if it is an endpoint for devices, put it in the "Devices" group. If it is an endpoint for a group that does not exist, create a group. Eventually, we will have groups for Devices, Organizations, Configurations, Library (will include VR Content, Files, Wifi), Users etc.
 
 Save and run the mintlify repo locally to validate changes. 
