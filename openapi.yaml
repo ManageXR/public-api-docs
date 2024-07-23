@@ -291,7 +291,10 @@ paths:
    /organizations/{orgId}/devices/{deviceId}/command:
       post:
          summary: Send command
-         description: Send command to a specific device by id.
+         description: |
+            Send command to a specific device
+
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
          parameters:
             - name: orgId
               in: path
@@ -310,38 +313,135 @@ paths:
             content:
                application/json:
                   schema:
-                     type: object
-                     properties:
-                        action:
-                           type: string
-                           enum:
-                              - SYNC
+                     oneOf: 
+                      - title: Launch App
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              required: true
+                              description:  Launch an application on the device.
+                              enum:
+                                 - LAUNCH_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    required: true
+                                    description: The package name of the app to be launched
+                                    example: 'com.myapp.quest'
+                                 launchParams: 
+                                    type: object
+                                    description: | 
+                                       (Optional) Additional custom launch parameters
+
+                                       e.g., { userId: 'ABC123', booleanValue: true, arrayValue: [1.23, 4.56], mapValue: { key: 'more stuff' }}
+                                    example: 
+                                       userId: 'ABC123'
+                                       booleanValue: true
+                                       floatValue: 100.29
+                                       arrayValue: [1.23, 4.56]
+                                       mapValue: { key: 'more stuff' }
+                                    required: false
+                      - title: Play / Pause Video
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Play or pause video on the device.
+                              enum:
+                                 - PLAY_VIDEO
+                                 - PAUSE_VIDEO
+                              example: PLAY_VIDEO
+                           data:
+                              type: object
+                              properties:
+                                 videoId:
+                                    type: string
+                                    description: |
+                                       The id of the video to play or pause. 
+                                       
+                                       To find a videoId, go to the video in your VR Content library on the Web Console and retrieve it from the url parameters (e.g. console.managexr.com/o/{orgId}/vr-content/edit/video/**FeWVcu7Rq4X3rmwGZGM6**).                   
+                      - title: Launch Web Url
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Launch a specific webxr link on the device. Requires the data field to be populated (see below)
+                              enum:
+                                 - LAUNCH_WEB_URL
+                              example: LAUNCH_WEB_URL
+                           data:
+                              type: object
+                              properties:
+                                 url:
+                                    type: string
+                                    description: The url of the webxr link to launch                      
+                      - title: Disable / Enable Kiosk Mode
+                        type: object
+                        properties: 
+                           action: 
+                              type: string
+                              description: | 
+                                 Override the device experience set on the Configuration. 
+
+                                 Disable Kiosk - Disable Kiosk Mode / ManageXR Home Screen on the device. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on device to `true`.
+
+                                 Enable Kiosk - Re-Enable Kiosk Mode / ManageXR Home Screen on the device. Sets `kioskModeOverride` flag on device to `false`.
+
+                                 _Note_, if the Configuration applied to a device uses Default Device Menus, the kioskModeOverride flag is a no-op.
+                              enum: 
                               - DISABLE_KIOSK
                               - ENABLE_KIOSK
-                              - LAUNCH_APP
-                              - LAUNCH_WEBXR
-                              - PLAY_VIDEO
-                              - PAUSE_VIDEO
+                              example: DISABLE_KIOSK
+                      - title: Restart
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Reboot the device.
+                              enum:
                               - RESTART
+                              example: RESTART
+                      - title: Uninstall App
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: |
+                                 Uninstall an application on the device. 
+                                 
+                                 Cannot uninstall system apps. If you uninstall an app that is still on a devices's configuration, it will automatically re-download the next time the device syncs.
+                              enum:
+                                 - UNINSTALL_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to uninstall                         
+                      - title: Sync
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Force device to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
+                              enum:
+                              - SYNC
+                              example: SYNC
+                      - title: Enable / Disable Tutorial Mode
+                        type: object
+                        properties: 
+                           action: 
+                              type: string
+                              description: When Tutorial Mode in enabled, the device launches into its tutorial app on boot. Set the tutorial app in Configuration > Device Settings.
+                              enum: 
                               - ENABLE_TUTORIAL_MODE
                               - DISABLE_TUTORIAL_MODE
-                           description: |
-                              Name of device command. Available commands:
-                              - SYNC: Force device to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
-                              - DISABLE_KIOSK: Disable Kiosk Mode / ManageXR Home Screen on the device. Grant users access to the default system menus.
-                              - ENABLE_KIOSK: Enable Kiosk Mode / ManageXR Home Screen on the device. No-op if configuration uses Default Device Menus. 
-                              - LAUNCH_APP: Launch a specific application on the device. Requires the data field to be populated with: { packageName: string, launchParams?: { key: value }}
-                              - LAUNCH_WEBXR: Launch a specific webxr link on the device. Requires the data field to be populated with: { url: string }
-                              - PLAY_VIDEO: Play a video on the device. Requires the data field to be populated with: { videoId: string }
-                              - PAUSE_VIDEO: Pause video on the device. Requires the data field to be populated with: { videoId: string }
-                              - RESTART: Restart the device.
-                              - UNINSTALL_APP: Uninstall an App on the device. Requires the data field to be populated with: {
-                              packageName: string }. Cannot uninstall system apps. 
-                              - ENABLE_TUTORIAL_MODE: Enables Tutorial Mode on the device to launch an app on boot. 
-                              - DISABLE_TUTORIAL_MODE: Disables Tutorial Mode on the device.
-                        data:
-                           type: object
-                           description: Additional parameters for specific device commands
+                              example: ENABLE_TUTORIAL_MODE                             
                   examples:
                      example-sync:
                         summary: Sync command
