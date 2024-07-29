@@ -59,7 +59,8 @@
       "pages": [
         "api-reference/endpoint/get",
         "api-reference/endpoint/send-command",
-        "api-reference/endpoint/edit"
+        "api-reference/endpoint/edit",
+        "api-reference/endpoint/set-pause-updates"
       ]
     },
     {

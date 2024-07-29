@@ -230,6 +230,64 @@ paths:
                                    ssid: Carol
                                 storage:
                                    available: 51294728192
+   /organizations/{orgId}/devices/set-pause-updates:
+      post:
+         summary: Set pause updates for devices
+         description: |
+            Pause or resume configuration updates for devices.
+
+            Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
+         parameters:
+           - name: orgId
+             in: path
+             required: true
+             schema:
+               type: string
+             description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+         requestBody:
+           required: true
+           content:
+             application/json:
+               schema:
+                 type: object
+                 properties:
+                   deviceIds:
+                     type: array
+                     items:
+                       type: string
+                     description: Array of device IDs (serial numbers) to update.
+                   pauseUpdates:
+                     type: boolean
+                     description: Whether to pause (true) or resume (false) configuration updates. 
+                 required:
+                   - deviceIds
+                   - pauseUpdates
+               examples:
+                 example-pause:
+                   summary: Pause updates for devices
+                   value:
+                     deviceIds:
+                       - 2G0YC1ZF630NZA
+                       - PA7950RGGC06043
+                     pauseUpdates: true
+                 example-resume:
+                   summary: Resume updates for devices
+                   value:
+                     deviceIds:
+                       - 2G0YC1ZF630NZA
+                       - PA7950RGGC06043
+                     pauseUpdates: false
+         responses:
+           '201':
+             description: Success
+             content:
+               application/json:
+                 schema:
+                   type: object
+                   properties:
+                     message:
+                       type: string
+                       example: "Success"
    /organizations/{orgId}/devices/{deviceId}/command:
       post:
          summary: Send command
