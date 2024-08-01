@@ -478,6 +478,234 @@ paths:
          responses:
             '200':
                description: Success
+   /organizations/{orgId}/devices/batch-command:
+      post:
+         summary: Send one command to multiple devices
+         description: |
+            Send one commands to multiple devices
+
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     oneOf: 
+                      - title: Launch App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              required: true
+                              description:  Launch an application on the devices.
+                              enum:
+                                 - LAUNCH_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    required: true
+                                    description: The package name of the app to be launched
+                                    example: 'com.myapp.quest'
+                                 launchParams: 
+                                    type: object
+                                    description: | 
+                                       (Optional) Additional custom launch parameters
+
+                                       e.g., { userId: 'ABC123', booleanValue: true, arrayValue: [1.23, 4.56], mapValue: { key: 'more stuff' }}
+                                    example: 
+                                       userId: 'ABC123'
+                                       booleanValue: true
+                                       floatValue: 100.29
+                                       arrayValue: [1.23, 4.56]
+                                       mapValue: { key: 'more stuff' }
+                                    required: false
+                      - title: Play / Pause Video
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              description:  Play or pause video on the devices.
+                              enum:
+                                 - PLAY_VIDEO
+                                 - PAUSE_VIDEO
+                              example: PLAY_VIDEO
+                           data:
+                              type: object
+                              properties:
+                                 videoId:
+                                    type: string
+                                    description: |
+                                       The id of the video to play or pause. 
+                                       
+                                       To find a videoId, go to the video in your VR Content library on the Web Console and retrieve it from the url parameters (e.g. console.managexr.com/o/{orgId}/vr-content/edit/video/**FeWVcu7Rq4X3rmwGZGM6**).                   
+                                 playFromBeginning: 
+                                    type: boolean
+                                    description: (Optional) Plays video from the beginning. If falsy and the video is already open, play resumes from position.
+                      - title: Launch Web Url
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              description:  Launch a specific webxr link on the devices. Requires the data field to be populated (see below)
+                              enum:
+                                 - LAUNCH_WEB_URL
+                              example: LAUNCH_WEB_URL
+                           data:
+                              type: object
+                              properties:
+                                 url:
+                                    type: string
+                                    description: The url of the webxr link to launch                      
+                      - title: Disable / Enable Kiosk Mode
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices. 
+                           action: 
+                              type: string
+                              description: | 
+                                 Override the device experience set on the Configuration. 
+
+                                 `DISABLE_KIOSK` - Disable Kiosk Mode / ManageXR Home Screen on the devices. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on devices to `true`.
+
+                                 `ENABLE_KIOSK` - Re-Enable Kiosk Mode / ManageXR Home Screen on the devices. Sets `kioskModeOverride` flag on devices to `false`.
+
+                                 _Note_, if the Configuration applied to a device uses Default Device Menus, the kioskModeOverride flag is a no-op.
+                              enum: 
+                              - DISABLE_KIOSK
+                              - ENABLE_KIOSK
+                              example: DISABLE_KIOSK
+                      - title: Restart
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              description: Reboot the devices.
+                              enum:
+                              - RESTART
+                              example: RESTART
+                      - title: Uninstall App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              description: |
+                                 Uninstall an application on the devices. 
+                                 
+                                 Cannot uninstall system apps. If you uninstall an app that is still on a devices's configuration, it will automatically re-download the next time the device syncs.
+                              enum:
+                                 - UNINSTALL_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to uninstall                         
+                      - title: Sync
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action:
+                              type: string
+                              description: Force devices to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
+                              enum:
+                              - SYNC
+                              example: SYNC
+                      - title: Enable / Disable Tutorial Mode
+                        type: object
+                        properties: 
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: The IDs of devices.
+                           action: 
+                              type: string
+                              description: When Tutorial Mode in enabled, the devices launch into their tutorial app on boot. Set the tutorial app in Configuration > Device Settings.
+                              enum: 
+                              - ENABLE_TUTORIAL_MODE
+                              - DISABLE_TUTORIAL_MODE
+                              example: ENABLE_TUTORIAL_MODE
+                  examples:
+                     example-sync:
+                        summary: Sync command
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: SYNC
+                     example-launch_app:
+                        summary: Launch App command
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                     example-launch_app_with_params:
+                        summary: Launch app with parameters
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                              launchParams:
+                                 userId: AX3EIUf89
+                                 booleanValue: true
+                                 floatValue: 100.29
+                                 arrayValue: [1.23, 4.56]
+                                 mapValue:
+                                    key: value
+                     example-launch_webxr:
+                        summary: Launch webxr link
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_WEB_URL
+                           data:
+                              url: https://google.com
+         responses:
+            '200':
+               description: Success
    /organizations/{orgId}/devices/{deviceId}:
       patch:
          summary: Edit Device
