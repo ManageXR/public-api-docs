@@ -547,7 +547,7 @@ paths:
               required: true
               schema:
                  type: string
-              description: The ID (serial number) of the device.
+              description: Unique identifier (serial number) of the device
          responses:
             '200':
                description: A device object
