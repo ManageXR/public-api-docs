@@ -480,9 +480,9 @@ paths:
                description: Success
    /organizations/{orgId}/devices/batch-command:
       post:
-         summary: Send one command to multiple devices
+         summary: Send a command to multiple devices at once
          description: |
-            Send one commands to multiple devices
+            Send a command to multiple devices at once
 
             <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
          parameters:
@@ -505,11 +505,11 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
                               required: true
-                              description:  Launch an application on the devices.
+                              description:  Launch an application on the devices
                               enum:
                                  - LAUNCH_APP
                               example: LAUNCH_APP
@@ -541,10 +541,10 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
-                              description:  Play or pause video on the devices.
+                              description:  Play or pause video on the devices
                               enum:
                                  - PLAY_VIDEO
                                  - PAUSE_VIDEO
@@ -568,10 +568,10 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
-                              description:  Launch a specific webxr link on the devices. Requires the data field to be populated (see below)
+                              description:  Launch a specific WebXR link on the devices. Requires the data field to be populated (see below)
                               enum:
                                  - LAUNCH_WEB_URL
                               example: LAUNCH_WEB_URL
@@ -588,7 +588,7 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices. 
+                              description: List of unique identifiers (serial numbers) of devices
                            action: 
                               type: string
                               description: | 
@@ -610,10 +610,10 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
-                              description: Reboot the devices.
+                              description: Reboot the devices
                               enum:
                               - RESTART
                               example: RESTART
@@ -624,7 +624,7 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
                               description: |
@@ -647,7 +647,7 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action:
                               type: string
                               description: Force devices to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
@@ -661,7 +661,7 @@ paths:
                               type: array
                               items:
                                  type: string
-                              description: The IDs of devices.
+                              description: List of unique identifiers (serial numbers) of devices
                            action: 
                               type: string
                               description: When Tutorial Mode in enabled, the devices launch into their tutorial app on boot. Set the tutorial app in Configuration > Device Settings.
