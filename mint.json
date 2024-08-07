@@ -57,9 +57,10 @@
     {
       "group": "Devices",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/send-command",
+        "api-reference/endpoint/get-devices",
+        "api-reference/endpoint/get-device",
         "api-reference/endpoint/edit",
+        "api-reference/endpoint/send-command",
         "api-reference/endpoint/set-pause-updates"
       ]
     },
