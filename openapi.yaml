@@ -695,7 +695,7 @@ paths:
    /organizations/{orgId}/configurations/{configurationId}:
       get:
          summary: Get configuration
-         description: Get a configuration by id.
+         description: Get a configuration by id
          parameters:
             - name: orgId
               in: path
