@@ -52,7 +52,7 @@
     {
       "group": "Devices",
       "pages": [
-        "api-reference/endpoint/get-devices",
+        "api-reference/endpoint/list-devices",
         "api-reference/endpoint/get-device",
         "api-reference/endpoint/edit",
         "api-reference/endpoint/send-command",

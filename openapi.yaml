@@ -18,6 +18,69 @@ paths:
               schema:
                  type: string
               description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: names
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by device name. Allow partial matching. Separate multiple name parameters by comma.
+            - name: serials
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by device serial. Allow partial matching. Separate multiple serial parameters by comma.
+            - name: configurations
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by configuration unique identifier. Separate multiple configuration parameters by comma.
+            - name: tags
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by tag unique identifier. Separate multiple tag parameters by comma.
+            - name: models
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by model name. Separate multiple model parameters by comma.
+            - name: manufacturers
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by manufacturer name. Separate multiple manufacturer parameters by comma.
+            - name: firmwareVersions
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by firmware version. Separate multiple firmware version parameters by comma.
+            - name: filters
+              in: query
+              required: false
+              schema:
+                 type: string
+                 enum:
+                     - online
+                     - offline
+                     - upToDate
+                     - outOfDate
+                     - updateError
+                     - updating
+                     - paused
+                     - lowBattery
+                     - activeToday
+                     - activeWeek
+                     - activeMonth
+                     - activeOther
+                     - factoryResetPending
+                     - factoryReset
+              description: Query by filter.
          responses:
             '200':
                description: A list of devices
