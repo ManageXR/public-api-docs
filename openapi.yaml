@@ -1214,7 +1214,10 @@ paths:
                              deviceCount: 30
    /organizations:
       get:
-         description: Returns a list of all organizations that have access to the API Key.
+         description: |
+          Returns a list of all organizations that can be controlled with a given API Key
+
+          <small><b>Need a multi-org API key?</b> Email support@managexr.com for early access to a single API key that allows you to control multiple organizations</small>
          responses:
             '200':
                description: A list of organization summary objects.
@@ -1232,10 +1235,10 @@ paths:
                                     description: Name of the organization
                                  activeDevices:
                                     type: string
-                                    description: Number of devices currently registered on the organization.
+                                    description: Number of devices currently registered on the organization
                                  deviceLicenses:
                                     type: number
-                                    description: Number of device lienses.
+                                    description: Number of device licenses
                         example:
                            - id: A1ZICsr6XwX5fv4E16QM
                              name: High school Musical
