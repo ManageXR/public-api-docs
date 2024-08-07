@@ -1212,6 +1212,39 @@ paths:
                              name: Employee Training
                              registrationCode: a8YhTzK
                              deviceCount: 30
+   /organizations:
+      get:
+         description: Returns a list of all organizations that have access to the API Key.
+         responses:
+            '200':
+               description: A list of organization summary objects.
+               content:
+                  application/json:
+                     schema:
+                        type: array
+                        items:
+                           properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the organization
+                                 name:
+                                    type: string
+                                    description: Name of the organization
+                                 activeDevices:
+                                    type: string
+                                    description: Number of devices currently registered on the organization.
+                                 deviceLicenses:
+                                    type: number
+                                    description: Number of device lienses.
+                        example:
+                           - id: A1ZICsr6XwX5fv4E16QM
+                             name: High school Musical
+                             activeDevices: 30
+                             deviceLicenses: 50
+                           - id: EwmhggZ9zYIqMVVMz2s7
+                             name: Sky High
+                             registrationCode: 50
+                             deviceCount: 100
 
 components:
    securitySchemes:
