@@ -23,25 +23,25 @@ paths:
               required: false
               schema:
                  type: string
-              description: Query by device name. Allow partial matching. Separate multiple name parameters by comma.
+              description: Query by device name. Allows partial matching. Separate multiple name parameters by comma.
             - name: serials
               in: query
               required: false
               schema:
                  type: string
-              description: Query by device serial. Allow partial matching. Separate multiple serial parameters by comma.
+              description: Query by device serial. Allows partial matching. Separate multiple serial parameters by comma.
             - name: configurations
               in: query
               required: false
               schema:
                  type: string
-              description: Query by configuration unique identifier. Separate multiple configuration parameters by comma.
+              description: Query by configuration unique identifier. Separate multiple configuration id parameters by comma.
             - name: tags
               in: query
               required: false
               schema:
                  type: string
-              description: Query by tag unique identifier. Separate multiple tag parameters by comma.
+              description: Query by tag unique identifier. Separate multiple tag id parameters by comma.
             - name: models
               in: query
               required: false
