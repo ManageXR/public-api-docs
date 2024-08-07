@@ -692,7 +692,258 @@ paths:
                                  example:
                                     available: 107079929856
                                  description: The available storage on the device in bytes
-
+   /organizations/{orgId}/configurations/{configurationId}:
+      get:
+         summary: Get configuration
+         description: Get a configuration by id
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: configurationId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the configuration
+         responses:
+            '200':
+               description: A configuration object
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                              id:
+                                 type: string
+                                 example: 6qwM6FzJE4o708iqTpWc
+                                 description: Unique identifier of the configuration
+                              name:
+                                 type: string
+                                 example: Trial
+                                 description: Name of the configuration
+                              registrationCode:
+                                 type: string
+                                 example: f7GbHvH
+                                 description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                              deviceCount:
+                                 type: number
+                                 example: 15
+                                 description: Number of devices using the configuration
+                              deviceExperience:
+                                 type: string
+                                 enum:
+                                    - HOME_SCREEN
+                                    - KIOSK
+                                    - DEFAULT
+                                 description: Device experience set on the configuration
+                              apps:
+                                 type: array
+                                 description: (Optional) List of all apps deployed on the configuration
+                                 required: false
+                                 items: 
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          example: 01b8e51a-15d3-2sd3-a0d8-4c13ff633413
+                                          description: Unique identifier of the app
+                                       title:
+                                          type: string
+                                          example: "Example App"
+                                          description: Title of the app
+                                       packageName:
+                                          type: string
+                                          example: "com.example.app"
+                                          description: Package name of the app
+                                       description:
+                                          type: string
+                                          example: "Quest version of my example app"
+                                          description: Description of the app
+                                       versionCode:
+                                          type: number
+                                          example: 42
+                                          description: Numeric code of the app version
+                                       versionName:
+                                          type: string
+                                          example: "1.0.0"
+                                          description: Name of the app version
+                                       versionLabel:
+                                          type: string
+                                          example: "Release"
+                                          description: Label applied to the app version
+                                       apkSize:
+                                          type: number
+                                          example: 1024
+                                          description: Size of the APK file for this app version in bytes
+                                       obbSize:
+                                          type: number
+                                          example: 1024
+                                          description: (Optional) Size of the OBB file for this app version in bytes
+                                          required: false
+                                       categories:
+                                          type: array
+                                          items:
+                                             type: string
+                                          example: ["Onboarding", "Safety"]
+                                          description: (Optional) List of Home Screen categories assigned to the app on ManageXR
+                                          required: false
+                                       hidden:
+                                          type: boolean
+                                          example: true
+                                          description: (Optional) True if the app is hidden on the Home Screen. [Learn More](https://help.managexr.com/en/articles/8353693-how-to-hide-vr-content-from-the-home-screen)
+                                       forceInstall:
+                                          type: boolean
+                                          example: false
+                                          description: (Optional) True if Force Install is enabled for the app on this configuration. When true, app updates will uninstall the current version of the app on device before installing the next version. [Learn More](https://help.managexr.com/en/articles/5274045-deploying-applications#h_ddb1b059c3)
+                                          required: false
+                                       autoGrantPermissions:
+                                          type: boolean
+                                          example: true
+                                          description: (Optional) True if Automatically Grant Permissions is enabled for the app on this configuration. When true, the device automatically grants certain device permissions that the app requests. [Learn More](https://help.managexr.com/en/articles/5274045-deploying-applications#h_ddb1b059c3)
+                                       expirationTimestamp:
+                                          type: number
+                                          example: 1710566400
+                                          description: (Optional) Expiration date of the shared app. Time in millis since 1970. [Learn More](https://help.managexr.com/en/articles/8562977-app-sharing-governance-set-expiration-dates-and-device-limits#h_7e9d3049df)
+                                          required: false
+                                       expirationBehavior:
+                                          type: string
+                                          enum:
+                                             - NONE
+                                             - DISABLE_APP
+                                             - DELETE_APP
+                                          example: DISABLE_APP
+                                          description: (Optional) Expiration behavior of the shared app when `expirationTimestamp` is reached. [Learn More](https://help.managexr.com/en/articles/8562977-app-sharing-governance-set-expiration-dates-and-device-limits#h_371c2d0566)
+                                          required: false
+                              videos:
+                                 type: array
+                                 description: (Optional) List of all videos deployed on the configuration
+                                 required: false
+                                 items:
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          example: 2656f354-9723-43f5-9165-f4b2a8662ab0
+                                          description: Unique identifier of the video
+                                       title:
+                                          type: string
+                                          example: "Example Video"
+                                          description: Title of the video
+                                       videoType:
+                                          type: string
+                                          enum:
+                                          - _360
+                                          - _180
+                                          - _2D
+                                          example: _360
+                                          description: Type of video
+                                       description:
+                                          type: string
+                                          example: "5 minute video of Patagonia"
+                                          description: Description of the video
+                                       size:
+                                          type: number
+                                          example: 1024
+                                          description: Size of the video in bytes
+                                       categories:
+                                          type: array
+                                          items:
+                                             type: string
+                                          example: ["Field Trips", "South America"]
+                                          description: (Optional) List of Home Screen categories assigned to the app on ManageXR
+                                       hidden:
+                                          type: boolean
+                                          example: false
+                                          description: (Optional) True if the video is hidden on the Home Screen. [Learn More](https://help.managexr.com/en/articles/8353693-how-to-hide-vr-content-from-the-home-screen)                       
+                              webxrLinks:
+                                 type: array
+                                 description: (Optional) List of WebXR Links deployed on the configuration
+                                 required: false
+                                 items:
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          example: 1Gvlpc3JVGcynBrWSJwI
+                                          description: Unique identifier of the WebXR link
+                                       url:
+                                          type: string
+                                          example: http://www.thechinaguide.com/destination/great-wall-of-china
+                                          description: Url of the WebXR link
+                                       title:
+                                          type: string
+                                          example: "Great wall of China"
+                                          description: Title of the WebXR link
+                                       description:
+                                          type: string
+                                          example: "A grand tour of the great wall of China, from the comfort of your seat."
+                                          description: Description of the WebXR link
+                                       categories:
+                                          type: array
+                                          items:
+                                             type: string
+                                          example: ["Field Trips", "Asia"]
+                                          description: (Optional) List of Home Screen categories assigned to the WebXR link on ManageXR
+                                       hidden:
+                                          type: boolean
+                                          example: true
+                                          description: (Optional) True if the WebXR Link is hidden on the Home Screen. [Learn More](https://help.managexr.com/en/articles/8353693-how-to-hide-vr-content-from-the-home-screen)              
+                              files:
+                                 type: array
+                                 description: (Optional) List of files deployed on the configuration
+                                 required: false
+                                 items: 
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          example: 0uZN2kuoQhcZJglgVNTc
+                                          description: Unique identifier of the file
+                                       path:
+                                          type: string
+                                          example: /foo/bar/myFile.png
+                                          description: Path to file on the device file system
+                                       size:
+                                          type: number
+                                          example: 1024
+                                          description: Size of the file in bytes                  
+                              wifiNetworks:
+                                 type: array
+                                 description: (Optional) List of wifi networks deployed on the configuration
+                                 required: false
+                                 items:
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          example: 1tZw3kuoOfcZMgbIs8
+                                          description: Unique identifier of the wifi network
+                                       ssid:
+                                          type: string
+                                          example: SF_Office_123
+                                          description: SSID of the wifi network
+                                       nickname:
+                                          type: string
+                                          example: SF Office wifi main
+                                          description: Nickname of the wifi network
+                                       type:
+                                          type: string
+                                          enum:
+                                          - OPEN
+                                          - WPA
+                                          - WPA_ENTERPRISE
+                                          - UNKNOWN
+                                          example: WPA_ENTERPRISE
+                                          description: Type of wifi network
+                              kioskAppId:
+                                 type: string
+                                 example:
+                                    available: 10707AB329856
+                                 description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
 components:
    securitySchemes:
       basicAuth:

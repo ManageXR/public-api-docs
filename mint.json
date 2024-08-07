@@ -65,6 +65,12 @@
       ]
     },
     {
+      "group": "Configurations",
+      "pages": [
+        "api-reference/endpoint/get-configuration"
+      ]
+    },
+    {
       "group": "Unity SDK Reference",
       "pages": [
         "sdk-reference/introduction"
