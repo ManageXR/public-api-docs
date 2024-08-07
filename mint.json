@@ -61,7 +61,12 @@
         "api-reference/endpoint/get-device",
         "api-reference/endpoint/edit",
         "api-reference/endpoint/send-command",
-        "api-reference/endpoint/set-pause-updates",
+        "api-reference/endpoint/set-pause-updates"
+      ]
+    },
+    {
+      "group": "Configurations",
+      "pages": [
         "api-reference/endpoint/get-configuration"
       ]
     },
