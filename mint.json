@@ -43,16 +43,11 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [
-        "introduction",
-        "feedback"
-      ]
+      "pages": ["introduction", "feedback"]
     },
     {
       "group": "API Reference",
-      "pages": [
-        "api-reference/introduction"
-      ]
+      "pages": ["api-reference/introduction"]
     },
     {
       "group": "Devices",
@@ -61,28 +56,23 @@
         "api-reference/endpoint/get-device",
         "api-reference/endpoint/edit",
         "api-reference/endpoint/send-command",
+        "api-reference/endpoint/batch-commands",
         "api-reference/endpoint/set-pause-updates"
       ]
     },
     {
       "group": "Configurations",
-      "pages": [
-        "api-reference/endpoint/get-configuration"
-      ]
+      "pages": ["api-reference/endpoint/get-configuration"]
     },
     {
       "group": "Unity SDK Reference",
-      "pages": [
-        "sdk-reference/introduction"
-      ]
+      "pages": ["sdk-reference/introduction"]
     },
     {
       "group": "CLI Reference",
-      "pages": [
-        "cli-reference/introduction"
-      ]
+      "pages": ["cli-reference/introduction"]
     },
-        {
+    {
       "group": "Commands",
       "pages": [
         "cli-reference/command/upload-app",
