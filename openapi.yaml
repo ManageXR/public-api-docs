@@ -532,6 +532,167 @@ paths:
          responses:
             '200':
                description: Success
+      get:
+         summary: Get device
+         description: Get a device by id (serial number).
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+            - name: deviceId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier (serial number) of the device
+         responses:
+            '200':
+               description: A device object
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                              serial:
+                                 type: string
+                                 example: 2G0YC1ZF630NZA
+                                 description: The serial number of the device. Also serves as the ID on ManageXR.
+                              name:
+                                 type: string
+                                 example: Device_0024
+                                 description: The name given to the device on ManageXR
+                              mac:
+                                 type: string
+                                 example: CE:AF:07:47:E0:AE
+                                 description: Device MAC address
+                              model:
+                                 type: string
+                                 example: Quest 3
+                                 description: Device model
+                              manufacturer:
+                                 type: string
+                                 example: Oculus
+                                 description: Device manufacturer. Note, Meta devices report as Oculus
+                              notes:
+                                 type: string
+                                 example: With Taylor L
+                                 description: The notes given to a device on ManageXR
+                              batteryLevel:
+                                 type: number
+                                 example: 34
+                                 description: The battery level of the device
+                              batteryIsCharging:
+                                 type: boolean
+                                 example: true
+                                 description: True if the device is charging
+                              online:
+                                 type: boolean
+                                 example: true
+                                 description: True if the device is online
+                              osVersion:
+                                 type: string
+                                 example: 12
+                                 description: The Android operating system version
+                              outOfDate:
+                                 type: boolean
+                                 example: false
+                                 description: True if device is not compliant with its configuration on ManageXR
+                              registerDate:
+                                 type: string
+                                 format: date-time
+                                 example: Tue, 27 Feb 2024 07:28:03 GMT
+                                 description: Date the device was registered on ManageXR
+                              updating:
+                                 type: boolean
+                                 example: false
+                                 description: True if the device is currently downloading content or firmware
+                              factoryResetStatus:
+                                 type: string
+                                 enum:
+                                    - QUEUED
+                                    - COMPLETE
+                                    - null
+                                 example: null
+                                 description: This status is set when an admin sends a factory reset command to a device. Null if no factory reset command has been sent.
+                              firmwareVersion:
+                                 type: string
+                                 example: 65.0.0.546.341
+                                 description: Device firmware version
+                              configuration:
+                                 type: object
+                                 properties:
+                                    name:
+                                       type: string
+                                       description: 'Configuration name'
+                                    id:
+                                       type: string
+                                       description: 'Configuration id'
+                                 example:
+                                    name: Test Configuration
+                                    id: OZ04csIYkA0EArkeu1vX
+                                 description: The configuration applied to the device on ManageXR
+                              tags:
+                                 type: array
+                                 example: [{ id: sFidGmedeQofSBcvRcyn, name: History }]
+                                 description: The tags applied to the device on ManageXR. Null if device has no tags.
+                              tutorialModeEnabled:
+                                 type: boolean
+                                 example: false
+                                 description: True if device is in Tutorial Mode
+                              kioskModeOverride:
+                                 type: boolean
+                                 example: false
+                                 description: True if device has Kiosk Mode/ManageXR Home Screen disabled. When true, the device is not locked into the ManageXR Home Screen or Kiosk App and users have full access to the native system menus. [Learn more](https://help.managexr.com/en/articles/5416931-temporarily-disable-kiosk-mode-home-screen) 
+                              lastSync:
+                                 type: string
+                                 format: date-time
+                                 example: Tue, 18 Jun 2024 21:46:34 GMT
+                                 description: The last time the device checked in with ManageXR. Online devices check in every 15 minutes.
+                              ram:
+                                 type: object
+                                 properties:
+                                    available:
+                                       type: number
+                                       description: Available RAM in bytes
+                                    total:
+                                       type: number
+                                       description: Total RAM in bytes
+                                 example:
+                                    available: 3704000512
+                                    total: 8108634112
+                                 description: Device RAM in bytes
+                              location:
+                                 type: object
+                                 example:
+                                    city: San Francisco
+                                    region: California
+                                    country: United States
+                                    continent: North America
+                                    timeZone: America/Los_Angeles
+                                    latitude: 37
+                                    longitude: -122
+                                 description: Device location as determined by its IP address and provided by ipstack.com
+                              connectedWifiNetwork:
+                                 type: object
+                                 properties:
+                                    ssid:
+                                       type: string
+                                       description: The ssid of the last connected wifi network
+                                 example:
+                                    ssid: TheElectricCity
+                                 description: Information about the last connected wifi network
+                              storage:
+                                 type: object
+                                 properties:
+                                    available:
+                                       type: number
+                                 example:
+                                    available: 107079929856
+                                 description: The available storage on the device in bytes
+
 components:
    securitySchemes:
       basicAuth:
