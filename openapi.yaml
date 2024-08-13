@@ -825,7 +825,7 @@ paths:
                description: Success
       get:
          summary: Get device
-         description: Get a device by id (serial number).
+         description: Get a device by id (serial number)
          parameters:
             - name: orgId
               in: path
