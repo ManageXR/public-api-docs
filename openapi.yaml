@@ -10,7 +10,7 @@ paths:
    /organizations/{orgId}/devices:
       get:
          summary: Get devices
-         description: Returns a list of devices
+         description: Retrieve a list of devices
          parameters:
             - name: orgId
               in: path
@@ -825,7 +825,7 @@ paths:
                description: Success
       get:
          summary: Get device
-         description: Get a device by id (serial number)
+         description: Retrieve a device by id (serial number)
          parameters:
             - name: orgId
               in: path
@@ -986,7 +986,7 @@ paths:
    /organizations/{orgId}/configurations/{configurationId}:
       get:
          summary: Get configuration
-         description: Get a configuration by id
+         description: Retrieve a configuration by id
          parameters:
             - name: orgId
               in: path
@@ -1237,7 +1237,7 @@ paths:
                                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
    /organizations/{orgId}/configurations:
       get:
-         description: Returns a list of all configurations
+         description: Retrieve a list of all configurations
          parameters:
             - name: orgId
               in: path
@@ -1278,7 +1278,7 @@ paths:
    /organizations:
       get:
          description: |
-          Returns a list of all organizations that can be controlled with a given API Key
+          Retrieve a list of all organizations that can be controlled with a given API Key
 
           <small><b>Need a multi-org API key?</b> Email support@managexr.com for early access to a single API key that allows you to control multiple organizations</small>
          responses:
