@@ -1172,6 +1172,47 @@ paths:
                                  example:
                                     available: 10707AB329856
                                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
+   /organizations/{orgId}/configurations:
+      get:
+         description: Returns a list of all configurations
+         parameters:
+            - name: orgId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+         responses:
+            '200':
+               description: A list of configuration summary objects.
+               content:
+                  application/json:
+                     schema:
+                        type: array
+                        items:
+                           properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the configuration
+                                 name:
+                                    type: string
+                                    description: Name of the configuration
+                                 registrationCode:
+                                    type: string
+                                    description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                                 deviceCount:
+                                    type: number
+                                    description: Number of devices using the configuration
+                        example:
+                           - id: 6qwM6FzJE4o708iqTpWc
+                             name: Education
+                             registrationCode: f7GbHvH
+                             deviceCount: 15
+                           - id: 7xzA3LrJS5b903jrTpYd
+                             name: Employee Training
+                             registrationCode: a8YhTzK
+                             deviceCount: 30
+
 components:
    securitySchemes:
       basicAuth:
