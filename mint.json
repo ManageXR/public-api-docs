@@ -62,7 +62,7 @@
     },
     {
       "group": "Configurations",
-      "pages": ["api-reference/endpoint/get-configuration", "api-reference/endpoint/list-configurations"]
+      "pages": ["api-reference/endpoint/list-configurations", "api-reference/endpoint/get-configuration"]
     },
     {
       "group": "Organizations",
