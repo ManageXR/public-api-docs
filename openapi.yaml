@@ -201,6 +201,14 @@ paths:
                                  description: Device RAM in bytes
                               location:
                                  type: object
+                                 properties:
+                                    city: string
+                                    region: string
+                                    country: string
+                                    continent: string
+                                    timeZone: string
+                                    latitude: number
+                                    longitude: number
                                  example:
                                     city: San Francisco
                                     region: California
@@ -971,6 +979,14 @@ paths:
                                  description: Device RAM in bytes
                               location:
                                  type: object
+                                 properties:
+                                    city: string
+                                    region: string
+                                    country: string
+                                    continent: string
+                                    timeZone: string
+                                    latitude: number
+                                    longitude: number
                                  example:
                                     city: San Francisco
                                     region: California
