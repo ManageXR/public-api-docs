@@ -202,13 +202,20 @@ paths:
                               location:
                                  type: object
                                  properties:
-                                    city: string
-                                    region: string
-                                    country: string
-                                    continent: string
-                                    timeZone: string
-                                    latitude: number
-                                    longitude: number
+                                    city: 
+                                       type: string
+                                    region: 
+                                       type: string
+                                    country: 
+                                       type: string
+                                    continent: 
+                                       type: string
+                                    timeZone: 
+                                       type: string
+                                    latitude: 
+                                       type: number
+                                    longitude: 
+                                       type: number
                                  example:
                                     city: San Francisco
                                     region: California
@@ -980,13 +987,20 @@ paths:
                               location:
                                  type: object
                                  properties:
-                                    city: string
-                                    region: string
-                                    country: string
-                                    continent: string
-                                    timeZone: string
-                                    latitude: number
-                                    longitude: number
+                                    city: 
+                                       type: string
+                                    region: 
+                                       type: string
+                                    country: 
+                                       type: string
+                                    continent: 
+                                       type: string
+                                    timeZone: 
+                                       type: string
+                                    latitude: 
+                                       type: number
+                                    longitude: 
+                                       type: number
                                  example:
                                     city: San Francisco
                                     region: California
