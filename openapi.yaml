@@ -131,6 +131,10 @@ paths:
                                  type: boolean
                                  example: false
                                  description: True if device is not compliant with its configuration on ManageXR
+                              pauseUpdates:
+                                 type: boolean
+                                 example: false
+                                 description: True if configuration updates are paused for device. Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
                               registerDate:
                                  type: string
                                  format: date-time
@@ -891,6 +895,10 @@ paths:
                                  type: boolean
                                  example: false
                                  description: True if device is not compliant with its configuration on ManageXR
+                              pauseUpdates:
+                                 type: boolean
+                                 example: false
+                                 description: True if configuration updates are paused for device. Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
                               registerDate:
                                  type: string
                                  format: date-time
