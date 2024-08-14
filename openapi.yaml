@@ -207,6 +207,8 @@ paths:
                                     country: United States
                                     continent: North America
                                     timeZone: America/Los_Angeles
+                                    latitude: 37
+                                    longitude: -122
                                  description: Device location as determined by its IP address and provided by ipstack.com
                               connectedWifiNetwork:
                                  type: object
@@ -259,6 +261,8 @@ paths:
                                    country: United States
                                    continent: North America
                                    timeZone: America/Los_Angeles
+                                   latitude: 37
+                                   longitude: -122
                                 connectedWifiNetwork:
                                    ssid: Comcast
                                 storage:
@@ -293,6 +297,8 @@ paths:
                                    country: Portugal
                                    continent: Europe
                                    timeZone: Europe/Lisbon
+                                   latitude: 38
+                                   longitude: 9
                                 connectedWifiNetwork:
                                    ssid: Carol
                                 storage:
