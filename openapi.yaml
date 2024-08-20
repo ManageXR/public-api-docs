@@ -1353,8 +1353,8 @@ paths:
                              deviceLicenses: 50
                            - id: EwmhggZ9zYIqMVVMz2s7
                              name: Sky High
-                             registrationCode: 50
-                             deviceCount: 100
+                             activeDevices: 50
+                             deviceLicenses: 100
 
 components:
    securitySchemes:
