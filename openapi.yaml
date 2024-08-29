@@ -272,8 +272,8 @@ paths:
                                    name: Quality Assurance
                                    id: SpGcLo99xqMkj9dyNvBd
                                 tags:
-                                    - id: sFidGmedeQofSBcvRcyn
-                                    name: QA Testing
+                                   - id: sFidGmedeQofSBcvRcyn
+                                   name: QA Testing
                                 tutorialModeEnabled: false
                                 kioskModeOverride: false
                                 lastSync: Mon, 24 Jun 2024 19:33:21 GMT
