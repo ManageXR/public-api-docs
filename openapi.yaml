@@ -171,7 +171,20 @@ paths:
                                  description: The configuration applied to the device on ManageXR
                               tags:
                                  type: array
-                                 example: [{ id: sFidGmedeQofSBcvRcyn, name: History }]
+                                 items:
+                                    type: object
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: The unique identifier for the tag
+                                       name:
+                                          type: string
+                                          description: The name of the tag
+                                 example:
+                                    - id: sFidGmedeQofSBcvRcyn
+                                    name: QA Testing
+                                    - id: azgYGmedeQofSBcvRBV
+                                    name: Kenny
                                  description: The tags applied to the device on ManageXR. Null if device has no tags.
                               tutorialModeEnabled:
                                  type: boolean
