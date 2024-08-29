@@ -183,8 +183,6 @@ paths:
                                  example:
                                     - id: sFidGmedeQofSBcvRcyn
                                     name: QA Testing
-                                    - id: azgYGmedeQofSBcvRBV
-                                    name: Kenny
                                  description: The tags applied to the device on ManageXR. Null if device has no tags.
                               tutorialModeEnabled:
                                  type: boolean
