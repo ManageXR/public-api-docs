@@ -750,7 +750,27 @@ paths:
                               properties:
                                  packageName:
                                     type: string
-                                    description: The package name of the app to uninstall                         
+                                    description: The package name of the app to uninstall
+                      - title: Restart App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices 
+                           action: 
+                              type: string
+                              description: Restart an app
+                              enum:
+                                 - RESTART_APP
+                              example: RESTART_APP
+                           data:
+                              type: object 
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to restart
                       - title: Sync
                         type: object
                         properties:
