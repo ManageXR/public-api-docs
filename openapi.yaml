@@ -515,13 +515,28 @@ paths:
                                  Cannot uninstall system apps. If you uninstall an app that is still on a devices's configuration, it will automatically re-download the next time the device syncs.
                               enum:
                                  - UNINSTALL_APP
-                              example: LAUNCH_APP
+                              example: UNINSTALL_APP
                            data:
                               type: object
                               properties:
                                  packageName:
                                     type: string
-                                    description: The package name of the app to uninstall                         
+                                    description: The package name of the app to uninstall
+                      - title: Restart App
+                        type: object
+                        properties: 
+                           action:
+                              type: string
+                              description: Restart an app
+                              enum:
+                                 - RESTART_APP
+                              example: RESTART_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to restart
                       - title: Sync
                         type: object
                         properties:
