@@ -390,7 +390,7 @@ paths:
          description: |
             Send command to a specific device
 
-            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode, Power OFF, Set Volume, Set Brightness </small>
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode</small>
          parameters:
             - name: orgId
               in: path
@@ -634,7 +634,7 @@ paths:
          description: |
             Send a command to multiple devices at once
 
-            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
          parameters:
             - name: orgId
               in: path
