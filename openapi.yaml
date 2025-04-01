@@ -390,7 +390,7 @@ paths:
          description: |
             Send command to a specific device
 
-            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Uninstall App, Sync, Enable/Disable Tutorial Mode, Power OFF, Set Volume, Set Brightness </small>
          parameters:
             - name: orgId
               in: path
@@ -504,6 +504,45 @@ paths:
                               enum:
                               - RESTART
                               example: RESTART
+                      - title: Power OFF
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Remotely turn off device. Supported on Pico Neo 3s PUI 5+ and Pico 4 Ultra Enterprise devices. 
+                              enum:
+                                 - POWER_OFF
+                              example: POWER_OFF
+                      - title: Set Volume
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Set volume on device. Supply a level between 0 and 100. 
+                              enum:
+                                 - SET_VOLUME
+                              example: SET_VOLUME
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The volume level to set. Choose a value between 0 and 100.
+                      - title: Set Brightness
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Set display brightness on device. Supply a level between 0 and 100. 
+                              enum:
+                                 - SET_BRIGHTNESS
+                              example: SET_BRIGHTNESS
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The display brightness level to set. Choose a value between 0 and 100.
                       - title: Uninstall App
                         type: object
                         properties:
