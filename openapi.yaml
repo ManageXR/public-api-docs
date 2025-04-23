@@ -6,7 +6,80 @@ info:
 servers:
    - url: https://managexrapi.com
      description: ManageXR API Server
-paths:
+paths: 
+# v1 Endpoints:
+# Apps 
+   /v1/apps/:
+      get: 
+         summary: List apps in organization
+         description: List all applications present in organization. This just lists top-level application info by package name, not app versions. 
+      post:
+         summary: Create app (self-hosted)
+         description: Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+   /v1/apps/{packageName}:
+      get:
+         summary: Get app information by package name
+         description: Returns information about a specific app including the title, iconUrl, categories, and number of versions.
+      patch:
+         summary: Edit app details 
+         description: Edit app information like title, description, categories, and icon 
+      delete:
+         summary: Delete app
+         description: Removes application and all versions from ManageXR.
+   /v1/apps/{packageName}/versions:
+      get:
+         summary: List app versions
+         description: Returns a list of all app versions for a given package name
+      post:
+         summary: Create app version (self-hosted). 
+         description: Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
+   /v1/apps/{packageName}/release-channels:
+      get:
+         summary: List app release channels
+         description: Returns a list of all release channels for a given application
+      post:
+         summary: Create an app release channel 
+         description: Add a new release channel for an app and assign it an app version
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}:
+      patch:
+         summary: Edit a release channel
+         description: Update the target app version or name of an existing app release channel
+      delete:
+         summary: Delete a release channel
+         description: Delete a release channel for an application
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}/share:
+      post:
+         summary: Share a release channel 
+         description: Share an app release channel with a client organization
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}/unshare:
+      post:
+         summary: Unshare a release channel
+         description: Unshare an app release channel with a client organization
+# Configurations
+   /v1/configurations/:
+      post:
+         summary: Create a configuration
+         description: Create a new configuration
+   /v1/configurations/{configurationId}:
+      patch:
+         summary: Edit a configuration
+         description: Update an existing configuration to deploy new content
+      delete:
+         summary: Delete a configuration
+         description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
+# Tags
+   /v1/tags/:
+      post:
+         summary: Create tag
+         description: Create a new tag
+   /v1/tags/{tagId}:
+      patch:
+         summary: Edit tag
+         description: Update an existing tag's name
+      delete: 
+         summary: Delete tag
+         description: Delete a tag 
+# v0 Endpoints: 
    /organizations/{orgId}/devices:
       get:
          summary: Get devices
