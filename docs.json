@@ -63,8 +63,7 @@
                 "api-reference/endpoint/v1/create-app-release-channel",
                 "api-reference/endpoint/v1/edit-app-release-channel",
                 "api-reference/endpoint/v1/share-app-release-channel",
-                "api-reference/endpoint/v1/unshare-app-release-channel",
-                "api-reference/endpoint/v1/delete-app-release-channel"]
+                "api-reference/endpoint/v1/unshare-app-release-channel"]
               },
               {
                 "group": "Tags",

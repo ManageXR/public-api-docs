@@ -46,17 +46,517 @@ paths:
       patch:
          summary: Edit a release channel
          description: Update the target app version or name of an existing app release channel
-      delete:
-         summary: Delete a release channel
-         description: Delete a release channel for an application
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: New name for the release channel
+                           example: "Stable"
+                        targetVersion:
+                           oneOf:
+                              - type: string
+                                description: App version ID
+                                example: "av_123"
+                              - type: string
+                                enum: [latest, last-created]
+                                description: Special version identifier
+                                example: "latest"
+                              - type: object
+                                properties:
+                                   versionCode:
+                                      type: number
+                                      description: Version code of the app
+                                      example: 42
+                                   versionName:
+                                      type: string
+                                      description: Version name of the app
+                                      example: "1.0.0"
+                                   versionLabel:
+                                      type: string
+                                      description: Label for uniqueness among app versions
+                                      example: "Release"
+                  example:
+                     name: "Stable"
+                     targetVersion: "latest"
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 42
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "1.0.0"
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              versionCode: 42
+                              versionName: "1.0.0"
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}/release-channels/{releaseChannelId}/share:
       post:
-         summary: Share a release channel 
-         description: Share an app release channel with a client organization
+         summary: Share a release channel
+         description: Share an app release channel with a client organization. The API key used must be a multi-org key with access to the client organizations to use this endpoint.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        organizationIds:
+                           type: array
+                           items:
+                              type: string
+                           description: Array of organization IDs to share the release channel with
+                           example: ["org_123", "org_456"]
+                     required:
+                        - organizationIds
+                  example:
+                     organizationIds: ["org_123", "org_456"]
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 42
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "1.0.0"
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              versionCode: 42
+                              versionName: "1.0.0"
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}/release-channels/{releaseChannelId}/unshare:
       post:
          summary: Unshare a release channel
          description: Unshare an app release channel with a client organization
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        organizationIds:
+                           type: array
+                           items:
+                              type: string
+                           description: Array of organization IDs to unshare the release channel with
+                           example: ["org_123", "org_456"]
+                     required:
+                        - organizationIds
+                  example:
+                     organizationIds: ["org_123", "org_456"]
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 42
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "1.0.0"
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              versionCode: 42
+                              versionName: "1.0.0"
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
 # Configurations
    /v1/configurations/:
       post:
