@@ -32,6 +32,127 @@ paths:
       get:
          summary: List app versions
          description: Returns a list of all app versions for a given package name
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         responses:
+            '200':
+               description: A list of app versions
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the app version
+                                       example: "av_123"
+                                    type:
+                                       type: string
+                                       enum: [managed, shared, external, instant]
+                                       description: Type of the app version
+                                       example: "managed"
+                                    configurationDeployments:
+                                       type: object
+                                       description: Map of configuration ids to device count using application
+                                       example: { "config_123": 1, "config_456": 0 }
+                                    createdAt:
+                                       type: number
+                                       description: Creation timestamp
+                                       example: 1645615777448
+                                    updatedAt:
+                                       type: number
+                                       description: Last update timestamp
+                                       example: 1687352117203
+                                    versionCode:
+                                       type: number
+                                       description: Version code of the app
+                                       example: 83894522
+                                    versionName:
+                                       type: string
+                                       description: Version name of the app
+                                       example: "8.7.8.1206"
+                                    versionLabel:
+                                       type: string
+                                       description: Label for uniqueness among app versions
+                                       example: "Quest"
+                                    apkSize:
+                                       type: number
+                                       description: Size of the APK file in bytes
+                                       example: 72633861
+                                    obbSize:
+                                       type: number
+                                       description: Size of the OBB file in bytes
+                                       example: 1024
+                                    selfHosted:
+                                       type: boolean
+                                       description: Whether the app is self-hosted
+                                       example: true
+                                    apkUrl:
+                                       type: string
+                                       description: URL of the APK file (only present if self-hosted)
+                                       example: "https://storage.example.com/apps/com.example.app.apk"
+                                    obbUrl:
+                                       type: string
+                                       description: URL of the OBB file (only present if self-hosted)
+                                       example: "https://storage.example.com/apps/com.example.app.obb"
+                     example:
+                        data:
+                           - id: "av_123"
+                             type: "managed"
+                             configurationDeployments: { "config_123": 1, "config_456": 0 }
+                             createdAt: 1645615777448
+                             updatedAt: 1687352117203
+                             versionCode: 83894522
+                             versionName: "8.7.8.1206"
+                             versionLabel: "Quest"
+                             apkSize: 72633861
+                             obbSize: 1024
+                             selfHosted: true
+                             apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                             obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                           - id: "av_456"
+                             type: "shared"
+                             configurationDeployments: { "config_123": 0, "config_456": 1 }
+                             createdAt: 1645615777448
+                             updatedAt: 1687352117203
+                             versionCode: 83894522
+                             versionName: "8.7.8.1206"
+                             versionLabel: "Quest"
+                             apkSize: 72633861
+                             obbSize: 1024
+                             selfHosted: true
+                             apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                             obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
       post:
          summary: Create app version (self-hosted)
          description: (Self-Hosted Only) Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
@@ -155,11 +276,11 @@ paths:
                                     example: true
                                  apkUrl:
                                     type: string
-                                    description: URL of the APK file
+                                    description: URL of the APK file (only present if self-hosted)
                                     example: "https://storage.example.com/apps/com.example.app.apk"
                                  obbUrl:
                                     type: string
-                                    description: URL of the OBB file
+                                    description: URL of the OBB file (only present if self-hosted)
                                     example: "https://storage.example.com/apps/com.example.app.obb"
                      example:
                         data:
@@ -215,26 +336,6 @@ paths:
                      example:
                         statusCode: 403
                         message: "Forbidden"
-                        error: "ManageXR Error"
-            '404':
-               description: App not found
-               content:
-                  application/json:
-                     schema:
-                        type: object
-                        properties:
-                           statusCode:
-                              type: number
-                              example: 404
-                           message:
-                              type: string
-                              example: "App with package name com.example.app not found"
-                           error:
-                              type: string
-                              example: "ManageXR Error"
-                     example:
-                        statusCode: 404
-                        message: "App with package name com.example.app not found"
                         error: "ManageXR Error"
    /v1/apps/{packageName}/release-channels:
       get:
