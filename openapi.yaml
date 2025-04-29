@@ -8,6 +8,8 @@ servers:
      description: ManageXR API Server
 paths: 
 # v1 Endpoints:
+# Devices
+
 # Apps 
    /v1/apps/:
       get: 
@@ -15,7 +17,7 @@ paths:
          description: List all applications present in organization. This just lists top-level application info by package name, not app versions. 
       post:
          summary: Create app (self-hosted)
-         description: Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+         description: (Self-Hosted Only) Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
    /v1/apps/{packageName}:
       get:
          summary: Get app information by package name
@@ -32,7 +34,7 @@ paths:
          description: Returns a list of all app versions for a given package name
       post:
          summary: Create app version (self-hosted). 
-         description: Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
+         description: (Self-Hosted Only) Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
    /v1/apps/{packageName}/release-channels:
       get:
          summary: List app release channels
@@ -60,7 +62,10 @@ paths:
       post:
          summary: Create a configuration
          description: Create a new configuration
-   /v1/configurations/{configurationId}:
+   /v1/configurations/{id}:
+      get: 
+         summary: Get a configuration
+         description: Retrieve a configuration by id
       patch:
          summary: Edit a configuration
          description: Update an existing configuration to deploy new content
@@ -72,13 +77,166 @@ paths:
       post:
          summary: Create tag
          description: Create a new tag
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the tag
+                           example: "History"
+                     required:
+                        - name
+                  example:
+                     name: "History"
+         responses:
+            '200':
+               description: The created tag
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the tag
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the tag
+                                    example: "History"
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "History"
+            '400':
+               description: Tag name already exists
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Tag with name History already exists"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Tag with name History already exists"
+                        error: "ManageXR Error"
    /v1/tags/{tagId}:
       patch:
          summary: Edit tag
          description: Update an existing tag's name
+         parameters:
+            - name: tagId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the tag
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: New name for the tag
+                           example: "World History"
+                     required:
+                        - name
+                  example:
+                     name: "World History"
+         responses:
+            '200':
+               description: The updated tag
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the tag
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the tag
+                                    example: "World History"
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "World History"
+            '400':
+               description: Tag name already exists
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Tag with name World History already exists"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Tag with name World History already exists"
+                        error: "ManageXR Error"
+            '404':
+               description: Tag not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           message:
+                              type: string
+                              example: "Tag with id sFidGmedeQofSBcvRcyn not found"
       delete: 
          summary: Delete tag
-         description: Delete a tag 
+         description: Delete a tag
+         parameters:
+            - name: tagId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the tag
+         responses:
+            '200':
+               description: Tag successfully deleted
+            '404':
+               description: Tag not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           message:
+                              type: string
+                              example: "Tag with id sFidGmedeQofSBcvRcyn not found"
 # v0 Endpoints: 
    /organizations/{orgId}/devices:
       get:
@@ -449,14 +607,6 @@ paths:
          responses:
            '201':
              description: Success
-             content:
-               application/json:
-                 schema:
-                   type: object
-                   properties:
-                     message:
-                       type: string
-                       example: "Success"
    /organizations/{orgId}/devices/{deviceId}/command:
       post:
          summary: Send command
