@@ -84,14 +84,39 @@ paths:
                                              type: string
                                              description: Unique identifier of the app version
                                              example: "av_123"
+                                          type:
+                                             type: string
+                                             enum: [managed, shared, external, instant]
+                                             description: Type of the app version
+                                             example: "managed"
+                                          configurationDeployments:
+                                             type: object
+                                             description: Number of deployments per configuration
+                                             example: { "config_123": 1, "config_456": 0 }
+                                          createdAt:
+                                             type: number
+                                             description: Creation timestamp
+                                             example: 1645615777448
+                                          updatedAt:
+                                             type: number
+                                             description: Last update timestamp
+                                             example: 1687352117203
                                           versionCode:
                                              type: number
                                              description: Version code of the app
-                                             example: 42
+                                             example: 83894522
                                           versionName:
                                              type: string
                                              description: Version name of the app
-                                             example: "1.0.0"
+                                             example: "8.7.8.1206"
+                                          apkSize:
+                                             type: number
+                                             description: Size of the APK file in bytes
+                                             example: 72633861
+                                          selfHosted:
+                                             type: boolean
+                                             description: Whether the app is self-hosted
+                                             example: false
                                     sharedOrganizations:
                                        type: array
                                        description: List of organizations this release channel is shared with
@@ -114,8 +139,14 @@ paths:
                              packageName: "com.example.app"
                              targetVersion:
                                 id: "av_123"
-                                versionCode: 42
-                                versionName: "1.0.0"
+                                type: "managed"
+                                configurationDeployments: { "config_123": 1, "config_456": 0 }
+                                createdAt: 1645615777448
+                                updatedAt: 1687352117203
+                                versionCode: 83894522
+                                versionName: "8.7.8.1206"
+                                apkSize: 72633861
+                                selfHosted: false
                              sharedOrganizations:
                                 - id: "org_789"
                                   name: "Example Org"
@@ -125,8 +156,14 @@ paths:
                              packageName: "com.example.app"
                              targetVersion:
                                 id: "av_456"
-                                versionCode: 43
-                                versionName: "1.1.0"
+                                type: "shared"
+                                configurationDeployments: { "config_123": 0, "config_456": 1 }
+                                createdAt: 1645615777448
+                                updatedAt: 1687352117203
+                                versionCode: 83894522
+                                versionName: "8.7.8.1206"
+                                apkSize: 72633861
+                                selfHosted: false
                              sharedOrganizations: []
       post:
          summary: Create an app release channel
@@ -242,14 +279,39 @@ paths:
                                           type: string
                                           description: Unique identifier of the app version
                                           example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Number of deployments per configuration
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
                                        versionCode:
                                           type: number
                                           description: Version code of the app
-                                          example: 42
+                                          example: 83894522
                                        versionName:
                                           type: string
                                           description: Version name of the app
-                                          example: "1.0.0"
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
                                  sharedOrganizations:
                                     type: array
                                     description: List of organizations this release channel is shared with
@@ -272,9 +334,17 @@ paths:
                            packageName: "com.example.app"
                            targetVersion:
                               id: "av_123"
-                              versionCode: 42
-                              versionName: "1.0.0"
-                           sharedOrganizations: []
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
             '400':
                description: Release channel package name mismatch
                content:
@@ -417,14 +487,39 @@ paths:
                                           type: string
                                           description: Unique identifier of the app version
                                           example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Number of deployments per configuration
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
                                        versionCode:
                                           type: number
                                           description: Version code of the app
-                                          example: 42
+                                          example: 83894522
                                        versionName:
                                           type: string
                                           description: Version name of the app
-                                          example: "1.0.0"
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
                                  sharedOrganizations:
                                     type: array
                                     description: List of organizations this release channel is shared with
@@ -447,8 +542,14 @@ paths:
                            packageName: "com.example.app"
                            targetVersion:
                               id: "av_123"
-                              versionCode: 42
-                              versionName: "1.0.0"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
                            sharedOrganizations:
                               - id: "org_789"
                                 name: "Example Org"
@@ -582,14 +683,39 @@ paths:
                                           type: string
                                           description: Unique identifier of the app version
                                           example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Number of deployments per configuration
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
                                        versionCode:
                                           type: number
                                           description: Version code of the app
-                                          example: 42
+                                          example: 83894522
                                        versionName:
                                           type: string
                                           description: Version name of the app
-                                          example: "1.0.0"
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
                                  sharedOrganizations:
                                     type: array
                                     description: List of organizations this release channel is shared with
@@ -612,8 +738,14 @@ paths:
                            packageName: "com.example.app"
                            targetVersion:
                               id: "av_123"
-                              versionCode: 42
-                              versionName: "1.0.0"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
                            sharedOrganizations:
                               - id: "org_789"
                                 name: "Example Org"
@@ -747,14 +879,39 @@ paths:
                                           type: string
                                           description: Unique identifier of the app version
                                           example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Number of deployments per configuration
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
                                        versionCode:
                                           type: number
                                           description: Version code of the app
-                                          example: 42
+                                          example: 83894522
                                        versionName:
                                           type: string
                                           description: Version name of the app
-                                          example: "1.0.0"
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
                                  sharedOrganizations:
                                     type: array
                                     description: List of organizations this release channel is shared with
@@ -777,8 +934,14 @@ paths:
                            packageName: "com.example.app"
                            targetVersion:
                               id: "av_123"
-                              versionCode: 42
-                              versionName: "1.0.0"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
                            sharedOrganizations:
                               - id: "org_789"
                                 name: "Example Org"
