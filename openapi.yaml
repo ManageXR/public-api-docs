@@ -99,12 +99,27 @@ paths:
                                        example: true
                                     apkUrl:
                                        type: string
-                                       description: URL of the APK file (only present if self-hosted)
+                                       description: URL of the APK file (self-hosted apps only)
                                        example: "https://storage.example.com/apps/com.example.app.apk"
                                     obbUrl:
                                        type: string
-                                       description: URL of the OBB file (only present if self-hosted)
+                                       description: URL of the OBB file (self-hosted apps only)
                                        example: "https://storage.example.com/apps/com.example.app.obb"
+                                    sharingOrganizationName:
+                                       type: string
+                                       description: Name of the organization sharing the app (shared apps only)
+                                       example: "XR Developer"
+                                    releaseChannelName: 
+                                       type: string
+                                       description: Name of the release channel (shared apps only)
+                                       example: "Production"
+                                    supportedDeviceModels:
+                                       type: array
+                                       items:
+                                          type: string
+                                          example: "Quest 3"
+                                       description: List of supported device models for Instant App (instant apps only)
+                                       example: ["Quest 3", "Quest 3S", "Pico 4 Ultra Enterprise"]
                      example:
                         data:
                            - id: "av_123"
@@ -130,9 +145,10 @@ paths:
                              versionLabel: "Quest"
                              apkSize: 72633861
                              obbSize: 1024
-                             selfHosted: true
-                             apkUrl: "https://storage.example.com/apps/com.example.app.apk"
-                             obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                             selfHosted: false
+
+                             releaseChannelName: "Production"
+                             sharingOrganizationName: "XR Developer"
             '404':
                description: App not found
                content:
