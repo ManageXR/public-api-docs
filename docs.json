@@ -54,12 +54,13 @@
                 "pages": ["api-reference/endpoint/v1/list-apps",
                 "api-reference/endpoint/v1/get-app", 
                 "api-reference/endpoint/v1/create-externally-hosted-app", 
-                "api-reference/endpoint/v1/edit-app", "api-reference/endpoint/v1/list-app-versions",
-                "api-reference/endpoint/v1/create-app-version"]
+                "api-reference/endpoint/v1/edit-app"]
               },
               {
-                "group": "App Release Channels",
-                "pages": ["api-reference/endpoint/v1/list-app-release-channels",
+                "group": "App Versions & Release Channels",
+                "pages": [ "api-reference/endpoint/v1/list-app-versions",
+                "api-reference/endpoint/v1/create-app-version", 
+                "api-reference/endpoint/v1/list-app-release-channels",
                 "api-reference/endpoint/v1/create-app-release-channel",
                 "api-reference/endpoint/v1/edit-app-release-channel",
                 "api-reference/endpoint/v1/share-app-release-channel",
