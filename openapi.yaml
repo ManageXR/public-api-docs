@@ -14,7 +14,61 @@ paths:
    /v1/apps/:
       get: 
          summary: List apps in organization
-         description: List all applications present in organization. This just lists top-level application info by package name, not app versions. 
+         description: List all applications present in organization. This lists top-level application info. To access app versions and specific version info, use [List App Versions](https://docs.managexr.com/api-reference/endpoint/v1/list-app-versions)
+         responses:
+            '200':
+               description: A list of app profiles
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 type: object
+                                 properties:
+                                    packageName:
+                                       type: string
+                                       description: Package name of the app
+                                       example: "com.example.app"
+                                    title:
+                                       type: string
+                                       description: Title of the app
+                                       example: "My Awesome App"
+                                    description:
+                                       type: string
+                                       description: Description of the app
+                                       example: "A fantastic app for managing XR content"
+                                    categories:
+                                       type: array
+                                       items:
+                                          type: string
+                                       description: Categories the app belongs to
+                                       example: ["Education", "Productivity"]
+                                    iconUrl:
+                                       type: string
+                                       format: uri
+                                       description: URL of the app's icon
+                                       example: "https://storage.example.com/apps/com.example.app/icon.png"
+                                    numVersions:
+                                       type: number
+                                       description: Number of versions of the app
+                                       example: 5
+                     example:
+                        data:
+                           - packageName: "com.example.app"
+                             title: "My Awesome App"
+                             description: "A fantastic app for managing XR content"
+                             categories: ["Education", "Productivity"]
+                             iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+                             numVersions: 5
+                           - packageName: "com.another.app"
+                             title: "Another App"
+                             description: "Another great app for XR"
+                             categories: ["Training", "Simulation"]
+                             iconUrl: "https://storage.example.com/apps/com.another.app/icon.png"
+                             numVersions: 3
       post:
          summary: Create managed app (self-hosted)
          description: Create a managed app (Self-Hosted Only). Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
