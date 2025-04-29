@@ -16,8 +16,200 @@ paths:
          summary: List apps in organization
          description: List all applications present in organization. This just lists top-level application info by package name, not app versions. 
       post:
-         summary: Create app (self-hosted)
-         description: (Self-Hosted Only) Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+         summary: Create managed app (self-hosted)
+         description: Create a managed app (Self-Hosted Only). Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        packageName:
+                           type: string
+                           description: Package name of the app
+                           example: "com.example.app"
+                        title:
+                           type: string
+                           description: Title of the app
+                           example: "My Awesome App"
+                        versionCode:
+                           type: number
+                           description: Version code of the app
+                           example: 42
+                        apkUrl:
+                           type: string
+                           description: URL of the APK file
+                           example: "https://storage.example.com/apps/com.example.app.apk"
+                        apkMd5:
+                           type: string
+                           description: MD5 hash of the APK file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        obbUrl:
+                           type: string
+                           description: URL of the OBB file
+                           example: "https://storage.example.com/apps/com.example.app.obb"
+                        obbMd5:
+                           type: string
+                           description: MD5 hash of the OBB file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        versionName:
+                           type: string
+                           description: Version name of the app
+                           example: "1.0.0"
+                        versionLabel:
+                           type: string
+                           description: Label for uniqueness among app versions
+                           example: "Quest"
+                        apkSize:
+                           type: number
+                           description: Size of the APK file in bytes
+                           example: 72633861
+                        obbSize:
+                           type: number
+                           description: Size of the OBB file in bytes
+                           example: 1024
+                        iconUrl:
+                           type: string
+                           format: uri
+                           description: URL of the app's icon
+                           example: "https://storage.example.com/apps/com.example.app/icon.png"
+                     required:
+                        - packageName
+                        - title
+                        - versionCode
+                        - apkUrl
+                        - apkMd5
+                        - versionName
+                        - apkSize
+                  example:
+                     packageName: "com.example.app"
+                     title: "My Awesome App"
+                     versionCode: 42
+                     apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                     apkMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                     obbMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     versionName: "1.0.0"
+                     versionLabel: "Quest"
+                     apkSize: 72633861
+                     obbSize: 1024
+                     iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+         responses:
+            '200':
+               description: The created managed app version
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the app version
+                                    example: "av_123"
+                                 type:
+                                    type: string
+                                    enum: [managed]
+                                    description: Type of the app version
+                                    example: "managed"
+                                 createdAt:
+                                    type: number
+                                    description: Creation timestamp
+                                    example: 1645615777448
+                                 updatedAt:
+                                    type: number
+                                    description: Last update timestamp
+                                    example: 1687352117203
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 83894522
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "8.7.8.1206"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 obbSize:
+                                    type: number
+                                    description: Size of the OBB file in bytes
+                                    example: 1024
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: true
+                                 apkUrl:
+                                    type: string
+                                    description: URL of the APK file
+                                    example: "https://storage.example.com/apps/com.example.app.apk"
+                                 obbUrl:
+                                    type: string
+                                    description: URL of the OBB file
+                                    example: "https://storage.example.com/apps/com.example.app.obb"
+                     example:
+                        data:
+                           id: "av_123"
+                           type: "managed"
+                           configurationDeployments: { "config_123": 1, "config_456": 0 }
+                           createdAt: 1645615777448
+                           updatedAt: 1687352117203
+                           versionCode: 83894522
+                           versionName: "8.7.8.1206"
+                           versionLabel: "Quest"
+                           apkSize: 72633861
+                           obbSize: 1024
+                           selfHosted: true
+                           apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                           obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            '400':
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid request"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid request"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}:
       get:
          summary: Get app information by package name
@@ -323,7 +515,7 @@ paths:
                         error: "ManageXR Error"
       post:
          summary: Create app version (self-hosted)
-         description: (Self-Hosted Only) Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
+         description: Create a managed app version (Self-Hosted Only). Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
          parameters:
             - name: packageName
               in: path
