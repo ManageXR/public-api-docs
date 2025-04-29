@@ -214,6 +214,79 @@ paths:
       get:
          summary: Get app information by package name
          description: Returns information about a specific app including the title, iconUrl, categories, and number of versions.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         responses:
+            '200':
+               description: The app profile
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 title:
+                                    type: string
+                                    description: Title of the app
+                                    example: "My Awesome App"
+                                 description:
+                                    type: string
+                                    description: Description of the app
+                                    example: "A fantastic app for managing XR content"
+                                 categories:
+                                    type: array
+                                    items:
+                                       type: string
+                                    description: Categories the app belongs to
+                                    example: ["Education", "Productivity"]
+                                 iconUrl:
+                                    type: string
+                                    format: uri
+                                    description: URL of the app's icon
+                                    example: "https://storage.example.com/apps/com.example.app/icon.png"
+                                 numVersions:
+                                    type: number
+                                    description: Number of versions of the app
+                                    example: 5
+                     example:
+                        data:
+                           packageName: "com.example.app"
+                           title: "My Awesome App"
+                           description: "A fantastic app for managing XR content"
+                           categories: ["Education", "Productivity"]
+                           iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+                           numVersions: 5
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
       patch:
          summary: Edit app
          description: Update an app's metadata such as title, description, categories, and icon URL
