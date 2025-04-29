@@ -69,16 +69,9 @@ paths:
                         name:
                            type: string
                            description: New name for the release channel
-                           example: "Stable"
+                           example: "Production"
                         targetVersion:
                            oneOf:
-                              - type: string
-                                description: App version ID
-                                example: "av_123"
-                              - type: string
-                                enum: [latest, last-created]
-                                description: Special version identifier
-                                example: "latest"
                               - type: object
                                 properties:
                                    versionCode:
@@ -92,10 +85,49 @@ paths:
                                    versionLabel:
                                       type: string
                                       description: Label for uniqueness among app versions
-                                      example: "Release"
-                  example:
-                     name: "Stable"
-                     targetVersion: "latest"
+                                      example: "Quest"
+                              - type: string
+                                enum: [latest, last-created]
+                                description: Special version identifier. "latest" = latest semver version. "last-created" = most recently created on ManageXR.
+                                example: "latest"
+                              - type: string
+                                description: App version ID
+                                example: "av_123"
+                  examples:
+                     example-name-only:
+                        summary: Update only the release channel name
+                        value:
+                           name: "Stable"
+                     example-latest:
+                        summary: Update to the latest version
+                        value:
+                           targetVersion: "latest"
+                     example-last-created:
+                        summary: Update to the most recently created version
+                        value:
+                           targetVersion: "last-created"
+                     example-specific-version:
+                        summary: Update to a specific version with version code and name
+                        value:
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                     example-specific-version-with-label:
+                        summary: Update to a specific version with version code, name, and label
+                        value:
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                              versionLabel: "Release"
+                     example-app-id:
+                        summary: Update to a specific version using app version ID
+                        value:
+                           targetVersion: "av_123"
+                     example-name-and-version:
+                        summary: Update both name and version
+                        value:
+                           name: "Stable"
+                           targetVersion: "latest"
          responses:
             '200':
                description: The updated release channel
