@@ -33,8 +33,209 @@ paths:
          summary: List app versions
          description: Returns a list of all app versions for a given package name
       post:
-         summary: Create app version (self-hosted). 
+         summary: Create app version (self-hosted)
          description: (Self-Hosted Only) Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        versionCode:
+                           type: number
+                           description: Version code of the app
+                           example: 42
+                        apkUrl:
+                           type: string
+                           description: URL of the APK file
+                           example: "https://storage.example.com/apps/com.example.app.apk"
+                        apkMd5:
+                           type: string
+                           description: MD5 hash of the APK file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        obbUrl:
+                           type: string
+                           description: URL of the OBB file
+                           example: "https://storage.example.com/apps/com.example.app.obb"
+                        obbMd5:
+                           type: string
+                           description: MD5 hash of the OBB file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        versionName:
+                           type: string
+                           description: Version name of the app
+                           example: "1.0.0"
+                        versionLabel:
+                           type: string
+                           description: Label for uniqueness among app versions
+                           example: "Quest"
+                        apkSize:
+                           type: number
+                           description: Size of the APK file in bytes
+                           example: 72633861
+                        obbSize:
+                           type: number
+                           description: Size of the OBB file in bytes
+                           example: 1024
+                     required:
+                        - versionCode
+                        - apkUrl
+                        - apkMd5
+                        - versionName
+                        - apkSize
+                  example:
+                     versionCode: 42
+                     apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                     apkMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                     obbMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     versionName: "1.0.0"
+                     versionLabel: "Quest"
+                     apkSize: 72633861
+                     obbSize: 1024
+         responses:
+            '200':
+               description: The created app version
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the app version
+                                    example: "av_123"
+                                 type:
+                                    type: string
+                                    enum: [managed, shared, external, instant]
+                                    description: Type of the app version
+                                    example: "managed"
+                                 createdAt:
+                                    type: number
+                                    description: Creation timestamp
+                                    example: 1645615777448
+                                 updatedAt:
+                                    type: number
+                                    description: Last update timestamp
+                                    example: 1687352117203
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 83894522
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "8.7.8.1206"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 obbSize:
+                                    type: number
+                                    description: Size of the OBB file in bytes
+                                    example: 1024
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: true
+                                 apkUrl:
+                                    type: string
+                                    description: URL of the APK file
+                                    example: "https://storage.example.com/apps/com.example.app.apk"
+                                 obbUrl:
+                                    type: string
+                                    description: URL of the OBB file
+                                    example: "https://storage.example.com/apps/com.example.app.obb"
+                     example:
+                        data:
+                           id: "av_123"
+                           type: "managed"
+                           configurationDeployments: { "config_123": 1, "config_456": 0 }
+                           createdAt: 1645615777448
+                           updatedAt: 1687352117203
+                           versionCode: 83894522
+                           versionName: "8.7.8.1206"
+                           versionLabel: "Quest"
+                           apkSize: 72633861
+                           obbSize: 1024
+                           selfHosted: true
+                           apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                           obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            '400':
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid request"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid request"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}/release-channels:
       get:
          summary: List app release channels
@@ -91,7 +292,7 @@ paths:
                                              example: "managed"
                                           configurationDeployments:
                                              type: object
-                                             description: Number of deployments per configuration
+                                             description: Map of configuration ids to device count using application
                                              example: { "config_123": 1, "config_456": 0 }
                                           createdAt:
                                              type: number
@@ -190,18 +391,18 @@ paths:
                            oneOf:
                               - type: object
                                 properties:
-                                   versionCode:
-                                      type: number
-                                      description: Version code of the app
-                                      example: 42
-                                   versionName:
-                                      type: string
-                                      description: Version name of the app
-                                      example: "1.0.0"
-                                   versionLabel:
-                                      type: string
-                                      description: Label for uniqueness among app versions
-                                      example: "Quest"
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 42
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "1.0.0"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
                               - type: string
                                 enum: [latest, last-created]
                                 description: Special version identifier. "latest" = latest semver version. "last-created" = most recently created on ManageXR.
@@ -286,7 +487,7 @@ paths:
                                           example: "managed"
                                        configurationDeployments:
                                           type: object
-                                          description: Number of deployments per configuration
+                                          description: Map of configuration ids to device count using application
                                           example: { "config_123": 1, "config_456": 0 }
                                        createdAt:
                                           type: number
@@ -397,18 +598,18 @@ paths:
                            oneOf:
                               - type: object
                                 properties:
-                                   versionCode:
-                                      type: number
-                                      description: Version code of the app
-                                      example: 42
-                                   versionName:
-                                      type: string
-                                      description: Version name of the app
-                                      example: "1.0.0"
-                                   versionLabel:
-                                      type: string
-                                      description: Label for uniqueness among app versions
-                                      example: "Quest"
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 42
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "1.0.0"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
                               - type: string
                                 enum: [latest, last-created]
                                 description: Special version identifier. "latest" = latest semver version. "last-created" = most recently created on ManageXR.
@@ -494,7 +695,7 @@ paths:
                                           example: "managed"
                                        configurationDeployments:
                                           type: object
-                                          description: Number of deployments per configuration
+                                          description: Map of configuration ID to device count using application
                                           example: { "config_123": 1, "config_456": 0 }
                                        createdAt:
                                           type: number
@@ -512,14 +713,14 @@ paths:
                                           type: string
                                           description: Version name of the app
                                           example: "8.7.8.1206"
-                                       apkSize:
-                                          type: number
-                                          description: Size of the APK file in bytes
-                                          example: 72633861
-                                       selfHosted:
-                                          type: boolean
-                                          description: Whether the app is self-hosted
-                                          example: false
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: false
                                  sharedOrganizations:
                                     type: array
                                     description: List of organizations this release channel is shared with
@@ -548,7 +749,6 @@ paths:
                               updatedAt: 1687352117203
                               versionCode: 83894522
                               versionName: "8.7.8.1206"
-                              apkSize: 72633861
                               selfHosted: false
                            sharedOrganizations:
                               - id: "org_789"
@@ -656,80 +856,80 @@ paths:
                         type: object
                         properties:
                            data:
-                              type: object
-                              properties:
-                                 id:
-                                    type: string
-                                    description: Unique identifier of the release channel
-                                    example: "rc_123"
-                                 name:
-                                    type: string
-                                    description: Name of the release channel
-                                    example: "Stable"
-                                 type:
-                                    type: string
-                                    enum: [app, link, video]
-                                    description: Type of the release channel
-                                    example: "app"
-                                 packageName:
-                                    type: string
-                                    description: Package name of the app
-                                    example: "com.example.app"
-                                 targetVersion:
-                                    type: object
-                                    description: The target app version for this release channel
-                                    properties:
-                                       id:
-                                          type: string
-                                          description: Unique identifier of the app version
-                                          example: "av_123"
-                                       type:
-                                          type: string
-                                          enum: [managed, shared, external, instant]
-                                          description: Type of the app version
-                                          example: "managed"
-                                       configurationDeployments:
-                                          type: object
-                                          description: Number of deployments per configuration
-                                          example: { "config_123": 1, "config_456": 0 }
-                                       createdAt:
-                                          type: number
-                                          description: Creation timestamp
-                                          example: 1645615777448
-                                       updatedAt:
-                                          type: number
-                                          description: Last update timestamp
-                                          example: 1687352117203
-                                       versionCode:
-                                          type: number
-                                          description: Version code of the app
-                                          example: 83894522
-                                       versionName:
-                                          type: string
-                                          description: Version name of the app
-                                          example: "8.7.8.1206"
-                                       apkSize:
-                                          type: number
-                                          description: Size of the APK file in bytes
-                                          example: 72633861
-                                       selfHosted:
-                                          type: boolean
-                                          description: Whether the app is self-hosted
-                                          example: false
-                                 sharedOrganizations:
-                                    type: array
-                                    description: List of organizations this release channel is shared with
-                                    items:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the release channel
+                                       example: "rc_123"
+                                    name:
+                                       type: string
+                                       description: Name of the release channel
+                                       example: "Stable"
+                                    type:
+                                       type: string
+                                       enum: [app, link, video]
+                                       description: Type of the release channel
+                                       example: "app"
+                                    packageName:
+                                       type: string
+                                       description: Package name of the app
+                                       example: "com.example.app"
+                                    targetVersion:
                                        type: object
+                                       description: The target app version for this release channel
                                        properties:
                                           id:
                                              type: string
-                                             description: Unique identifier of the organization
-                                             example: "org_789"
-                                          name:
+                                             description: Unique identifier of the app version
+                                             example: "av_123"
+                                          type:
                                              type: string
-                                             description: Name of the organization
-                                             example: "Example Org"
+                                             enum: [managed, shared, external, instant]
+                                             description: Type of the app version
+                                             example: "managed"
+                                          configurationDeployments:
+                                             type: object
+                                             description: Map of configuration ID to device count using application
+                                             example: { "config_123": 1, "config_456": 0 }
+                                          createdAt:
+                                             type: number
+                                             description: Creation timestamp
+                                             example: 1645615777448
+                                          updatedAt:
+                                             type: number
+                                             description: Last update timestamp
+                                             example: 1687352117203
+                                          versionCode:
+                                             type: number
+                                             description: Version code of the app
+                                             example: 83894522
+                                          versionName:
+                                             type: string
+                                             description: Version name of the app
+                                             example: "8.7.8.1206"
+                                          apkSize:
+                                             type: number
+                                             description: Size of the APK file in bytes
+                                             example: 72633861
+                                          selfHosted:
+                                             type: boolean
+                                             description: Whether the app is self-hosted
+                                             example: false
+                                    sharedOrganizations:
+                                       type: array
+                                       description: List of organizations this release channel is shared with
+                                       items:
+                                          type: object
+                                          properties:
+                                             id:
+                                                type: string
+                                                description: Unique identifier of the organization
+                                                example: "org_789"
+                                             name:
+                                                type: string
+                                                description: Name of the organization
+                                                example: "Example Org"
                      example:
                         data:
                            id: "rc_123"
@@ -886,7 +1086,7 @@ paths:
                                           example: "managed"
                                        configurationDeployments:
                                           type: object
-                                          description: Number of deployments per configuration
+                                          description: Map of configuration ID to device count using application
                                           example: { "config_123": 1, "config_456": 0 }
                                        createdAt:
                                           type: number

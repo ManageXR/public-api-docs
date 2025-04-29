@@ -55,7 +55,7 @@
                 "api-reference/endpoint/v1/get-app", 
                 "api-reference/endpoint/v1/create-externally-hosted-app", 
                 "api-reference/endpoint/v1/edit-app", "api-reference/endpoint/v1/list-app-versions",
-                "api-reference/endpoint/v1/create-app-version","api-reference/endpoint/v1/delete-app"]
+                "api-reference/endpoint/v1/create-app-version"]
               },
               {
                 "group": "App Release Channels",
