@@ -1793,18 +1793,379 @@ paths:
                         statusCode: 404
                         message: "Release channel with id rc_123 not found"
                         error: "ManageXR Error"
-# Configurations
+# V1-Configurations
    /v1/configurations/:
       post:
          summary: Create a configuration
-         description: Create a new configuration
+         description: Create a new configuration. Creates a blank configuration with default settings and no content.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the configuration
+                           example: "New Configuration A"
+                     required: 
+                        - name
+                     example:
+                        name: "New Configuration A"
+         responses:
+            '200':
+                  description: The created configuration
+                  content:
+                     application/json:
+                        schema:
+                           type: object
+                           properties:
+                              data:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the configuration
+                                       example: "sFidGmedeQofSBcvRcyn"
+                                    name:
+                                       type: string
+                                       description: Name of the configuration
+                                       example: "New Configuration A"
+                                    registrationCode:
+                                       type: string
+                                       description: Configuration code (formerly known as registration code) used for enrollment
+                                       example: "ad39kda"
+                                    deviceCount:
+                                       type: number
+                                       example: 15
+                                       description: Number of devices using the configuration
+                                    deviceExperience:
+                                       type: string
+                                       enum:
+                                          - HOME_SCREEN
+                                          - KIOSK
+                                          - KIOSK_VIDEO
+                                          - DEFAULT
+                                       description: Device experience set on the configuration. Default is Home Screen.
+                                    content:
+                                       type: array
+                                       description: An array of VR content deployed on the configuration. For newly created configurations, this will be empty. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1ContentAppManaged'
+                                             - $ref: '#/components/schemas/V1ContentVideo'
+                                             - $ref: '#/components/schemas/V1ContentLink'
+                                          discriminator:
+                                             propertyName: contentType
+                                             mapping:
+                                                app: '#/components/schemas/V1ContentAppManaged'
+                                                video: '#/components/schemas/V1ContentVideo'
+                                                link: '#/components/schemas/V1ContentLink'
+                                    files:
+                                       type: array
+                                       description: An array of files deployed on the configuration. For newly created configurations, this will be empty.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1ManagedFile'
+                                    wifiNetworks:
+                                       type: array
+                                       description: An array of Wi-Fi networks deployed on the configuration. For newly created configurations, this will be empty.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1WifiNetwork'
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"                
    /v1/configurations/{id}:
       get: 
          summary: Get a configuration
          description: Retrieve a configuration by id
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the configuration
+         responses:
+            '200':
+               description: The requested configuration
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the configuration
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the configuration
+                                    example: "New Configuration A"
+                                 registrationCode:
+                                    type: string
+                                    description: Configuration code (formerly known as registration code) used for enrollment
+                                    example: "ad39kda"
+                                 deviceCount:
+                                    type: number
+                                    example: 15
+                                    description: Number of devices using the configuration
+                                 deviceExperience:
+                                    type: string
+                                    enum:
+                                       - HOME_SCREEN
+                                       - KIOSK
+                                       - KIOSK_VIDEO
+                                       - DEFAULT
+                                    description: Device experience set on the configuration. Default is Home Screen.
+                                 content:
+                                    type: array
+                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ContentAppManaged'
+                                          - $ref: '#/components/schemas/V1ContentVideo'
+                                          - $ref: '#/components/schemas/V1ContentLink'
+                                       discriminator:
+                                          propertyName: contentType
+                                          mapping:
+                                             app: '#/components/schemas/V1ContentAppManaged'
+                                             video: '#/components/schemas/V1ContentVideo'
+                                             link: '#/components/schemas/V1ContentLink'
+                                 files:
+                                    type: array
+                                    description: An array of files deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ManagedFile'
+                                 wifiNetworks:
+                                    type: array
+                                    description: An array of Wi-Fi networks deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1WifiNetwork'
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Configuration not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Configuration not found"
+                           error:
+                              type: string
+                              example: "Not Found"
+                     example:
+                        statusCode: 404
+                        message: "Configuration not found"
+                        error: "Not Found"
+
       patch:
          summary: Edit a configuration
-         description: Update an existing configuration to deploy new content
+         description: Update an existing configuration to change the content deployed (e.g., update app versions, add/remove apps, videos, and webxr links)
+         parameters:
+            - name: configurationId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the configuration
+            - name: organizationId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the organization
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Updated name for the configuration
+                           example: "Client Configuration v2"
+                        vrContent:
+                           type: array 
+                           description: Updated set of VR content on the configuration. Content will appear on the Home Screen in the order it appears in the vrContent array.
+                           items:
+                              oneOf:
+                                 - $ref: '#/components/schemas/V1AppReleaseIdentifier'
+                                 - $ref: '#/components/schemas/V1AppVersionIdentifier'
+                                 - $ref: '#/components/schemas/V1VideoIdentifier'                              
+                                 - $ref: '#/components/schemas/V1WebXRIdentifier'
+                  example:
+                     name: "Client Configuration v2"
+                     vrContent: [{ type: "app", id: { packageName: "com.my.customApp", releaseChannel: "prod" } }, { type: "video", id: "KSJ34KHDA12MR" }, { type: "app", id: { packageName: "com.my.test1", version: 'latest' }}, { type: "app", id: { packageName: "com.my.test1", version: { versionCode: 1, versionName: '1.0' } }}]     
+         responses:
+            '200':
+               description: The updated configuration
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the configuration
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the configuration
+                                    example: "Client Configuration v2"
+                                 registrationCode:
+                                    type: string
+                                    description: Configuration code (formerly known as registration code) used for enrollment
+                                    example: "ad39kda"
+                                 deviceCount:
+                                    type: number
+                                    example: 12
+                                    description: Number of devices using the configuration
+                                 deviceExperience:
+                                    type: string
+                                    enum:
+                                       - HOME_SCREEN
+                                       - KIOSK
+                                       - KIOSK_VIDEO
+                                       - DEFAULT
+                                    description: Device experience set on the configuration. Default is Home Screen.
+                                 content:
+                                    type: array
+                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ContentAppManaged'
+                                          - $ref: '#/components/schemas/V1ContentVideo'
+                                          - $ref: '#/components/schemas/V1ContentLink'
+                                       discriminator:
+                                          propertyName: contentType
+                                          mapping:
+                                             app: '#/components/schemas/V1ContentAppManaged'
+                                             video: '#/components/schemas/V1ContentVideo'
+                                             link: '#/components/schemas/V1ContentLink'
+                                 files:
+                                    type: array
+                                    description: An array of files deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ManagedFile'
+                                 wifiNetworks:
+                                    type: array
+                                    description: An array of Wi-Fi networks deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1WifiNetwork'
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "Client Configuration v2"
+                           registrationCode: "ad39kda"
+                           deviceCount: 12
+                           deviceExperience: "HOME_SCREEN"
+                           content:
+                              - contentType: app
+                                id: "com.my.customApp"
+                                title: "Custom App"
+                                iconUrl: "https://storage.example.com/apps/com.my.customApp/icon.png"
+                                createdAt: 1719855774748
+                                updatedAt: 1719855779899
+                                type: managed
+                                versionCode: 17
+                                versionName: "2.3.0"
+                                releaseChannelName: "prod"
+                                apkSize: 1204975930
+                                obbSize: 0
+                                selfHosted: false
+                                configurationDeployments:
+                                 sFidGmedeQofSBcvRcyn: 12
+                              - contentType: video
+                                id: "KSJ34KHDA12MR"
+                                title: "Onboarding Intro"
+                                iconUrl: "https://storage.example.com/videos/onboarding-intro/icon.jpg"
+                                size: 553657
+                                type: "_360"
+                                display: "MONO"
+                                mapping: "EQUIRECTANGULAR"
+                                packing: "NONE"
+                                md5: "abc123xyz456=="
+                                createdAt: 1719840000000
+                                updatedAt: 1719849999999
+                              - contentType: app
+                                id: "com.my.test1"
+                                title: "Test App"
+                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
+                                createdAt: 1719850000000
+                                updatedAt: 1719857777777
+                                type: managed
+                                versionCode: 22
+                                versionName: "3.0.0"
+                                configurationDeployments:
+                                  sFidGmedeQofSBcvRcyn: 12
+                              - contentType: app
+                                id: "com.my.test1"
+                                title: "Test App"
+                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
+                                createdAt: 1719800000000
+                                updatedAt: 1719851111111
+                                type: managed
+                                versionCode: 1
+                                versionName: "1.0"
+                                configurationDeployments:
+                                    sFidGmedeQofSBcvRcyn: 12
+                           files: []
+                           wifiNetworks: []
       delete:
          summary: Delete a configuration
          description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
@@ -3376,7 +3737,7 @@ paths:
                                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
    /organizations/{orgId}/configurations:
       get:
-         description: Retrieve a list of all configurations
+         description: Retrieve a list of all configurations.
          parameters:
             - name: orgId
               in: path
@@ -3452,6 +3813,435 @@ paths:
                              deviceLicenses: 100
 
 components:
+   schemas:
+      V1ContentAppManaged:
+         type: object
+         title: App
+         description: __App (managed)__. Managed apps deployed on the configuration will include the attributes listed below
+         properties:
+            contentType:
+               type: string
+               enum: [app]
+            title:
+               type: string
+               description: Title of the app
+               example: "My Custom VR App"
+            packageName:
+               type: string
+               description: Package name of the app
+               example: "com.picovr.launcher"
+            iconUrl:
+               type: string
+               format: uri
+               example: "https://firebasestorage.googleapis.com/v0/b/example.jpg"
+            id:
+               type: string
+               description: Unique identifier of the app version
+               example: "av_123"
+            type:
+               type: string
+               enum: [managed, shared, external, instant]
+               description: Type of the app version
+               example: "managed"
+            configurationDeployments:
+               type: object
+               description: Map of configuration ids to device count using application
+               example: { "config_123": 1, "config_456": 0 }
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+            versionCode:
+               type: number
+               description: Version code of the app
+               example: 83894522
+            versionName:
+               type: string
+               description: Version name of the app
+               example: "8.7.8.1206"
+            versionLabel:
+               type: string
+               description: Label for uniqueness among app versions
+               example: "Quest"
+            apkSize:
+               type: number
+               description: Size of the APK file in bytes
+               example: 72633861
+            obbSize:
+               type: number
+               description: Size of the OBB file in bytes
+               example: 1024
+            selfHosted:
+               type: boolean
+               description: Whether the app is self-hosted
+               example: true
+            apkUrl:
+               type: string
+               description: URL of the APK file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.apk"
+            obbUrl:
+               type: string
+               description: URL of the OBB file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.obb"
+            sharingOrganizationName:
+               type: string
+               description: Name of the organization sharing the app (shared apps only)
+               example: "XR Developer"
+            releaseChannelName: 
+               type: string
+               description: Name of the release channel (shared apps only)
+               example: "Production"
+            supportedDeviceModels:
+               type: array
+               items:
+                  type: string
+                  example: "Quest 3"
+               description: List of supported device models for Instant App (instant apps only)
+               example: ["Quest 3", "Quest 3S", "Pico 4 Ultra Enterprise"]
+         example:
+            contentType: app
+            id: "kaldh3907hjxmi219"
+            title: "My Custom VR App"
+            packageName: "com.picovr.vrlauncher"
+            iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+            createdAt: 1645615777448
+            updatedAt: 1687352117203
+            configurationDeployments: { "config_123": 1 }
+            type: managed
+            versionCode: "Device_0024"
+            versionName: "CE:AF:07:47:E0:AE"
+            apkSize: 1204975930
+            obbSize: 19097894
+            selfHosted: false
+      V1ContentVideo:
+         type: object
+         title: Video
+         description: Videos deployed on the configuration will include the attributes listed below
+         required: [contentType, id, title, size, type, display, mapping, packing, iconUrl, createdAt, updatedAt]
+         properties:
+            contentType:
+               type: string
+               enum: [video]
+            id:
+               type: string
+               description: Unique identifier of the video
+            title:
+               type: string
+               description: Title of the video
+            size:
+               type: number
+               description: Size of the video in bytes 
+            type:
+               type: string
+               enum:
+                  - _360
+                  - _180
+                  - _2D
+               example: "_360"
+               description: Type of video
+            display:
+               type: string
+               enum:
+                  - "MONO"
+                  - "STEREO"
+               example: "MONO"
+               description: Video display type
+            mapping:
+               type: string
+               enum:
+                  - "NONE"
+                  - "EQUIRECTANGULAR"
+                  - "CUBEMAP"
+               example: "EQUIRECTANGULAR"
+               description: Video mapping
+            packing:
+               type: string
+               enum:
+                  - "NONE"
+                  - "TOP_BOTTOM"
+                  - "LEFT_RIGHT"
+               example: "TOP_BOTTOM"
+               description: Video packing (stereoscopic videos only)
+            md5:
+               type: string
+               description: MD5 hash of the video file
+            iconUrl:
+               type: string
+               format: uri
+               description: URL of the video's icon
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+            description:
+               type: string
+               description: Optional description of the video
+         example:
+            contentType: video
+            id: "gF0ODIEvXSwsjqtP0CgVo"
+            title: "Discover San Francsico"
+            description: "[360 Mono Cubemap] 1 MB"
+            size: 553657
+            type: "_360"
+            display: "MONO"
+            mapping: "CUBEMAP"
+            packing: "NONE"
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            iconUrl: "https://firebasestorage.googleapis.com/v0/b/example.jpg"
+            createdAt: 1696978504660
+            updatedAt: 1715651553616
+      V1ContentLink:
+         type: object
+         title: WebXR Link
+         description: WebXR links deployed on the configuration will include the attributes listed below
+         required: [contentType, id, title, url, iconUrl, createdAt, updatedAt]
+         properties:
+            contentType:
+               type: string
+               enum: [link]
+               description: Type of content
+            id:
+               type: string
+               description: Unique identifier of the webxr link
+            title:
+               type: string
+               description: Title of the webxr link
+            url:
+               type: string
+               format: uri
+               description: WebXR link url to open in-headset 
+            iconUrl:
+               type: string
+               format: uri
+               description: URL of the webxr link's icon
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+         example:
+            contentType: link
+            id: "A3t67LlxH99cKeprazuc"
+            title: "Virtual College Tour"
+            url: "https://www.youtube.com/watch?v=AyWLvrWBKHA"
+            iconUrl: "https://firebasestorage.googleapis.com/v0/b/icon.png"
+            createdAt: 1706719137865
+            updatedAt: 1706719137865
+      V1ManagedFile:
+         type: object
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the file
+               example: "DLO133U5NFLMAL1"
+            url:
+               type: string
+               format: uri
+               description: Direct URL to download the file
+               example: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
+            name:
+               type: string
+               description: Name of the file, including extension
+               example: "training-video.mp4"
+            size:
+               type: number
+               description: Size of the file in bytes
+               example: 1204975930
+            md5:
+               type: string
+               description: MD5 hash of the file for integrity verification
+               example: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description:
+               type: string
+               description: Optional description of the file's contents or purpose
+               example: "Introductory training video for new hires"
+            directory:
+               type: string
+               description: Path to the file within the organization's file system
+               example: "Android/obb/your.app.package/bundles/Onboarding"
+         example:
+            id: "file_123abc"
+            url: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
+            name: "training-video.mp4"
+            size: 1204975930
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description: "Introductory training video for new hires"
+            directory: "Android/obb/your.app.package/bundles/Onboarding"
+      V1WifiNetwork:
+         type: object
+         description: A Wi-Fi network profile that can be deployed to devices.
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the Wi-Fi network
+               example: "wifi_abc123"
+            ssid:
+               type: string
+               description: The SSID (name) of the Wi-Fi network
+               example: "MyNetwork"
+            nickname:
+               type: string
+               description: A user-defined label for the network
+               example: "Office Wi-Fi"
+            type:
+               type: string
+               description: The security type of the network
+               enum:
+               - OPEN
+               - WPA
+               - WPA_ENTERPRISE
+               - UNKNOWN
+               example: WPA_ENTERPRISE
+         example:
+            id: "wifi_abc123"
+            ssid: "MyNetwork"
+            nickname: "Office Wi-Fi"
+            type: WPA_ENTERPRISE
+      V1AppIdentifier:
+         type: object
+         properties:
+            packageName:
+               type: string
+               description: Package name of the app
+               example: 'com.myapp.quest'
+            version:
+               oneOf:
+               - '#/components/schemas/V1AppVersionIdentifier'
+      V1AppVersionShortcutIdentifier:
+         type: string
+         enum:
+         - latest
+         - last-created
+      V1AppVersionIdentifierRetired:
+         type: object
+         properties:
+            versionCode:
+               type: number
+               description: App version code
+               example: 42
+            versionName:
+               type: string
+               description: App version name
+               example: "4.2.0"
+            versionLabel:
+               type: string
+               description: Optional version label (e.g. 'Stable', 'Beta', 'Quest'). Used to differentiate app versions with the same name and code.
+               example: "Stable"
+         required:
+         - versionCode
+         - versionName
+         example:
+            versionCode: 42
+            versionName: "4.2.0"
+            versionLabel: "Stable"
+      V1AppVersionIdOnly:
+         type: string
+         description: Unique identifier of app version, video, or link on ManageXR
+         example: "LAKDJFLAKJ21JK34"
+      V1VideoIdentifier:
+         type: object
+         title: Video
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the video
+               example: "KD32I5NGL1345"
+            type:
+               type: string
+               enum:
+               - video 
+               example: video
+      V1WebXRIdentifier:
+         type: object
+         title: WebXR Link
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the webxr link
+               example: "KD32I5NGL133k8"
+            type:
+               type: string
+               enum:
+               - link 
+               example: link
+      V1AppVersionIdentifier:
+         type: object
+         title: App (Specific Version)
+         properties:
+            id:
+               description: Unique identifier of the app
+               type: object
+               properties:
+                  packageName:
+                     type: string
+                     description: Package Name of the application
+                  version:
+                     oneOf:
+                     - type: string
+                       description: |
+                        Use a shortcut to identify a recent version. "latest" = latest semver version. "last-created" = most recently created on ManageXR. 
+
+                        _Select from the dropdown above for other version identification options_
+                       enum: ['latest', 'last-created']
+                     - type: object
+                       description: Identify a specific version using the standard version information.
+                       properties:
+                        versionCode:
+                           type: number
+                           description: App version code
+                           example: 42
+                        versionName:
+                           type: string
+                           description: App version name
+                           example: "4.2.0"
+                        versionLabel:
+                           type: string
+                           description: Optional version label (e.g. 'Stable', 'Beta', 'Quest'). Used to differentiate app versions with the same name and code.
+                           example: "Stable"
+                       required: [versionCode, versionName]
+                     - type: string
+                       description: Unique identifier of app version on ManageXR. You can retrieve this using the List App Versions endpoint.
+            type:
+               type: string
+               enum:
+               - app 
+               example: app
+      V1AppReleaseIdentifier:
+         type: object
+         title: App (Release Channel)
+         description: We recommend using release channels to deploy apps to configurations to simplify app version management. Instead of updating the app version on every configuration whenever you have an update, simply update the release channel. [Learn More](https://help.managexr.com/en/articles/5518816-release-channels)
+         properties:
+            id:
+               description: Unique identifier of the app
+               type: object
+               properties:
+                  packageName:
+                     type: string
+                     description: Package Name of the application
+                  releaseChannel:
+                     type: string
+                     description: Name of the release channel
+                  type:
+                     enum:
+                     - shared
+                     - managed
+               required: [packageName, releaseChannel]
+            type:
+               type: string
+               enum:
+               - app 
+               example: app    
    securitySchemes:
       basicAuth:
          type: http
