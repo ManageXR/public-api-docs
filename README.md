@@ -10,7 +10,7 @@ Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview th
 npm i -g mintlify
 ```
 
-Run the following command at the root of your documentation (where mint.json is)
+Run the following command at the root of your documentation (where docs.json is)
 
 ```
 mintlify dev
@@ -23,14 +23,14 @@ mintlify dev --port 3333
 ### Troubleshooting
 
 - Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+- Page loads as a 404 - Make sure you are running in a folder with `docs.json`
   
 ## Adding Endpoints to the Api-Reference
 The API Reference contains all of the information about the ManageXR Public API. To add a new endpoint, make the following changes: 
 
 1. **Update openapi.yaml** to include info about the endpoint. Format according to OpenAPI 3.1.0 specifications.
 2. **Create an mdx file** within api-reference>endpoint. Include a title and an openapi url. See existing examples in the directory. It is important that the openapi url matches the openapi.yaml specification for the endpoint. Mintlify also has options to [generate these automatically](https://mintlify.com/docs/api-playground/openapi/setup#autogenerate-files-recommended).
-3. **Update mint.json** to include the endpoint mdx page in the documentation. Put the file in the appropriate group e.g., if it is an endpoint for devices, put it in the "Devices" group. If it is an endpoint for a group that does not exist, create a group. Eventually, we will have groups for Devices, Organizations, Configurations, Library (will include VR Content, Files, Wifi), Users etc.
+3. **Update docs.json** to include the endpoint mdx page in the documentation. Put the file in the appropriate group e.g., if it is an endpoint for devices, put it in the "Devices" group. If it is an endpoint for a group that does not exist, create a group. Eventually, we will have groups for Devices, Organizations, Configurations, Library (will include VR Content, Files, Wifi), Users etc.
 
 Save and run the mintlify repo locally to validate changes. 
 
