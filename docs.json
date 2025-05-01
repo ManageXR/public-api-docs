@@ -24,38 +24,87 @@
       },
       {
         "tab": "API",
-        "groups": [
+        "versions": [
           {
-            "group": "API Reference",
-            "pages": [
-              "api-reference/introduction"
+            "version": "API v1 (Latest)",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "pages": ["api-reference/introduction"]
+              },
+              {
+                "group": "Devices",
+                "pages": ["api-reference/endpoint/list-devices",
+                "api-reference/endpoint/v1/get-device",
+                "api-reference/endpoint/v1/edit-device",
+                "api-reference/endpoint/v1/send-command",
+                "api-reference/endpoint/v1/batch-commands",
+                "api-reference/endpoint/v1/set-pause-updates"]
+              },
+              {
+                "group": "Configurations",
+                "pages": ["api-reference/endpoint/list-configurations",
+                "api-reference/endpoint/v1/get-configuration", 
+                "api-reference/endpoint/v1/create-configuration",
+                "api-reference/endpoint/v1/edit-configuration"]
+              },
+              {
+                "group": "Apps",
+                "pages": ["api-reference/endpoint/v1/list-apps",
+                "api-reference/endpoint/v1/get-app", 
+                "api-reference/endpoint/v1/create-externally-hosted-app", 
+                "api-reference/endpoint/v1/edit-app"]
+              },
+              {
+                "group": "App Versions & Release Channels",
+                "pages": [ "api-reference/endpoint/v1/list-app-versions",
+                "api-reference/endpoint/v1/create-app-version", 
+                "api-reference/endpoint/v1/list-app-release-channels",
+                "api-reference/endpoint/v1/create-app-release-channel",
+                "api-reference/endpoint/v1/edit-app-release-channel",
+                "api-reference/endpoint/v1/share-app-release-channel",
+                "api-reference/endpoint/v1/unshare-app-release-channel"]
+              },
+              {
+                "group": "Tags",
+                "pages": ["api-reference/endpoint/v1/create-tag",
+                "api-reference/endpoint/v1/edit-tag",
+                "api-reference/endpoint/v1/delete-tag"]
+              },
+              {
+                "group": "Organizations",
+                "pages": [  "api-reference/endpoint/list-organizations"]
+              }
             ]
           },
-          {
-            "group": "Devices",
-            "pages": [
-              "api-reference/endpoint/list-devices",
+        {
+          "version": "API v0",
+          "groups": [
+            {
+              "group": "Getting Started",
+              "pages": ["api-reference/introduction"]
+            },
+            {
+              "group": "Devices",
+              "pages": ["api-reference/endpoint/list-devices",
               "api-reference/endpoint/get-device",
               "api-reference/endpoint/edit",
               "api-reference/endpoint/send-command",
               "api-reference/endpoint/batch-commands",
-              "api-reference/endpoint/set-pause-updates"
-            ]
-          },
-          {
-            "group": "Configurations",
-            "pages": [
-              "api-reference/endpoint/list-configurations",
-              "api-reference/endpoint/get-configuration"
-            ]
-          },
-          {
-            "group": "Organizations",
-            "pages": [
-              "api-reference/endpoint/list-organizations"
-            ]
-          }
-        ]
+              "api-reference/endpoint/set-pause-updates"]
+            },
+            {
+              "group": "Configurations",
+              "pages": ["api-reference/endpoint/list-configurations",
+              "api-reference/endpoint/get-configuration"]
+            },
+            {
+              "group": "Organizations",
+              "pages": [  "api-reference/endpoint/list-organizations"]
+            }
+          ]
+        }
+      ]
       },
       {
         "tab": "CLI",

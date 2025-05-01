@@ -6,7 +6,3162 @@ info:
 servers:
    - url: https://managexrapi.com
      description: ManageXR API Server
-paths:
+paths: 
+# v1 Endpoints:
+# Devices
+   /v1/devices/{id}:
+      get:
+         summary: Get device
+         description: Retrieve a device by id (serial number)
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+               type: string
+              description: Unique identifier (serial number) of the device
+         responses:
+            '200':
+               description: A device object
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                              data:
+                                 $ref: '#/components/schemas/V1Device'
+            '404':
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Not found error"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+      patch:
+         summary: Update a device by id
+         description: abd
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+               type: string
+              description: Unique identifier (serial number) of the device
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the device
+                           example: "Device_123"
+                        configurationId:
+                           type: string
+                           description: ID of new configuration to assign to the device
+                           example: "AKDJF139UGNLA12J"
+                        notes:
+                           type: string
+                           description: Device notes
+                           example: "This device was recently moved on 9/15"
+                        tagIds:
+                           type: array
+                           items:
+                              type: string
+                           description: Ids of tags to apply to device
+                           example: ["KADJFL2U4T", "AKLU32OI2QU5U"]
+         responses:
+            '200':
+               description: Success
+            '404':
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Not found error"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   /v1/devices/set-pause-updates:
+      post:
+         summary: Set pause updates for devices
+         description: |
+            Pause or resume configuration updates for devices.
+
+            Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
+         requestBody:
+           required: true
+           content:
+             application/json:
+               schema:
+                 type: object
+                 properties:
+                   deviceIds:
+                     type: array
+                     items:
+                       type: string
+                     description: Array of device IDs (serial numbers) to update.
+                   pauseUpdates:
+                     type: boolean
+                     description: Whether to pause (true) or resume (false) configuration updates. 
+                 required:
+                   - deviceIds
+                   - pauseUpdates
+               examples:
+                 example-pause:
+                   summary: Pause updates for devices
+                   value:
+                     deviceIds:
+                       - 2G0YC1ZF630NZA
+                       - PA7950RGGC06043
+                     pauseUpdates: true
+                 example-resume:
+                   summary: Resume updates for devices
+                   value:
+                     deviceIds:
+                       - 2G0YC1ZF630NZA
+                       - PA7950RGGC06043
+                     pauseUpdates: false
+         responses:
+           '200':
+             description: Success
+   /v1/devices/{id}/command:
+      post:
+         summary: Send command
+         description: |
+            Send command to a specific device
+
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode</small>
+         parameters:
+            - name: deviceId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The ID (serial number) of the device.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     oneOf: 
+                      - title: Launch App
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              required: true
+                              description:  Launch an application on the device.
+                              enum:
+                                 - LAUNCH_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    required: true
+                                    description: The package name of the app to be launched
+                                    example: 'com.myapp.quest'
+                                 launchParams: 
+                                    type: object
+                                    description: | 
+                                       (Optional) Additional custom launch parameters
+
+                                       e.g., { userId: 'ABC123', booleanValue: true, arrayValue: [1.23, 4.56], mapValue: { key: 'more stuff' }}
+                                    example: 
+                                       userId: 'ABC123'
+                                       booleanValue: true
+                                       floatValue: 100.29
+                                       arrayValue: [1.23, 4.56]
+                                       mapValue: { key: 'more stuff' }
+                                    required: false
+                      - title: Play / Pause Video
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Play or pause video on the device.
+                              enum:
+                                 - PLAY_VIDEO
+                                 - PAUSE_VIDEO
+                              example: PLAY_VIDEO
+                           data:
+                              type: object
+                              properties:
+                                 videoId:
+                                    type: string
+                                    description: |
+                                       The id of the video to play or pause. 
+                                       
+                                       To find a videoId, go to the video in your VR Content library on the Web Console and retrieve it from the url parameters (e.g. console.managexr.com/o/{orgId}/vr-content/edit/video/**FeWVcu7Rq4X3rmwGZGM6**).                   
+                                 playFromBeginning: 
+                                    type: boolean
+                                    description: (Optional) Plays video from the beginning. If falsy and the video is already open, play resumes from position.
+                      - title: Launch Web Url
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Launch a specific webxr link on the device. Requires the data field to be populated (see below)
+                              enum:
+                                 - LAUNCH_WEB_URL
+                              example: LAUNCH_WEB_URL
+                           data:
+                              type: object
+                              properties:
+                                 url:
+                                    type: string
+                                    description: The url of the webxr link to launch                      
+                      - title: Disable / Enable Kiosk Mode
+                        type: object
+                        properties: 
+                           action: 
+                              type: string
+                              description: | 
+                                 Override the device experience set on the Configuration. 
+
+                                 `DISABLE_KIOSK` - Disable Kiosk Mode / ManageXR Home Screen on the device. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on device to `true`.
+
+                                 `ENABLE_KIOSK` - Re-Enable Kiosk Mode / ManageXR Home Screen on the device. Sets `kioskModeOverride` flag on device to `false`.
+
+                                 _Note_, if the Configuration applied to a device uses Default Device Menus, the kioskModeOverride flag is a no-op.
+                              enum: 
+                              - DISABLE_KIOSK
+                              - ENABLE_KIOSK
+                              example: DISABLE_KIOSK
+                      - title: Restart
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Reboot the device.
+                              enum:
+                              - RESTART
+                              example: RESTART
+                      - title: Power OFF
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description:  Remotely turn off device. Supported on Pico Neo 3s PUI 5+ and Pico 4 Ultra Enterprise devices. 
+                              enum:
+                                 - POWER_OFF
+                              example: POWER_OFF
+                      - title: Set Volume
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Set volume on device. Supply a level between 0 and 100. 
+                              enum:
+                                 - SET_VOLUME
+                              example: SET_VOLUME
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The volume level to set. Choose a value between 0 and 100.
+                      - title: Set Brightness
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Set display brightness on device. Supply a level between 0 and 100. 
+                              enum:
+                                 - SET_BRIGHTNESS
+                              example: SET_BRIGHTNESS
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The display brightness level to set. Choose a value between 0 and 100.
+                      - title: Uninstall App
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: |
+                                 Uninstall an application on the device. 
+                                 
+                                 Cannot uninstall system apps. If you uninstall an app that is still on a devices's configuration, it will automatically re-download the next time the device syncs.
+                              enum:
+                                 - UNINSTALL_APP
+                              example: UNINSTALL_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to uninstall
+                      - title: Restart App
+                        type: object
+                        properties: 
+                           action:
+                              type: string
+                              description: Restart an app
+                              enum:
+                                 - RESTART_APP
+                              example: RESTART_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to restart
+                      - title: Sync
+                        type: object
+                        properties:
+                           action:
+                              type: string
+                              description: Force device to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
+                              enum:
+                              - SYNC
+                              example: SYNC
+                      - title: Enable / Disable Tutorial Mode
+                        type: object
+                        properties: 
+                           action: 
+                              type: string
+                              description: When Tutorial Mode in enabled, the device launches into its tutorial app on boot. Set the tutorial app in Configuration > Device Settings.
+                              enum: 
+                              - ENABLE_TUTORIAL_MODE
+                              - DISABLE_TUTORIAL_MODE
+                              example: ENABLE_TUTORIAL_MODE                             
+                  examples:
+                     example-sync:
+                        summary: Sync command
+                        value:
+                           action: SYNC
+                     example-launch_app:
+                        summary: Launch App command
+                        value:
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                     example-launch_app_with_params:
+                        summary: Launch app with parameters
+                        value:
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                              launchParams:
+                                 userId: AX3EIUf89
+                                 booleanValue: true
+                                 floatValue: 100.29
+                                 arrayValue: [1.23, 4.56]
+                                 mapValue:
+                                    key: value
+                     example-launch_webxr:
+                        summary: Launch webxr link
+                        value:
+                           action: LAUNCH_WEB_URL
+                           data:
+                              url: https://google.com
+         responses:
+            '200':
+               description: Success
+            '400':
+               description: Request must contain valid action
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Request must contain a valid action"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+            '404':
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Not found error"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   /v1/devices/batch-command:
+      post:
+         summary: Send a command to multiple devices at once
+         description: |
+            Send a command to multiple devices at once
+
+            <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     oneOf: 
+                      - title: Launch App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              required: true
+                              description:  Launch an application on the devices
+                              enum:
+                                 - LAUNCH_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    required: true
+                                    description: The package name of the app to be launched
+                                    example: 'com.myapp.quest'
+                                 launchParams: 
+                                    type: object
+                                    description: | 
+                                       (Optional) Additional custom launch parameters
+
+                                       e.g., { userId: 'ABC123', booleanValue: true, arrayValue: [1.23, 4.56], mapValue: { key: 'more stuff' }}
+                                    example: 
+                                       userId: 'ABC123'
+                                       booleanValue: true
+                                       floatValue: 100.29
+                                       arrayValue: [1.23, 4.56]
+                                       mapValue: { key: 'more stuff' }
+                                    required: false
+                      - title: Play / Pause Video
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description:  Play or pause video on the devices
+                              enum:
+                                 - PLAY_VIDEO
+                                 - PAUSE_VIDEO
+                              example: PLAY_VIDEO
+                           data:
+                              type: object
+                              properties:
+                                 videoId:
+                                    type: string
+                                    description: |
+                                       The id of the video to play or pause. 
+                                       
+                                       To find a videoId, go to the video in your VR Content library on the Web Console and retrieve it from the url parameters (e.g. console.managexr.com/o/{orgId}/vr-content/edit/video/**FeWVcu7Rq4X3rmwGZGM6**).                   
+                                 playFromBeginning: 
+                                    type: boolean
+                                    description: (Optional) Plays video from the beginning. If falsy and the video is already open, play resumes from position.
+                      - title: Launch Web Url
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description:  Launch a specific WebXR link on the devices. Requires the data field to be populated (see below)
+                              enum:
+                                 - LAUNCH_WEB_URL
+                              example: LAUNCH_WEB_URL
+                           data:
+                              type: object
+                              properties:
+                                 url:
+                                    type: string
+                                    description: The url of the webxr link to launch                      
+                      - title: Disable / Enable Kiosk Mode
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action: 
+                              type: string
+                              description: | 
+                                 Override the device experience set on the Configuration. 
+
+                                 `DISABLE_KIOSK` - Disable Kiosk Mode / ManageXR Home Screen on the devices. Grants users full access to the default system menus. Sets `kioskModeOverride` flag on devices to `true`.
+
+                                 `ENABLE_KIOSK` - Re-Enable Kiosk Mode / ManageXR Home Screen on the devices. Sets `kioskModeOverride` flag on devices to `false`.
+
+                                 _Note_, if the Configuration applied to a device uses Default Device Menus, the kioskModeOverride flag is a no-op.
+                              enum: 
+                              - DISABLE_KIOSK
+                              - ENABLE_KIOSK
+                              example: DISABLE_KIOSK
+                      - title: Restart
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: Reboot the devices
+                              enum:
+                              - RESTART
+                              example: RESTART
+                      - title: Power OFF
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: Remotely turn off devices. Supported on Pico Neo 3s PUI 5+ and Pico 4 Ultra Enterprise devices.
+                              enum:
+                                 - POWER_OFF
+                              example: POWER_OFF
+                      - title: Set Volume
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: Set volume on device. Supply a level between 0 and 100.
+                              enum:
+                                 - SET_VOLUME
+                              example: SET_VOLUME
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The volume level to set. Choose a value between 0 and 100.
+                      - title: Set Brightness
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: Set brightness on device. Supply a level between 0 and 100.
+                              enum:
+                                 - SET_BRIGHTNESS
+                              example: SET_BRIGHTNESS
+                           data:
+                              type: object
+                              properties:
+                                 level:
+                                    type: number
+                                    description: The brightness level to set. Choose a value between 0 and 100.
+                      - title: Uninstall App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: |
+                                 Uninstall an application on the devices. 
+                                 
+                                 Cannot uninstall system apps. If you uninstall an app that is still on a devices's configuration, it will automatically re-download the next time the device syncs.
+                              enum:
+                                 - UNINSTALL_APP
+                              example: LAUNCH_APP
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to uninstall
+                      - title: Restart App
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices 
+                           action: 
+                              type: string
+                              description: Restart an app
+                              enum:
+                                 - RESTART_APP
+                              example: RESTART_APP
+                           data:
+                              type: object 
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: The package name of the app to restart
+                      - title: Sync
+                        type: object
+                        properties:
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action:
+                              type: string
+                              description: Force devices to check in with ManageXR. Online devices sync every 15 minutes or immediately when configuration changes are made.
+                              enum:
+                              - SYNC
+                              example: SYNC
+                      - title: Enable / Disable Tutorial Mode
+                        type: object
+                        properties: 
+                           deviceIds:
+                              type: array
+                              items:
+                                 type: string
+                              description: List of unique identifiers (serial numbers) of devices
+                           action: 
+                              type: string
+                              description: When Tutorial Mode in enabled, the devices launch into their tutorial app on boot. Set the tutorial app in Configuration > Device Settings.
+                              enum: 
+                              - ENABLE_TUTORIAL_MODE
+                              - DISABLE_TUTORIAL_MODE
+                              example: ENABLE_TUTORIAL_MODE
+                  examples:
+                     example-sync:
+                        summary: Sync command
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: SYNC
+                     example-launch_app:
+                        summary: Launch App command
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                     example-launch_app_with_params:
+                        summary: Launch app with parameters
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_APP
+                           data:
+                              packageName: com.example.app
+                              launchParams:
+                                 userId: AX3EIUf89
+                                 booleanValue: true
+                                 floatValue: 100.29
+                                 arrayValue: [1.23, 4.56]
+                                 mapValue:
+                                    key: value
+                     example-launch_webxr:
+                        summary: Launch webxr link
+                        value:
+                           deviceIds: ["fJlJrjEL08UkhSLRRryd", "GrCQfwI4373WFqzVjguI"]
+                           action: LAUNCH_WEB_URL
+                           data:
+                              url: https://google.com
+         responses:
+            '200':
+               description: Success
+            '400':
+               description: Request must contain valid action
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Request must contain a valid action"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+            '404':
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Not found error"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+
+# Apps 
+   /v1/apps/:
+      get: 
+         summary: List apps in organization
+         description: List all applications present in organization. This lists top-level application info. To access app versions and specific version info, use [List App Versions](https://docs.managexr.com/api-reference/endpoint/v1/list-app-versions)
+         responses:
+            '200':
+               description: A list of app profiles
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 type: object
+                                 properties:
+                                    packageName:
+                                       type: string
+                                       description: Package name of the app
+                                       example: "com.example.app"
+                                    title:
+                                       type: string
+                                       description: Title of the app
+                                       example: "My Awesome App"
+                                    description:
+                                       type: string
+                                       description: Description of the app
+                                       example: "A fantastic app for managing XR content"
+                                    categories:
+                                       type: array
+                                       items:
+                                          type: string
+                                       description: Categories the app belongs to
+                                       example: ["Education", "Productivity"]
+                                    iconUrl:
+                                       type: string
+                                       format: uri
+                                       description: URL of the app's icon
+                                       example: "https://storage.example.com/apps/com.example.app/icon.png"
+                                    numVersions:
+                                       type: number
+                                       description: Number of versions of the app
+                                       example: 5
+                     example:
+                        data:
+                           - packageName: "com.example.app"
+                             title: "My Awesome App"
+                             description: "A fantastic app for managing XR content"
+                             categories: ["Education", "Productivity"]
+                             iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+                             numVersions: 5
+                           - packageName: "com.another.app"
+                             title: "Another App"
+                             description: "Another great app for XR"
+                             categories: ["Training", "Simulation"]
+                             iconUrl: "https://storage.example.com/apps/com.another.app/icon.png"
+                             numVersions: 3
+      post:
+         summary: Create managed app (self-hosted)
+         description: Create a managed app (Self-Hosted Only). Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        packageName:
+                           type: string
+                           description: Package name of the app
+                           example: "com.example.app"
+                        title:
+                           type: string
+                           description: Title of the app
+                           example: "My Awesome App"
+                        versionCode:
+                           type: number
+                           description: Version code of the app
+                           example: 42
+                        apkUrl:
+                           type: string
+                           description: URL of the APK file
+                           example: "https://storage.example.com/apps/com.example.app.apk"
+                        apkMd5:
+                           type: string
+                           description: MD5 hash of the APK file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        obbUrl:
+                           type: string
+                           description: URL of the OBB file
+                           example: "https://storage.example.com/apps/com.example.app.obb"
+                        obbMd5:
+                           type: string
+                           description: MD5 hash of the OBB file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        versionName:
+                           type: string
+                           description: Version name of the app
+                           example: "1.0.0"
+                        versionLabel:
+                           type: string
+                           description: Label for uniqueness among app versions
+                           example: "Quest"
+                        apkSize:
+                           type: number
+                           description: Size of the APK file in bytes
+                           example: 72633861
+                        obbSize:
+                           type: number
+                           description: Size of the OBB file in bytes
+                           example: 1024
+                        iconUrl:
+                           type: string
+                           format: uri
+                           description: URL of the app's icon
+                           example: "https://storage.example.com/apps/com.example.app/icon.png"
+                     required:
+                        - packageName
+                        - title
+                        - versionCode
+                        - apkUrl
+                        - apkMd5
+                        - versionName
+                        - apkSize
+                  example:
+                     packageName: "com.example.app"
+                     title: "My Awesome App"
+                     versionCode: 42
+                     apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                     apkMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                     obbMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     versionName: "1.0.0"
+                     versionLabel: "Quest"
+                     apkSize: 72633861
+                     obbSize: 1024
+                     iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+         responses:
+            '200':
+               description: The created managed app version
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the app version
+                                    example: "av_123"
+                                 type:
+                                    type: string
+                                    enum: [managed]
+                                    description: Type of the app version
+                                    example: "managed"
+                                 createdAt:
+                                    type: number
+                                    description: Creation timestamp
+                                    example: 1645615777448
+                                 updatedAt:
+                                    type: number
+                                    description: Last update timestamp
+                                    example: 1687352117203
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 83894522
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "8.7.8.1206"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 obbSize:
+                                    type: number
+                                    description: Size of the OBB file in bytes
+                                    example: 1024
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: true
+                                 apkUrl:
+                                    type: string
+                                    description: URL of the APK file
+                                    example: "https://storage.example.com/apps/com.example.app.apk"
+                                 obbUrl:
+                                    type: string
+                                    description: URL of the OBB file
+                                    example: "https://storage.example.com/apps/com.example.app.obb"
+                     example:
+                        data:
+                           id: "av_123"
+                           type: "managed"
+                           configurationDeployments: { "config_123": 1, "config_456": 0 }
+                           createdAt: 1645615777448
+                           updatedAt: 1687352117203
+                           versionCode: 83894522
+                           versionName: "8.7.8.1206"
+                           versionLabel: "Quest"
+                           apkSize: 72633861
+                           obbSize: 1024
+                           selfHosted: true
+                           apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                           obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            '400':
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid request"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid request"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   /v1/apps/{packageName}:
+      get:
+         summary: Get app information by package name
+         description: Returns information about a specific app including the title, iconUrl, categories, and number of versions.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         responses:
+            '200':
+               description: The app profile
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 title:
+                                    type: string
+                                    description: Title of the app
+                                    example: "My Awesome App"
+                                 description:
+                                    type: string
+                                    description: Description of the app
+                                    example: "A fantastic app for managing XR content"
+                                 categories:
+                                    type: array
+                                    items:
+                                       type: string
+                                    description: Categories the app belongs to
+                                    example: ["Education", "Productivity"]
+                                 iconUrl:
+                                    type: string
+                                    format: uri
+                                    description: URL of the app's icon
+                                    example: "https://storage.example.com/apps/com.example.app/icon.png"
+                                 numVersions:
+                                    type: number
+                                    description: Number of versions of the app
+                                    example: 5
+                     example:
+                        data:
+                           packageName: "com.example.app"
+                           title: "My Awesome App"
+                           description: "A fantastic app for managing XR content"
+                           categories: ["Education", "Productivity"]
+                           iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+                           numVersions: 5
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
+      patch:
+         summary: Edit app
+         description: Update an app's metadata such as title, description, categories, and icon URL
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: type
+              in: query
+              required: false
+              schema:
+                 type: string
+                 enum: [managed, shared, instant]
+                 description: Type of the app version to update
+              description: Type of the app version to update
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        title:
+                           type: string
+                           description: Title of the app
+                           example: "My Awesome App"
+                        description:
+                           type: string
+                           description: Description of the app
+                           example: "A fantastic app for managing XR content"
+                        categories:
+                           type: array
+                           items:
+                              type: string
+                           description: Home screen categories the app belongs to
+                           example: ["Education", "Productivity"]
+                        iconUrl:
+                           type: string
+                           format: uri
+                           description: URL of the app's icon
+                           example: "https://storage.example.com/apps/com.example.app/icon.png"
+                  example:
+                     title: "My Awesome App"
+                     description: "A fantastic app for managing XR content"
+                     categories: ["Education", "Productivity"]
+                     iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+         responses:
+            '200':
+               description: The updated app profile
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 title:
+                                    type: string
+                                    description: Title of the app
+                                    example: "My Awesome App"
+                                 description:
+                                    type: string
+                                    description: Description of the app
+                                    example: "A fantastic app for managing XR content"
+                                 categories:
+                                    type: array
+                                    items:
+                                       type: string
+                                    description: Categories the app belongs to
+                                    example: ["Education", "Productivity"]
+                                 iconUrl:
+                                    type: string
+                                    format: uri
+                                    description: URL of the app's icon
+                                    example: "https://storage.example.com/apps/com.example.app/icon.png"
+                                 numVersions:
+                                    type: number
+                                    description: Number of versions of the app
+                                    example: 5
+                     example:
+                        data:
+                           packageName: "com.example.app"
+                           title: "My Awesome App"
+                           description: "A fantastic app for managing XR content"
+                           categories: ["Education", "Productivity"]
+                           iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+                           numVersions: 5
+            '400':
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid app type: external"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid app type: external"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
+      delete:
+         summary: Delete app
+         description: Removes application and all versions from ManageXR.
+   /v1/apps/{packageName}/versions:
+      get:
+         summary: List app versions
+         description: Returns a list of all app versions for a given package name
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         responses:
+            '200':
+               description: A list of app versions
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the app version
+                                       example: "av_123"
+                                    type:
+                                       type: string
+                                       enum: [managed, shared, external, instant]
+                                       description: Type of the app version
+                                       example: "managed"
+                                    configurationDeployments:
+                                       type: object
+                                       description: Map of configuration ids to device count using application
+                                       example: { "config_123": 1, "config_456": 0 }
+                                    createdAt:
+                                       type: number
+                                       description: Creation timestamp
+                                       example: 1645615777448
+                                    updatedAt:
+                                       type: number
+                                       description: Last update timestamp
+                                       example: 1687352117203
+                                    versionCode:
+                                       type: number
+                                       description: Version code of the app
+                                       example: 83894522
+                                    versionName:
+                                       type: string
+                                       description: Version name of the app
+                                       example: "8.7.8.1206"
+                                    versionLabel:
+                                       type: string
+                                       description: Label for uniqueness among app versions
+                                       example: "Quest"
+                                    apkSize:
+                                       type: number
+                                       description: Size of the APK file in bytes
+                                       example: 72633861
+                                    obbSize:
+                                       type: number
+                                       description: Size of the OBB file in bytes
+                                       example: 1024
+                                    selfHosted:
+                                       type: boolean
+                                       description: Whether the app is self-hosted
+                                       example: true
+                                    apkUrl:
+                                       type: string
+                                       description: URL of the APK file (self-hosted apps only)
+                                       example: "https://storage.example.com/apps/com.example.app.apk"
+                                    obbUrl:
+                                       type: string
+                                       description: URL of the OBB file (self-hosted apps only)
+                                       example: "https://storage.example.com/apps/com.example.app.obb"
+                                    sharingOrganizationName:
+                                       type: string
+                                       description: Name of the organization sharing the app (shared apps only)
+                                       example: "XR Developer"
+                                    releaseChannelName: 
+                                       type: string
+                                       description: Name of the release channel (shared apps only)
+                                       example: "Production"
+                                    supportedDeviceModels:
+                                       type: array
+                                       items:
+                                          type: string
+                                          example: "Quest 3"
+                                       description: List of supported device models for Instant App (instant apps only)
+                                       example: ["Quest 3", "Quest 3S", "Pico 4 Ultra Enterprise"]
+                     example:
+                        data:
+                           - id: "av_123"
+                             type: "managed"
+                             configurationDeployments: { "config_123": 1, "config_456": 0 }
+                             createdAt: 1645615777448
+                             updatedAt: 1687352117203
+                             versionCode: 83894522
+                             versionName: "8.7.8.1206"
+                             versionLabel: "Quest"
+                             apkSize: 72633861
+                             obbSize: 1024
+                             selfHosted: true
+                             apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                             obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                           - id: "av_456"
+                             type: "shared"
+                             configurationDeployments: { "config_123": 0, "config_456": 1 }
+                             createdAt: 1645615777448
+                             updatedAt: 1687352117203
+                             versionCode: 83894522
+                             versionName: "8.7.8.1206"
+                             versionLabel: "Quest"
+                             apkSize: 72633861
+                             obbSize: 1024
+                             selfHosted: false
+
+                             releaseChannelName: "Production"
+                             sharingOrganizationName: "XR Developer"
+            '404':
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App with package name com.example.app not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
+      post:
+         summary: Create app version (self-hosted)
+         description: Create a managed app version (Self-Hosted Only). Adds a new version of a self-hosted application. To create and upload a new app version to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app)
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        versionCode:
+                           type: number
+                           description: Version code of the app
+                           example: 42
+                        apkUrl:
+                           type: string
+                           description: URL of the APK file
+                           example: "https://storage.example.com/apps/com.example.app.apk"
+                        apkMd5:
+                           type: string
+                           description: MD5 hash of the APK file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        obbUrl:
+                           type: string
+                           description: URL of the OBB file
+                           example: "https://storage.example.com/apps/com.example.app.obb"
+                        obbMd5:
+                           type: string
+                           description: MD5 hash of the OBB file
+                           example: "d41d8cd98f00b204e9800998ecf8427e"
+                        versionName:
+                           type: string
+                           description: Version name of the app
+                           example: "1.0.0"
+                        versionLabel:
+                           type: string
+                           description: Label for uniqueness among app versions
+                           example: "Quest"
+                        apkSize:
+                           type: number
+                           description: Size of the APK file in bytes
+                           example: 72633861
+                        obbSize:
+                           type: number
+                           description: Size of the OBB file in bytes
+                           example: 1024
+                     required:
+                        - versionCode
+                        - apkUrl
+                        - apkMd5
+                        - versionName
+                        - apkSize
+                  example:
+                     versionCode: 42
+                     apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                     apkMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+                     obbMd5: "d41d8cd98f00b204e9800998ecf8427e"
+                     versionName: "1.0.0"
+                     versionLabel: "Quest"
+                     apkSize: 72633861
+                     obbSize: 1024
+         responses:
+            '200':
+               description: The created app version
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the app version
+                                    example: "av_123"
+                                 type:
+                                    type: string
+                                    enum: [managed, shared, external, instant]
+                                    description: Type of the app version
+                                    example: "managed"
+                                 createdAt:
+                                    type: number
+                                    description: Creation timestamp
+                                    example: 1645615777448
+                                 updatedAt:
+                                    type: number
+                                    description: Last update timestamp
+                                    example: 1687352117203
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 83894522
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "8.7.8.1206"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 obbSize:
+                                    type: number
+                                    description: Size of the OBB file in bytes
+                                    example: 1024
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: true
+                                 apkUrl:
+                                    type: string
+                                    description: URL of the APK file (only present if self-hosted)
+                                    example: "https://storage.example.com/apps/com.example.app.apk"
+                                 obbUrl:
+                                    type: string
+                                    description: URL of the OBB file (only present if self-hosted)
+                                    example: "https://storage.example.com/apps/com.example.app.obb"
+                     example:
+                        data:
+                           id: "av_123"
+                           type: "managed"
+                           configurationDeployments: { "config_123": 1, "config_456": 0 }
+                           createdAt: 1645615777448
+                           updatedAt: 1687352117203
+                           versionCode: 83894522
+                           versionName: "8.7.8.1206"
+                           versionLabel: "Quest"
+                           apkSize: 72633861
+                           obbSize: 1024
+                           selfHosted: true
+                           apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                           obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            '400':
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid request"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid request"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   /v1/apps/{packageName}/release-channels:
+      get:
+         summary: List app release channels
+         description: Returns a list of all release channels for a given application
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         responses:
+            '200':
+               description: A list of release channels
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the release channel
+                                       example: "rc_123"
+                                    name:
+                                       type: string
+                                       description: Name of the release channel
+                                       example: "Stable"
+                                    type:
+                                       type: string
+                                       enum: [app, link, video]
+                                       description: Type of the release channel
+                                       example: "app"
+                                    packageName:
+                                       type: string
+                                       description: Package name of the app
+                                       example: "com.example.app"
+                                    targetVersion:
+                                       type: object
+                                       description: The target app version for this release channel
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the app version
+                                             example: "av_123"
+                                          type:
+                                             type: string
+                                             enum: [managed, shared, external, instant]
+                                             description: Type of the app version
+                                             example: "managed"
+                                          configurationDeployments:
+                                             type: object
+                                             description: Map of configuration ids to device count using application
+                                             example: { "config_123": 1, "config_456": 0 }
+                                          createdAt:
+                                             type: number
+                                             description: Creation timestamp
+                                             example: 1645615777448
+                                          updatedAt:
+                                             type: number
+                                             description: Last update timestamp
+                                             example: 1687352117203
+                                          versionCode:
+                                             type: number
+                                             description: Version code of the app
+                                             example: 83894522
+                                          versionName:
+                                             type: string
+                                             description: Version name of the app
+                                             example: "8.7.8.1206"
+                                          apkSize:
+                                             type: number
+                                             description: Size of the APK file in bytes
+                                             example: 72633861
+                                          selfHosted:
+                                             type: boolean
+                                             description: Whether the app is self-hosted
+                                             example: false
+                                    sharedOrganizations:
+                                       type: array
+                                       description: List of organizations this release channel is shared with
+                                       items:
+                                          type: object
+                                          properties:
+                                             id:
+                                                type: string
+                                                description: Unique identifier of the organization
+                                                example: "org_789"
+                                             name:
+                                                type: string
+                                                description: Name of the organization
+                                                example: "Example Org"
+                     example:
+                        data:
+                           - id: "rc_123"
+                             name: "Stable"
+                             type: "app"
+                             packageName: "com.example.app"
+                             targetVersion:
+                                id: "av_123"
+                                type: "managed"
+                                configurationDeployments: { "config_123": 1, "config_456": 0 }
+                                createdAt: 1645615777448
+                                updatedAt: 1687352117203
+                                versionCode: 83894522
+                                versionName: "8.7.8.1206"
+                                apkSize: 72633861
+                                selfHosted: false
+                             sharedOrganizations:
+                                - id: "org_789"
+                                  name: "Example Org"
+                           - id: "rc_456"
+                             name: "Beta"
+                             type: "app"
+                             packageName: "com.example.app"
+                             targetVersion:
+                                id: "av_456"
+                                type: "shared"
+                                configurationDeployments: { "config_123": 0, "config_456": 1 }
+                                createdAt: 1645615777448
+                                updatedAt: 1687352117203
+                                versionCode: 83894522
+                                versionName: "8.7.8.1206"
+                                apkSize: 72633861
+                                selfHosted: false
+                             sharedOrganizations: []
+      post:
+         summary: Create an app release channel
+         description: Add a new release channel for an app and assign it an app version
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the release channel
+                           example: "Stable"
+                        targetVersion:
+                           oneOf:
+                              - type: object
+                                properties:
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 42
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "1.0.0"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                              - type: string
+                                enum: [latest, last-created]
+                                description: Special version identifier. "latest" = latest semver version. "last-created" = most recently created on ManageXR.
+                                example: "latest"
+                              - type: string
+                                description: App version ID
+                                example: "av_123"
+                     required:
+                        - name
+                        - targetVersion
+                  examples:
+                     example-latest:
+                        summary: Create release channel with latest version
+                        value:
+                           name: "Stable"
+                           targetVersion: "latest"
+                     example-last-created:
+                        summary: Create release channel with most recently created version
+                        value:
+                           name: "Beta"
+                           targetVersion: "last-created"
+                     example-specific-version:
+                        summary: Create release channel with specific version
+                        value:
+                           name: "Production"
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                     example-specific-version-with-label:
+                        summary: Create release channel with specific version and label
+                        value:
+                           name: "Quest Release"
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                              versionLabel: "Quest"
+                     example-app-id:
+                        summary: Create release channel with app version ID
+                        value:
+                           name: "Stable"
+                           targetVersion: "av_123"
+         responses:
+            '200':
+               description: The created release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Map of configuration ids to device count using application
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 83894522
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "App matching version identifier not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "App matching version identifier not found"
+                        error: "ManageXR Error"
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}:
+      patch:
+         summary: Edit a release channel
+         description: Update the target app version or name of an existing app release channel
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: New name for the release channel
+                           example: "Production"
+                        targetVersion:
+                           oneOf:
+                              - type: object
+                                properties:
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 42
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "1.0.0"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                              - type: string
+                                enum: [latest, last-created]
+                                description: Special version identifier. "latest" = latest semver version. "last-created" = most recently created on ManageXR.
+                                example: "latest"
+                              - type: string
+                                description: App version ID
+                                example: "av_123"
+                  examples:
+                     example-name-only:
+                        summary: Update only the release channel name
+                        value:
+                           name: "Stable"
+                     example-latest:
+                        summary: Update to the latest version
+                        value:
+                           targetVersion: "latest"
+                     example-last-created:
+                        summary: Update to the most recently created version
+                        value:
+                           targetVersion: "last-created"
+                     example-specific-version:
+                        summary: Update to a specific version with version code and name
+                        value:
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                     example-specific-version-with-label:
+                        summary: Update to a specific version with version code, name, and label
+                        value:
+                           targetVersion:
+                              versionCode: 42
+                              versionName: "1.0.0"
+                              versionLabel: "Release"
+                     example-app-id:
+                        summary: Update to a specific version using app version ID
+                        value:
+                           targetVersion: "av_123"
+                     example-name-and-version:
+                        summary: Update both name and version
+                        value:
+                           name: "Stable"
+                           targetVersion: "latest"
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Map of configuration ID to device count using application
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 83894522
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "8.7.8.1206"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: false
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              selfHosted: false
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}/share:
+      post:
+         summary: Share a release channel
+         description: Share an app release channel with a client organization. The API key used must be a multi-org key with access to the client organizations to use this endpoint.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        organizationIds:
+                           type: array
+                           items:
+                              type: string
+                           description: Array of organization IDs to share the release channel with
+                           example: ["org_123", "org_456"]
+                     required:
+                        - organizationIds
+                  example:
+                     organizationIds: ["org_123", "org_456"]
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the release channel
+                                       example: "rc_123"
+                                    name:
+                                       type: string
+                                       description: Name of the release channel
+                                       example: "Stable"
+                                    type:
+                                       type: string
+                                       enum: [app, link, video]
+                                       description: Type of the release channel
+                                       example: "app"
+                                    packageName:
+                                       type: string
+                                       description: Package name of the app
+                                       example: "com.example.app"
+                                    targetVersion:
+                                       type: object
+                                       description: The target app version for this release channel
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the app version
+                                             example: "av_123"
+                                          type:
+                                             type: string
+                                             enum: [managed, shared, external, instant]
+                                             description: Type of the app version
+                                             example: "managed"
+                                          configurationDeployments:
+                                             type: object
+                                             description: Map of configuration ID to device count using application
+                                             example: { "config_123": 1, "config_456": 0 }
+                                          createdAt:
+                                             type: number
+                                             description: Creation timestamp
+                                             example: 1645615777448
+                                          updatedAt:
+                                             type: number
+                                             description: Last update timestamp
+                                             example: 1687352117203
+                                          versionCode:
+                                             type: number
+                                             description: Version code of the app
+                                             example: 83894522
+                                          versionName:
+                                             type: string
+                                             description: Version name of the app
+                                             example: "8.7.8.1206"
+                                          apkSize:
+                                             type: number
+                                             description: Size of the APK file in bytes
+                                             example: 72633861
+                                          selfHosted:
+                                             type: boolean
+                                             description: Whether the app is self-hosted
+                                             example: false
+                                    sharedOrganizations:
+                                       type: array
+                                       description: List of organizations this release channel is shared with
+                                       items:
+                                          type: object
+                                          properties:
+                                             id:
+                                                type: string
+                                                description: Unique identifier of the organization
+                                                example: "org_789"
+                                             name:
+                                                type: string
+                                                description: Name of the organization
+                                                example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
+   /v1/apps/{packageName}/release-channels/{releaseChannelId}/unshare:
+      post:
+         summary: Unshare a release channel
+         description: Unshare an app release channel with a client organization
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The unique identifier of the release channel
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        organizationIds:
+                           type: array
+                           items:
+                              type: string
+                           description: Array of organization IDs to unshare the release channel with
+                           example: ["org_123", "org_456"]
+                     required:
+                        - organizationIds
+                  example:
+                     organizationIds: ["org_123", "org_456"]
+         responses:
+            '200':
+               description: The updated release channel
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the release channel
+                                    example: "rc_123"
+                                 name:
+                                    type: string
+                                    description: Name of the release channel
+                                    example: "Stable"
+                                 type:
+                                    type: string
+                                    enum: [app, link, video]
+                                    description: Type of the release channel
+                                    example: "app"
+                                 packageName:
+                                    type: string
+                                    description: Package name of the app
+                                    example: "com.example.app"
+                                 targetVersion:
+                                    type: object
+                                    description: The target app version for this release channel
+                                    properties:
+                                       id:
+                                          type: string
+                                          description: Unique identifier of the app version
+                                          example: "av_123"
+                                       type:
+                                          type: string
+                                          enum: [managed, shared, external, instant]
+                                          description: Type of the app version
+                                          example: "managed"
+                                       configurationDeployments:
+                                          type: object
+                                          description: Map of configuration ID to device count using application
+                                          example: { "config_123": 1, "config_456": 0 }
+                                       createdAt:
+                                          type: number
+                                          description: Creation timestamp
+                                          example: 1645615777448
+                                       updatedAt:
+                                          type: number
+                                          description: Last update timestamp
+                                          example: 1687352117203
+                                       versionCode:
+                                          type: number
+                                          description: Version code of the app
+                                          example: 83894522
+                                       versionName:
+                                          type: string
+                                          description: Version name of the app
+                                          example: "8.7.8.1206"
+                                       apkSize:
+                                          type: number
+                                          description: Size of the APK file in bytes
+                                          example: 72633861
+                                       selfHosted:
+                                          type: boolean
+                                          description: Whether the app is self-hosted
+                                          example: false
+                                 sharedOrganizations:
+                                    type: array
+                                    description: List of organizations this release channel is shared with
+                                    items:
+                                       type: object
+                                       properties:
+                                          id:
+                                             type: string
+                                             description: Unique identifier of the organization
+                                             example: "org_789"
+                                          name:
+                                             type: string
+                                             description: Name of the organization
+                                             example: "Example Org"
+                     example:
+                        data:
+                           id: "rc_123"
+                           name: "Stable"
+                           type: "app"
+                           packageName: "com.example.app"
+                           targetVersion:
+                              id: "av_123"
+                              type: "managed"
+                              configurationDeployments: { "config_123": 1, "config_456": 0 }
+                              createdAt: 1645615777448
+                              updatedAt: 1687352117203
+                              versionCode: 83894522
+                              versionName: "8.7.8.1206"
+                              apkSize: 72633861
+                              selfHosted: false
+                           sharedOrganizations:
+                              - id: "org_789"
+                                name: "Example Org"
+            '400':
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
+# V1-Configurations
+   /v1/configurations/:
+      post:
+         summary: Create a configuration
+         description: Create a new configuration. Creates a blank configuration with default settings and no content.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the configuration
+                           example: "New Configuration A"
+                     required: 
+                        - name
+                     example:
+                        name: "New Configuration A"
+         responses:
+            '200':
+                  description: The created configuration
+                  content:
+                     application/json:
+                        schema:
+                           type: object
+                           properties:
+                              data:
+                                 type: object
+                                 properties:
+                                    id:
+                                       type: string
+                                       description: Unique identifier of the configuration
+                                       example: "sFidGmedeQofSBcvRcyn"
+                                    name:
+                                       type: string
+                                       description: Name of the configuration
+                                       example: "New Configuration A"
+                                    registrationCode:
+                                       type: string
+                                       description: Configuration code (formerly known as registration code) used for enrollment
+                                       example: "ad39kda"
+                                    deviceCount:
+                                       type: number
+                                       example: 15
+                                       description: Number of devices using the configuration
+                                    deviceExperience:
+                                       type: string
+                                       enum:
+                                          - HOME_SCREEN
+                                          - KIOSK
+                                          - KIOSK_VIDEO
+                                          - DEFAULT
+                                       description: Device experience set on the configuration. Default is Home Screen.
+                                    content:
+                                       type: array
+                                       description: An array of VR content deployed on the configuration. For newly created configurations, this will be empty. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1ContentAppManaged'
+                                             - $ref: '#/components/schemas/V1ContentVideo'
+                                             - $ref: '#/components/schemas/V1ContentLink'
+                                          discriminator:
+                                             propertyName: contentType
+                                             mapping:
+                                                app: '#/components/schemas/V1ContentAppManaged'
+                                                video: '#/components/schemas/V1ContentVideo'
+                                                link: '#/components/schemas/V1ContentLink'
+                                    files:
+                                       type: array
+                                       description: An array of files deployed on the configuration. For newly created configurations, this will be empty.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1ManagedFile'
+                                    wifiNetworks:
+                                       type: array
+                                       description: An array of Wi-Fi networks deployed on the configuration. For newly created configurations, this will be empty.
+                                       items:
+                                          oneOf:
+                                             - $ref: '#/components/schemas/V1WifiNetwork'
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"                
+   /v1/configurations/{id}:
+      get: 
+         summary: Get a configuration
+         description: Retrieve a configuration by id
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the configuration
+         responses:
+            '200':
+               description: The requested configuration
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the configuration
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the configuration
+                                    example: "New Configuration A"
+                                 registrationCode:
+                                    type: string
+                                    description: Configuration code (formerly known as registration code) used for enrollment
+                                    example: "ad39kda"
+                                 deviceCount:
+                                    type: number
+                                    example: 15
+                                    description: Number of devices using the configuration
+                                 deviceExperience:
+                                    type: string
+                                    enum:
+                                       - HOME_SCREEN
+                                       - KIOSK
+                                       - KIOSK_VIDEO
+                                       - DEFAULT
+                                    description: Device experience set on the configuration. Default is Home Screen.
+                                 content:
+                                    type: array
+                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ContentAppManaged'
+                                          - $ref: '#/components/schemas/V1ContentVideo'
+                                          - $ref: '#/components/schemas/V1ContentLink'
+                                       discriminator:
+                                          propertyName: contentType
+                                          mapping:
+                                             app: '#/components/schemas/V1ContentAppManaged'
+                                             video: '#/components/schemas/V1ContentVideo'
+                                             link: '#/components/schemas/V1ContentLink'
+                                 files:
+                                    type: array
+                                    description: An array of files deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ManagedFile'
+                                 wifiNetworks:
+                                    type: array
+                                    description: An array of Wi-Fi networks deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1WifiNetwork'
+            '403':
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            '404':
+               description: Configuration not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Configuration not found"
+                           error:
+                              type: string
+                              example: "Not Found"
+                     example:
+                        statusCode: 404
+                        message: "Configuration not found"
+                        error: "Not Found"
+
+      patch:
+         summary: Edit a configuration
+         description: Update an existing configuration to change the content deployed (e.g., update app versions, add/remove apps, videos, and webxr links)
+         parameters:
+            - name: configurationId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the configuration
+            - name: organizationId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the organization
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Updated name for the configuration
+                           example: "Client Configuration v2"
+                        vrContent:
+                           type: array 
+                           description: Updated set of VR content on the configuration. Content will appear on the Home Screen in the order it appears in the vrContent array.
+                           items:
+                              oneOf:
+                                 - $ref: '#/components/schemas/V1AppReleaseIdentifier'
+                                 - $ref: '#/components/schemas/V1AppVersionIdentifier'
+                                 - $ref: '#/components/schemas/V1VideoIdentifier'                              
+                                 - $ref: '#/components/schemas/V1WebXRIdentifier'
+                  example:
+                     name: "Client Configuration v2"
+                     vrContent: [{ type: "app", id: { packageName: "com.my.customApp", releaseChannel: "prod" } }, { type: "video", id: "KSJ34KHDA12MR" }, { type: "app", id: { packageName: "com.my.test1", version: 'latest' }}, { type: "app", id: { packageName: "com.my.test1", version: { versionCode: 1, versionName: '1.0' } }}]     
+         responses:
+            '200':
+               description: The updated configuration
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the configuration
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the configuration
+                                    example: "Client Configuration v2"
+                                 registrationCode:
+                                    type: string
+                                    description: Configuration code (formerly known as registration code) used for enrollment
+                                    example: "ad39kda"
+                                 deviceCount:
+                                    type: number
+                                    example: 12
+                                    description: Number of devices using the configuration
+                                 deviceExperience:
+                                    type: string
+                                    enum:
+                                       - HOME_SCREEN
+                                       - KIOSK
+                                       - KIOSK_VIDEO
+                                       - DEFAULT
+                                    description: Device experience set on the configuration. Default is Home Screen.
+                                 content:
+                                    type: array
+                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ContentAppManaged'
+                                          - $ref: '#/components/schemas/V1ContentVideo'
+                                          - $ref: '#/components/schemas/V1ContentLink'
+                                       discriminator:
+                                          propertyName: contentType
+                                          mapping:
+                                             app: '#/components/schemas/V1ContentAppManaged'
+                                             video: '#/components/schemas/V1ContentVideo'
+                                             link: '#/components/schemas/V1ContentLink'
+                                 files:
+                                    type: array
+                                    description: An array of files deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1ManagedFile'
+                                 wifiNetworks:
+                                    type: array
+                                    description: An array of Wi-Fi networks deployed on the configuration.
+                                    items:
+                                       oneOf:
+                                          - $ref: '#/components/schemas/V1WifiNetwork'
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "Client Configuration v2"
+                           registrationCode: "ad39kda"
+                           deviceCount: 12
+                           deviceExperience: "HOME_SCREEN"
+                           content:
+                              - contentType: app
+                                id: "com.my.customApp"
+                                title: "Custom App"
+                                iconUrl: "https://storage.example.com/apps/com.my.customApp/icon.png"
+                                createdAt: 1719855774748
+                                updatedAt: 1719855779899
+                                type: managed
+                                versionCode: 17
+                                versionName: "2.3.0"
+                                releaseChannelName: "prod"
+                                apkSize: 1204975930
+                                obbSize: 0
+                                selfHosted: false
+                                configurationDeployments:
+                                 sFidGmedeQofSBcvRcyn: 12
+                              - contentType: video
+                                id: "KSJ34KHDA12MR"
+                                title: "Onboarding Intro"
+                                iconUrl: "https://storage.example.com/videos/onboarding-intro/icon.jpg"
+                                size: 553657
+                                type: "_360"
+                                display: "MONO"
+                                mapping: "EQUIRECTANGULAR"
+                                packing: "NONE"
+                                md5: "abc123xyz456=="
+                                createdAt: 1719840000000
+                                updatedAt: 1719849999999
+                              - contentType: app
+                                id: "com.my.test1"
+                                title: "Test App"
+                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
+                                createdAt: 1719850000000
+                                updatedAt: 1719857777777
+                                type: managed
+                                versionCode: 22
+                                versionName: "3.0.0"
+                                configurationDeployments:
+                                  sFidGmedeQofSBcvRcyn: 12
+                              - contentType: app
+                                id: "com.my.test1"
+                                title: "Test App"
+                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
+                                createdAt: 1719800000000
+                                updatedAt: 1719851111111
+                                type: managed
+                                versionCode: 1
+                                versionName: "1.0"
+                                configurationDeployments:
+                                    sFidGmedeQofSBcvRcyn: 12
+                           files: []
+                           wifiNetworks: []
+      delete:
+         summary: Delete a configuration
+         description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
+# Tags
+   /v1/tags/:
+      post:
+         summary: Create tag
+         description: Create a new tag
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Name of the tag
+                           example: "History"
+                     required:
+                        - name
+                  example:
+                     name: "History"
+         responses:
+            '200':
+               description: The created tag
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the tag
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the tag
+                                    example: "History"
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "History"
+            '400':
+               description: Tag name already exists
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Tag with name History already exists"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Tag with name History already exists"
+                        error: "ManageXR Error"
+   /v1/tags/{tagId}:
+      patch:
+         summary: Edit tag
+         description: Update an existing tag's name
+         parameters:
+            - name: tagId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the tag
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: New name for the tag
+                           example: "World History"
+                     required:
+                        - name
+                  example:
+                     name: "World History"
+         responses:
+            '200':
+               description: The updated tag
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the tag
+                                    example: "sFidGmedeQofSBcvRcyn"
+                                 name:
+                                    type: string
+                                    description: Name of the tag
+                                    example: "World History"
+                     example:
+                        data:
+                           id: "sFidGmedeQofSBcvRcyn"
+                           name: "World History"
+            '400':
+               description: Tag name already exists
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Tag with name World History already exists"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Tag with name World History already exists"
+                        error: "ManageXR Error"
+            '404':
+               description: Tag not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           message:
+                              type: string
+                              example: "Tag with id sFidGmedeQofSBcvRcyn not found"
+      delete: 
+         summary: Delete tag
+         description: Delete a tag
+         parameters:
+            - name: tagId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the tag
+         responses:
+            '200':
+               description: Tag successfully deleted
+            '404':
+               description: Tag not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           message:
+                              type: string
+                              example: "Tag with id sFidGmedeQofSBcvRcyn not found"
+# v0 Endpoints: 
    /organizations/{orgId}/devices:
       get:
          summary: Get devices
@@ -89,243 +3244,8 @@ paths:
                      schema:
                         type: array
                         items:
-                           type: object
-                           properties:
-                              serial:
-                                 type: string
-                                 example: 2G0YC1ZF630NZA
-                                 description: The serial number of the device. Also serves as the ID on ManageXR.
-                              name:
-                                 type: string
-                                 example: Device_0024
-                                 description: The name given to the device on ManageXR
-                              mac:
-                                 type: string
-                                 example: CE:AF:07:47:E0:AE
-                                 description: Device MAC address
-                              model:
-                                 type: string
-                                 example: Quest 3
-                                 description: Device model
-                              manufacturer:
-                                 type: string
-                                 example: Oculus
-                                 description: Device manufacturer. Note, Meta devices report as Oculus
-                              notes:
-                                 type: string
-                                 example: With Taylor L
-                                 description: The notes given to a device on ManageXR
-                              batteryLevel:
-                                 type: number
-                                 example: 34
-                                 description: The battery level of the device
-                              online:
-                                 type: boolean
-                                 example: true
-                                 description: True if the device is online
-                              osVersion:
-                                 type: string
-                                 example: 12
-                                 description: The Android operating system version
-                              outOfDate:
-                                 type: boolean
-                                 example: false
-                                 description: True if device is not compliant with its configuration on ManageXR
-                              pauseUpdates:
-                                 type: boolean
-                                 example: false
-                                 description: True if configuration updates are paused for device. Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
-                              registerDate:
-                                 type: string
-                                 format: date-time
-                                 example: Tue, 27 Feb 2024 07:28:03 GMT
-                                 description: Date the device was registered on ManageXR
-                              updating:
-                                 type: boolean
-                                 example: false
-                                 description: True if the device is currently downloading content or firmware
-                              factoryResetStatus:
-                                 type: string
-                                 enum:
-                                    - QUEUED
-                                    - COMPLETE
-                                    - null
-                                 example: null
-                                 description: This status is set when an admin sends a factory reset command to a device. Null if no factory reset command has been sent.
-                              firmwareVersion:
-                                 type: string
-                                 example: 65.0.0.546.341
-                                 description: Device firmware version
-                              configuration:
-                                 type: object
-                                 properties:
-                                    name:
-                                       type: string
-                                       description: 'Configuration name'
-                                    id:
-                                       type: string
-                                       description: 'Configuration id'
-                                 example:
-                                    name: Test Configuration
-                                    id: OZ04csIYkA0EArkeu1vX
-                                 description: The configuration applied to the device on ManageXR
-                              tags:
-                                 type: array
-                                 items:
-                                    type: object
-                                    properties:
-                                       id:
-                                          type: string
-                                          description: The unique identifier for the tag
-                                       name:
-                                          type: string
-                                          description: The name of the tag
-                                 description: The tags applied to the device on ManageXR. Null if device has no tags.
-                              tutorialModeEnabled:
-                                 type: boolean
-                                 example: false
-                                 description: True if device is in Tutorial Mode
-                              kioskModeOverride:
-                                 type: boolean
-                                 example: false
-                                 description: True if device has Kiosk Mode/ManageXR Home Screen disabled. When true, the device is not locked into the ManageXR Home Screen or Kiosk App and users have full access to the native system menus. [Learn more](https://help.managexr.com/en/articles/5416931-temporarily-disable-kiosk-mode-home-screen) 
-                              lastSync:
-                                 type: string
-                                 format: date-time
-                                 example: Tue, 18 Jun 2024 21:46:34 GMT
-                                 description: The last time the device checked in with ManageXR. Online devices check in every 15 minutes.
-                              ram:
-                                 type: object
-                                 properties:
-                                    available:
-                                       type: number
-                                       description: Available RAM in bytes
-                                    total:
-                                       type: number
-                                       description: Total RAM in bytes
-                                 example:
-                                    available: 3704000512
-                                    total: 8108634112
-                                 description: Device RAM in bytes
-                              location:
-                                 type: object
-                                 properties:
-                                    city: 
-                                       type: string
-                                    region: 
-                                       type: string
-                                    country: 
-                                       type: string
-                                    continent: 
-                                       type: string
-                                    timeZone: 
-                                       type: string
-                                    latitude: 
-                                       type: number
-                                    longitude: 
-                                       type: number
-                                 example:
-                                    city: San Francisco
-                                    region: California
-                                    country: United States
-                                    continent: North America
-                                    timeZone: America/Los_Angeles
-                                    latitude: 37
-                                    longitude: -122
-                                 description: Device location as determined by its IP address and provided by ipstack.com
-                              connectedWifiNetwork:
-                                 type: object
-                                 properties:
-                                    ssid:
-                                       type: string
-                                       description: The ssid of the last connected wifi network
-                                 example:
-                                    ssid: TheElectricCity
-                                 description: Information about the last connected wifi network
-                              storage:
-                                 type: object
-                                 properties:
-                                    available:
-                                       type: number
-                                 example:
-                                    available: 107079929856
-                                 description: The available storage on the device in bytes
-                     examples:
-                        example-1:
-                           summary: Example response
-                           value:
-                              - serial: 2G0YC1ZF630NZA
-                                name: Oculus Quest 2
-                                mac: 0816D76C3AE5
-                                model: Quest 2
-                                manufacturer: Oculus
-                                notes: with Phil P
-                                batteryLevel: 81
-                                online: false
-                                osVersion: 10
-                                outOfDate: true
-                                registerDate: Thu, 08 Jun 2023 21:16:39 GMT
-                                updating: false
-                                factoryResetStatus: null
-                                firmwareVersion: 65.0.0.546.341
-                                configuration:
-                                   name: Quality Assurance
-                                   id: SpGcLo99xqMkj9dyNvBd
-                                tags: []
-                                tutorialModeEnabled: false
-                                kioskModeOverride: false
-                                lastSync: Mon, 24 Jun 2024 19:33:21 GMT
-                                ram:
-                                   available: 4276592640
-                                   total: 8151437312
-                                location:
-                                   city: Galt
-                                   region: California
-                                   country: United States
-                                   continent: North America
-                                   timeZone: America/Los_Angeles
-                                   latitude: 37
-                                   longitude: -122
-                                connectedWifiNetwork:
-                                   ssid: Comcast
-                                storage:
-                                   available: 235923423232
-                              - serial: PA7950RGGC06043
-                                name: Carolina
-                                mac: 0816D56C3AE4
-                                model: Quest 2
-                                manufacturer: Oculus
-                                notes: null
-                                batteryLevel: 81
-                                online: false
-                                osVersion: 10
-                                outOfDate: true
-                                registerDate: Thu, 08 Jun 2023 21:16:39 GMT
-                                updating: false
-                                factoryResetStatus: QUEUED
-                                firmwareVersion: 4.0.7
-                                configuration:
-                                   name: Customer Success
-                                   id: SpGcLo99xqMkj9dyNvBd
-                                tags: null
-                                tutorialModeEnabled: false
-                                kioskModeOverride: false
-                                lastSync: Mon, 24 Jun 2024 19:33:21 GMT
-                                ram:
-                                   available: 4276592640
-                                   total: 8151437312
-                                location:
-                                   city: Ílhavo
-                                   region: Aveiro
-                                   country: Portugal
-                                   continent: Europe
-                                   timeZone: Europe/Lisbon
-                                   latitude: 38
-                                   longitude: 9
-                                connectedWifiNetwork:
-                                   ssid: Carol
-                                storage:
-                                   available: 51294728192
+                           oneOf:
+                              - $ref: '#/components/schemas/V1Device'
    /organizations/{orgId}/devices/set-pause-updates:
       post:
          summary: Set pause updates for devices
@@ -376,14 +3296,6 @@ paths:
          responses:
            '201':
              description: Success
-             content:
-               application/json:
-                 schema:
-                   type: object
-                   properties:
-                     message:
-                       type: string
-                       example: "Success"
    /organizations/{orgId}/devices/{deviceId}/command:
       post:
          summary: Send command
@@ -1417,7 +4329,7 @@ paths:
                                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
    /organizations/{orgId}/configurations:
       get:
-         description: Retrieve a list of all configurations
+         description: Retrieve a list of all configurations.
          parameters:
             - name: orgId
               in: path
@@ -1493,6 +4405,627 @@ paths:
                              deviceLicenses: 100
 
 components:
+   schemas:
+      V1ContentAppManaged:
+         type: object
+         title: App
+         description: __App (managed)__. Managed apps deployed on the configuration will include the attributes listed below
+         properties:
+            contentType:
+               type: string
+               enum: [app]
+            title:
+               type: string
+               description: Title of the app
+               example: "My Custom VR App"
+            packageName:
+               type: string
+               description: Package name of the app
+               example: "com.picovr.launcher"
+            iconUrl:
+               type: string
+               format: uri
+               example: "https://firebasestorage.googleapis.com/v0/b/example.jpg"
+            id:
+               type: string
+               description: Unique identifier of the app version
+               example: "av_123"
+            type:
+               type: string
+               enum: [managed, shared, external, instant]
+               description: Type of the app version
+               example: "managed"
+            configurationDeployments:
+               type: object
+               description: Map of configuration ids to device count using application
+               example: { "config_123": 1, "config_456": 0 }
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+            versionCode:
+               type: number
+               description: Version code of the app
+               example: 83894522
+            versionName:
+               type: string
+               description: Version name of the app
+               example: "8.7.8.1206"
+            versionLabel:
+               type: string
+               description: Label for uniqueness among app versions
+               example: "Quest"
+            apkSize:
+               type: number
+               description: Size of the APK file in bytes
+               example: 72633861
+            obbSize:
+               type: number
+               description: Size of the OBB file in bytes
+               example: 1024
+            selfHosted:
+               type: boolean
+               description: Whether the app is self-hosted
+               example: true
+            apkUrl:
+               type: string
+               description: URL of the APK file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.apk"
+            obbUrl:
+               type: string
+               description: URL of the OBB file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.obb"
+            sharingOrganizationName:
+               type: string
+               description: Name of the organization sharing the app (shared apps only)
+               example: "XR Developer"
+            releaseChannelName: 
+               type: string
+               description: Name of the release channel (shared apps only)
+               example: "Production"
+            supportedDeviceModels:
+               type: array
+               items:
+                  type: string
+                  example: "Quest 3"
+               description: List of supported device models for Instant App (instant apps only)
+               example: ["Quest 3", "Quest 3S", "Pico 4 Ultra Enterprise"]
+         example:
+            contentType: app
+            id: "kaldh3907hjxmi219"
+            title: "My Custom VR App"
+            packageName: "com.picovr.vrlauncher"
+            iconUrl: "https://storage.example.com/apps/com.example.app/icon.png"
+            createdAt: 1645615777448
+            updatedAt: 1687352117203
+            configurationDeployments: { "config_123": 1 }
+            type: managed
+            versionCode: "Device_0024"
+            versionName: "CE:AF:07:47:E0:AE"
+            apkSize: 1204975930
+            obbSize: 19097894
+            selfHosted: false
+      V1ContentVideo:
+         type: object
+         title: Video
+         description: Videos deployed on the configuration will include the attributes listed below
+         required: [contentType, id, title, size, type, display, mapping, packing, iconUrl, createdAt, updatedAt]
+         properties:
+            contentType:
+               type: string
+               enum: [video]
+            id:
+               type: string
+               description: Unique identifier of the video
+            title:
+               type: string
+               description: Title of the video
+            size:
+               type: number
+               description: Size of the video in bytes 
+            type:
+               type: string
+               enum:
+                  - _360
+                  - _180
+                  - _2D
+               example: "_360"
+               description: Type of video
+            display:
+               type: string
+               enum:
+                  - "MONO"
+                  - "STEREO"
+               example: "MONO"
+               description: Video display type
+            mapping:
+               type: string
+               enum:
+                  - "NONE"
+                  - "EQUIRECTANGULAR"
+                  - "CUBEMAP"
+               example: "EQUIRECTANGULAR"
+               description: Video mapping
+            packing:
+               type: string
+               enum:
+                  - "NONE"
+                  - "TOP_BOTTOM"
+                  - "LEFT_RIGHT"
+               example: "TOP_BOTTOM"
+               description: Video packing (stereoscopic videos only)
+            md5:
+               type: string
+               description: MD5 hash of the video file
+            iconUrl:
+               type: string
+               format: uri
+               description: URL of the video's icon
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+            description:
+               type: string
+               description: Optional description of the video
+         example:
+            contentType: video
+            id: "gF0ODIEvXSwsjqtP0CgVo"
+            title: "Discover San Francsico"
+            description: "[360 Mono Cubemap] 1 MB"
+            size: 553657
+            type: "_360"
+            display: "MONO"
+            mapping: "CUBEMAP"
+            packing: "NONE"
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            iconUrl: "https://firebasestorage.googleapis.com/v0/b/example.jpg"
+            createdAt: 1696978504660
+            updatedAt: 1715651553616
+      V1ContentLink:
+         type: object
+         title: WebXR Link
+         description: WebXR links deployed on the configuration will include the attributes listed below
+         required: [contentType, id, title, url, iconUrl, createdAt, updatedAt]
+         properties:
+            contentType:
+               type: string
+               enum: [link]
+               description: Type of content
+            id:
+               type: string
+               description: Unique identifier of the webxr link
+            title:
+               type: string
+               description: Title of the webxr link
+            url:
+               type: string
+               format: uri
+               description: WebXR link url to open in-headset 
+            iconUrl:
+               type: string
+               format: uri
+               description: URL of the webxr link's icon
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+         example:
+            contentType: link
+            id: "A3t67LlxH99cKeprazuc"
+            title: "Virtual College Tour"
+            url: "https://www.youtube.com/watch?v=AyWLvrWBKHA"
+            iconUrl: "https://firebasestorage.googleapis.com/v0/b/icon.png"
+            createdAt: 1706719137865
+            updatedAt: 1706719137865
+      V1ManagedFile:
+         type: object
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the file
+               example: "DLO133U5NFLMAL1"
+            url:
+               type: string
+               format: uri
+               description: Direct URL to download the file
+               example: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
+            name:
+               type: string
+               description: Name of the file, including extension
+               example: "training-video.mp4"
+            size:
+               type: number
+               description: Size of the file in bytes
+               example: 1204975930
+            md5:
+               type: string
+               description: MD5 hash of the file for integrity verification
+               example: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description:
+               type: string
+               description: Optional description of the file's contents or purpose
+               example: "Introductory training video for new hires"
+            directory:
+               type: string
+               description: Path to the file within the organization's file system
+               example: "Android/obb/your.app.package/bundles/Onboarding"
+         example:
+            id: "file_123abc"
+            url: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
+            name: "training-video.mp4"
+            size: 1204975930
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description: "Introductory training video for new hires"
+            directory: "Android/obb/your.app.package/bundles/Onboarding"
+      V1WifiNetwork:
+         type: object
+         description: A Wi-Fi network profile that can be deployed to devices.
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the Wi-Fi network
+               example: "wifi_abc123"
+            ssid:
+               type: string
+               description: The SSID (name) of the Wi-Fi network
+               example: "MyNetwork"
+            nickname:
+               type: string
+               description: A user-defined label for the network
+               example: "Office Wi-Fi"
+            type:
+               type: string
+               description: The security type of the network
+               enum:
+               - OPEN
+               - WPA
+               - WPA_ENTERPRISE
+               - UNKNOWN
+               example: WPA_ENTERPRISE
+         example:
+            id: "wifi_abc123"
+            ssid: "MyNetwork"
+            nickname: "Office Wi-Fi"
+            type: WPA_ENTERPRISE
+      V1AppIdentifier:
+         type: object
+         properties:
+            packageName:
+               type: string
+               description: Package name of the app
+               example: 'com.myapp.quest'
+            version:
+               oneOf:
+               - '#/components/schemas/V1AppVersionIdentifier'
+      V1AppVersionShortcutIdentifier:
+         type: string
+         enum:
+         - latest
+         - last-created
+      V1AppVersionIdentifierRetired:
+         type: object
+         properties:
+            versionCode:
+               type: number
+               description: App version code
+               example: 42
+            versionName:
+               type: string
+               description: App version name
+               example: "4.2.0"
+            versionLabel:
+               type: string
+               description: Optional version label (e.g. 'Stable', 'Beta', 'Quest'). Used to differentiate app versions with the same name and code.
+               example: "Stable"
+         required:
+         - versionCode
+         - versionName
+         example:
+            versionCode: 42
+            versionName: "4.2.0"
+            versionLabel: "Stable"
+      V1AppVersionIdOnly:
+         type: string
+         description: Unique identifier of app version, video, or link on ManageXR
+         example: "LAKDJFLAKJ21JK34"
+      V1VideoIdentifier:
+         type: object
+         title: Video
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the video
+               example: "KD32I5NGL1345"
+            type:
+               type: string
+               enum:
+               - video 
+               example: video
+      V1WebXRIdentifier:
+         type: object
+         title: WebXR Link
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the webxr link
+               example: "KD32I5NGL133k8"
+            type:
+               type: string
+               enum:
+               - link 
+               example: link
+      V1AppVersionIdentifier:
+         type: object
+         title: App (Specific Version)
+         properties:
+            id:
+               description: Unique identifier of the app
+               type: object
+               properties:
+                  packageName:
+                     type: string
+                     description: Package Name of the application
+                  version:
+                     oneOf:
+                     - type: string
+                       description: |
+                        Use a shortcut to identify a recent version. "latest" = latest semver version. "last-created" = most recently created on ManageXR. 
+
+                        _Select from the dropdown above for other version identification options_
+                       enum: ['latest', 'last-created']
+                     - type: object
+                       description: Identify a specific version using the standard version information.
+                       properties:
+                        versionCode:
+                           type: number
+                           description: App version code
+                           example: 42
+                        versionName:
+                           type: string
+                           description: App version name
+                           example: "4.2.0"
+                        versionLabel:
+                           type: string
+                           description: Optional version label (e.g. 'Stable', 'Beta', 'Quest'). Used to differentiate app versions with the same name and code.
+                           example: "Stable"
+                       required: [versionCode, versionName]
+                     - type: string
+                       description: Unique identifier of app version on ManageXR. You can retrieve this using the List App Versions endpoint.
+            type:
+               type: string
+               enum:
+               - app 
+               example: app
+      V1AppReleaseIdentifier:
+         type: object
+         title: App (Release Channel)
+         description: We recommend using release channels to deploy apps to configurations to simplify app version management. Instead of updating the app version on every configuration whenever you have an update, simply update the release channel. [Learn More](https://help.managexr.com/en/articles/5518816-release-channels)
+         properties:
+            id:
+               description: Unique identifier of the app
+               type: object
+               properties:
+                  packageName:
+                     type: string
+                     description: Package Name of the application
+                  releaseChannel:
+                     type: string
+                     description: Name of the release channel
+                  type:
+                     enum:
+                     - shared
+                     - managed
+               required: [packageName, releaseChannel]
+            type:
+               type: string
+               enum:
+               - app 
+               example: app
+      V1Device:
+         type: object
+         description: Full representation of a device managed in ManageXR
+         properties:
+            id:
+               type: string
+               description: The device ID (serial number)
+               example: "12345678901234"
+            serial:
+               type: string
+               description: Device serial number
+               example: "12345678901234"
+            name:
+               type: string
+               description: The device name
+               example: "Training Room 1"
+            mac:
+               type: string
+               description: MAC address of the device
+               example: "CE:AF:07:47:E0:AE"
+            model:
+               type: string
+               description: The device model
+               example: "Quest 2"
+            manufacturer:
+               type: string
+               description: The device manufacturer
+               example: "Meta"
+            notes:
+               type: string
+               description: Optional user-provided notes about the device
+               example: "Mounted in Room 5"
+            batteryLevel:
+               type: number
+               description: Battery level percentage
+               example: 87
+            batteryIsCharging:
+               type: boolean
+               description: Whether the device is currently charging
+               example: true
+            pauseUpdates:
+               type: boolean
+               description: Whether updates are paused for this device
+               example: false
+            online:
+               type: boolean
+               description: Whether the device is currently online
+               example: true
+            osVersion:
+               type: string
+               description: The OS version running on the device
+               example: "Android 12"
+            outOfDate:
+               type: boolean
+               description: Whether the device is running outdated software
+               example: true
+            registerDate:
+               type: string
+               format: date-time
+               description: The date this device was registered with ManageXR
+               example: "2023-11-12T10:30:00Z"
+            updating:
+               type: boolean
+               description: Whether the device is currently performing an update
+               example: false
+            factoryResetStatus:
+               type: string
+               description: Status of any pending or active factory reset
+               example: "NONE"
+            firmwareVersion:
+               type: string
+               description: Firmware version reported by the device
+               example: "Oculus OS 46.0.0.230"
+            configuration:
+               type: object
+               description: The configuration assigned to this device
+               properties:
+                  id:
+                     type: string
+                     example: "sFidGmedeQofSBcvRcyn"
+                  name:
+                     type: string
+                     example: "Training Configuration"
+            tags:
+               type: array
+               description: Tags assigned to this device
+               items:
+                  type: object
+                  properties:
+                     id:
+                        type: string
+                        example: "tag_abc123"
+                     name:
+                        type: string
+                        example: "Lab Devices"
+            tutorialModeEnabled:
+               type: boolean
+               description: Whether tutorial mode is enabled
+               example: false
+            kioskModeOverride:
+               type: boolean
+               description: True if device has Kiosk Mode/ManageXR Home Screen disabled. When true, the device is not locked into the ManageXR Home Screen or Kiosk App and users have full access to the native system menus. [Learn more](https://help.managexr.com/en/articles/5416931-temporarily-disable-kiosk-mode-home-screen) 
+               example: true
+            lastSync:
+               type: string
+               format: date-time
+               description: The last time the device checked in with ManageXR. Online devices check in every 15 minutes.
+               example: "2024-04-20T17:23:12Z"
+            ram:
+               type: object
+               description: RAM usage info
+               properties:
+                  available:
+                     type: number
+                     description: Available RAM in bytes
+                     example: 2147483648
+                  total:
+                     type: number
+                     description: Total RAM in bytes
+                     example: 4294967296
+            storage:
+               type: object
+               description: Internal storage usage info
+               properties:
+                  available:
+                     type: number
+                     description: Available storage in bytes
+                     example: 15728640000
+            location:
+               type: object
+               description: Approximate location of the device
+               properties:
+                  city:
+                     type: string
+                     example: "San Francisco"
+                  region:
+                     type: string
+                     example: "California"
+                  country:
+                     type: string
+                     example: "US"
+                  continent:
+                     type: string
+                     example: "North America"
+                  timeZone:
+                     type: string
+                     example: "America/Los_Angeles"
+                  longitude:
+                     type: number
+                     example: -122.4194
+                  latitude:
+                     type: number
+                     example: 37.7749
+            connectedWifiNetwork:
+               type: object
+               description: Current connected Wi-Fi network
+               properties:
+                  ssid:
+                     type: string
+                     example: "ManageXR-Office"
+            currentForegroundApp:
+               type: object
+               description: Currently running app in the foreground
+               properties:
+                  packageName:
+                     type: string
+                     example: "com.my.app"
+                  title:
+                     type: string
+                     example: "My Training App"
+            controllerData:
+               type: object
+               description: Data about connected controllers
+               properties:
+                  controller0:
+                     type: object
+                     properties:
+                        batteryLevel:
+                           type: number
+                           example: 85
+                        version:
+                           type: string
+                           example: "v14"
+                  controller1:
+                     type: object
+                     properties:
+                        batteryLevel:
+                           type: number
+                           example: 82
+                        version:
+                           type: string
+                           example: "v14"    
    securitySchemes:
       basicAuth:
          type: http
