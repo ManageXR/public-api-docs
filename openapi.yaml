@@ -4959,9 +4959,9 @@ components:
                description: Internal storage usage info
                properties:
                   available:
-                  type: number
-                  description: Available storage in bytes
-                  example: 15728640000
+                     type: number
+                     description: Available storage in bytes
+                     example: 15728640000
             location:
                type: object
                description: Approximate location of the device
@@ -4992,8 +4992,8 @@ components:
                description: Current connected Wi-Fi network
                properties:
                   ssid:
-                  type: string
-                  example: "ManageXR-Office"
+                     type: string
+                     example: "ManageXR-Office"
             currentForegroundApp:
                type: object
                description: Currently running app in the foreground
