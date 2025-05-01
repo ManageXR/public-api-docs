@@ -72,7 +72,7 @@ paths:
                         error: "ManageXR Error"
       patch:
          summary: Update a device by id
-         description: abd
+         description: Update device metadata or apply a new configuration
          parameters:
             - name: id
               in: path
