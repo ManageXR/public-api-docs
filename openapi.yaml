@@ -20,6 +20,12 @@ paths:
               schema:
                type: string
               description: Unique identifier (serial number) of the device
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: A device object
@@ -80,6 +86,12 @@ paths:
               schema:
                type: string
               description: Unique identifier (serial number) of the device
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -155,6 +167,13 @@ paths:
             Pause or resume configuration updates for devices.
 
             Pausing configuration updates stops a device from syncing with its latest Configuration. User-initiated changes to Configurations and ManageXR-initiated updates to the ManageXR Admin App and Home Screen will not propagate to devices with updates paused.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
            required: true
            content:
@@ -205,6 +224,12 @@ paths:
               schema:
                  type: string
               description: The ID (serial number) of the device.
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -492,6 +517,13 @@ paths:
             Send a command to multiple devices at once
 
             <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode </small>
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -842,6 +874,13 @@ paths:
       get: 
          summary: List apps in organization
          description: List all applications present in organization. This lists top-level application info. To access app versions and specific version info, use [List App Versions](https://docs.managexr.com/api-reference/endpoint/v1/list-app-versions)
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: A list of app profiles
@@ -899,6 +938,13 @@ paths:
       post:
          summary: Create managed app (self-hosted)
          description: Create a managed app (Self-Hosted Only). Add an applictation to your ManageXR library that you are hosting on your own servers. To create and upload an application to our servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/command/upload-app).
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -1102,6 +1148,12 @@ paths:
               schema:
                  type: string
               description: The package name of the app
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: The app profile
@@ -1186,6 +1238,12 @@ paths:
                  enum: [managed, shared, instant]
                  description: Type of the app version to update
               description: Type of the app version to update
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -1337,6 +1395,12 @@ paths:
               schema:
                  type: string
               description: The package name of the app
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: A list of app versions
@@ -1477,6 +1541,12 @@ paths:
               schema:
                  type: string
               description: The package name of the app
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -1662,6 +1732,12 @@ paths:
               schema:
                  type: string
               description: The package name of the app
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: A list of release channels
@@ -1791,6 +1867,12 @@ paths:
               schema:
                  type: string
               description: The package name of the app
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -1998,6 +2080,12 @@ paths:
               schema:
                  type: string
               description: The unique identifier of the release channel
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -2245,6 +2333,12 @@ paths:
               schema:
                  type: string
               description: The unique identifier of the release channel
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -2441,6 +2535,12 @@ paths:
               schema:
                  type: string
               description: The unique identifier of the release channel
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -2625,6 +2725,13 @@ paths:
       post:
          summary: Create a configuration
          description: Create a new configuration. Creates a blank configuration with default settings and no content.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -2732,6 +2839,12 @@ paths:
               schema:
                  type: string
               description: Unique identifier of the configuration
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: The requested configuration
@@ -3001,6 +3114,13 @@ paths:
       post:
          summary: Create tag
          description: Create a new tag
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -3070,6 +3190,12 @@ paths:
               schema:
                  type: string
               description: Unique identifier of the tag
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
@@ -3148,6 +3274,12 @@ paths:
               schema:
                  type: string
               description: Unique identifier of the tag
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             '200':
                description: Tag successfully deleted
