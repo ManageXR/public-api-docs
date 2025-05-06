@@ -3036,11 +3036,11 @@ paths:
                  type: string
               description: Unique identifier of the configuration
             - name: organizationId
-              in: path
-              required: true
+              in: query
+              required: false
               schema:
                  type: string
-              description: Unique identifier of the organization
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          requestBody:
             required: true
             content:
