@@ -46,24 +46,29 @@
                 "pages": ["api-reference/endpoint/list-configurations",
                 "api-reference/endpoint/v1/get-configuration", 
                 "api-reference/endpoint/v1/create-configuration",
-                "api-reference/endpoint/v1/edit-configuration"]
+                "api-reference/endpoint/v1/edit-configuration",
+                "api-reference/endpoint/v1/delete-configuration",
+                "api-reference/endpoint/v1/duplicate-configuration-v1"]
               },
               {
                 "group": "Apps",
                 "pages": ["api-reference/endpoint/v1/list-apps",
                 "api-reference/endpoint/v1/get-app", 
                 "api-reference/endpoint/v1/create-externally-hosted-app", 
-                "api-reference/endpoint/v1/edit-app"]
+                "api-reference/endpoint/v1/edit-app",
+                "api-reference/endpoint/v1/delete-app"]
               },
               {
                 "group": "App Versions & Release Channels",
                 "pages": [ "api-reference/endpoint/v1/list-app-versions",
                 "api-reference/endpoint/v1/create-app-version", 
+                "api-reference/endpoint/v1/delete-app-version",
                 "api-reference/endpoint/v1/list-app-release-channels",
                 "api-reference/endpoint/v1/create-app-release-channel",
                 "api-reference/endpoint/v1/edit-app-release-channel",
                 "api-reference/endpoint/v1/share-app-release-channel",
-                "api-reference/endpoint/v1/unshare-app-release-channel"]
+                "api-reference/endpoint/v1/unshare-app-release-channel",
+                "api-reference/endpoint/v1/delete-app-release-channel"]
               },
               {
                 "group": "Tags",
