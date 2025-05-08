@@ -4816,8 +4816,9 @@ components:
             updatedAt: 1687352117203
             configurationDeployments: { "config_123": 1 }
             type: managed
-            versionCode: "Device_0024"
-            versionName: "CE:AF:07:47:E0:AE"
+            versionCode: 10203
+            versionName: "1.2.3"
+            versionLabel: "quest"
             apkSize: 1204975930
             obbSize: 19097894
             selfHosted: false
