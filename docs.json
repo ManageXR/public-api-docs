@@ -34,7 +34,7 @@
               },
               {
                 "group": "Devices",
-                "pages": ["api-reference/endpoint/list-devices",
+                "pages": ["api-reference/endpoint/v1/list-devices",
                 "api-reference/endpoint/v1/get-device",
                 "api-reference/endpoint/v1/edit-device",
                 "api-reference/endpoint/v1/send-command",
@@ -43,7 +43,7 @@
               },
               {
                 "group": "Configurations",
-                "pages": ["api-reference/endpoint/list-configurations",
+                "pages": ["api-reference/endpoint/v1/list-configurations",
                 "api-reference/endpoint/v1/get-configuration", 
                 "api-reference/endpoint/v1/create-configuration",
                 "api-reference/endpoint/v1/edit-configuration",
@@ -79,6 +79,18 @@
               {
                 "group": "Organizations",
                 "pages": [  "api-reference/endpoint/list-organizations"]
+              },
+              {
+                "group": "Wi-Fi Networks",
+                "pages": [  "api-reference/endpoint/v1/list-wifi-networks"]
+              },
+              {
+                "group": "Videos",
+                "pages": [  "api-reference/endpoint/v1/list-videos"]
+              },
+              {
+                "group": "WebXR Links",
+                "pages": [  "api-reference/endpoint/v1/list-links"]
               }
             ]
           },
