@@ -3029,7 +3029,7 @@ paths:
          summary: Edit a configuration
          description: Update an existing configuration to change the content deployed (e.g., update app versions, add/remove apps, videos, and webxr links)
          parameters:
-            - name: configurationId
+            - name: id
               in: path
               required: true
               schema:
