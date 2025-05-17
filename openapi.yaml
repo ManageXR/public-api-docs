@@ -8,7 +8,9 @@ servers:
      description: ManageXR API Server
 paths: 
 # v1 Endpoints:
+##################################################
 # Devices
+##################################################
    /v1/devices/{id}:
       get:
          summary: Get device
@@ -869,7 +871,9 @@ paths:
                         message: "Forbidden"
                         error: "ManageXR Error"
 
+##################################################
 # Apps 
+##################################################
    /v1/apps/:
       get: 
          summary: List apps in organization
@@ -2720,7 +2724,9 @@ paths:
                         statusCode: 404
                         message: "Release channel with id rc_123 not found"
                         error: "ManageXR Error"
+##################################################
 # V1-Configurations
+##################################################
    /v1/configurations/:
       post:
          summary: Create a configuration
@@ -3109,7 +3115,9 @@ paths:
       delete:
          summary: Delete a configuration
          description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
+##################################################
 # Tags
+##################################################
    /v1/tags/:
       post:
          summary: Create tag
@@ -3293,7 +3301,10 @@ paths:
                            message:
                               type: string
                               example: "Tag with id sFidGmedeQofSBcvRcyn not found"
-# v0 Endpoints: 
+   # v0 Endpoints: 
+   ##################################################
+   # Devices
+   ##################################################
    /organizations/{orgId}/devices:
       get:
          summary: Get devices
@@ -4207,6 +4218,9 @@ paths:
                                  example:
                                     available: 107079929856
                                  description: The available storage on the device in bytes
+   ##################################################
+   # Configurations
+   ##################################################                                 
    /organizations/{orgId}/configurations/{configurationId}:
       get:
          summary: Get configuration
@@ -4499,6 +4513,67 @@ paths:
                              name: Employee Training
                              registrationCode: a8YhTzK
                              deviceCount: 30
+   /organizations/{orgId}/configurations/duplicate:
+    post:
+      summary: Duplicate an existing configuration
+      description: Create a new configuration by duplicating an existing one.
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          description: The ID of the organization. Locate the orgId under Organization Settings > API Keys.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - configurationId
+              properties:
+                name:
+                  type: string
+                  description: New configuration name
+                configurationId:
+                  type: string
+                  description: Unique identifier of the configuration to duplicate
+            examples:
+              example-request:
+                summary: Duplicate a configuration
+                value:
+                  name: Config v2
+                  configurationId: TY8ZiuJoxuy51fsSxXp0
+      responses:
+        '201':
+          description: A configuration summary object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the configuration
+                  name:
+                    type: string
+                    description: Name of the configuration
+                  registrationCode:
+                    type: string
+                    description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                  deviceCount:
+                    type: number
+                    description: Number of devices using the configuration
+              example:
+                id: 6qwM6FzJE4o708iqTpWc
+                name: Config v2
+                registrationCode: f7GbHvH
+                deviceCount: 0
+   ##################################################
+   # Organization
+   ##################################################
    /organizations:
       get:
          description: |

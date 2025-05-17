@@ -96,7 +96,8 @@
             {
               "group": "Configurations",
               "pages": ["api-reference/endpoint/list-configurations",
-              "api-reference/endpoint/get-configuration"]
+              "api-reference/endpoint/get-configuration",               
+              "api-reference/endpoint/duplicate-configuration"]
             },
             {
               "group": "Organizations",
