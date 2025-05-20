@@ -34,7 +34,7 @@
               },
               {
                 "group": "Devices",
-                "pages": ["api-reference/endpoint/list-devices",
+                "pages": ["api-reference/endpoint/v1/list-devices",
                 "api-reference/endpoint/v1/get-device",
                 "api-reference/endpoint/v1/edit-device",
                 "api-reference/endpoint/v1/send-command",
@@ -43,7 +43,7 @@
               },
               {
                 "group": "Configurations",
-                "pages": ["api-reference/endpoint/list-configurations",
+                "pages": ["api-reference/endpoint/v1/list-configurations",
                 "api-reference/endpoint/v1/get-configuration", 
                 "api-reference/endpoint/v1/create-configuration",
                 "api-reference/endpoint/v1/duplicate-configuration",
@@ -71,6 +71,7 @@
                 "api-reference/endpoint/v1/unshare-app-release-channel",
                 "api-reference/endpoint/v1/delete-app-release-channel"]
               },
+              { "group": "Library", "pages": [  "api-reference/endpoint/v1/list-wifi-networks", "api-reference/endpoint/v1/list-videos", "api-reference/endpoint/v1/list-links"]  },
               {
                 "group": "Tags",
                 "pages": ["api-reference/endpoint/v1/create-tag",
@@ -81,6 +82,7 @@
                 "group": "Organizations",
                 "pages": [  "api-reference/endpoint/list-organizations"]
               }
+        
             ]
           },
         {

@@ -12,6 +12,75 @@ paths:
    ##################################################
    # Devices
    ##################################################
+   /v1/devices/:
+      get:
+         summary: List devices
+         description: Retrieve a list of devices
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier (serial number) of the device
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+         responses:
+            "200":
+               description: A list of devices
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1Device"
+            "404":
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Not found error"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
    /v1/devices/{id}:
       get:
          summary: Get device
@@ -1610,7 +1679,6 @@ paths:
                              apkSize: 72633861
                              obbSize: 1024
                              selfHosted: false
-
                              releaseChannelName: "Production"
                              sharingOrganizationName: "XR Developer"
             "404":
@@ -3024,9 +3092,53 @@ paths:
                         message: "Release channel with id rc_123 not found"
                         error: "ManageXR Error"
    ##################################################
-   # V1-Configurations
+   # V1‑Configurations
    ##################################################
    /v1/configurations/:
+      get:
+         summary: List configurations
+         description: Retrieve all configurations.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key when omitted.
+         responses:
+            "200":
+               description: A list of configurations
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1ConfigurationResponse"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
       post:
          summary: Create a configuration
          description: Create a new configuration. Creates a blank configuration with default settings and no content.
@@ -3036,20 +3148,21 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
          requestBody:
             required: true
             content:
                application/json:
                   schema:
                      type: object
+                     required:
+                        - name
                      properties:
                         name:
                            type: string
                            description: Name of the configuration
-                           example: "New Configuration A"
-                     required:
-                        - name
                      example:
                         name: "New Configuration A"
          responses:
@@ -3061,58 +3174,7 @@ paths:
                         type: object
                         properties:
                            data:
-                              type: object
-                              properties:
-                                 id:
-                                    type: string
-                                    description: Unique identifier of the configuration
-                                    example: "sFidGmedeQofSBcvRcyn"
-                                 name:
-                                    type: string
-                                    description: Name of the configuration
-                                    example: "New Configuration A"
-                                 registrationCode:
-                                    type: string
-                                    description: Configuration code (formerly known as registration code) used for enrollment
-                                    example: "ad39kda"
-                                 deviceCount:
-                                    type: number
-                                    example: 15
-                                    description: Number of devices using the configuration
-                                 deviceExperience:
-                                    type: string
-                                    enum:
-                                       - HOME_SCREEN
-                                       - KIOSK
-                                       - KIOSK_VIDEO
-                                       - DEFAULT
-                                    description: Device experience set on the configuration. Default is Home Screen.
-                                 content:
-                                    type: array
-                                    description: An array of VR content deployed on the configuration. For newly created configurations, this will be empty. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ContentAppManaged"
-                                          - $ref: "#/components/schemas/V1ContentVideo"
-                                          - $ref: "#/components/schemas/V1ContentLink"
-                                       discriminator:
-                                          propertyName: contentType
-                                          mapping:
-                                             app: "#/components/schemas/V1ContentAppManaged"
-                                             video: "#/components/schemas/V1ContentVideo"
-                                             link: "#/components/schemas/V1ContentLink"
-                                 files:
-                                    type: array
-                                    description: An array of files deployed on the configuration. For newly created configurations, this will be empty.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ManagedFile"
-                                 wifiNetworks:
-                                    type: array
-                                    description: An array of Wi-Fi networks deployed on the configuration. For newly created configurations, this will be empty.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1WifiNetwork"
+                              $ref: "#/components/schemas/V1ConfigurationResponse"
             "403":
                description: Forbidden
                content:
@@ -3143,34 +3205,33 @@ paths:
             - name: organizationId
               in: query
               required: false
-              schema: { type: string }
+              schema:
+                 type: string
               description: |
                  Unique identifier of the organization.  
                  Defaults to the organization associated with the API key.
-
          requestBody:
             required: true
             content:
                application/json:
                   schema:
                      type: object
-                     required: [name, configurationId]
+                     required:
+                        - name
+                        - configurationId
                      properties:
                         name:
                            type: string
                            description: Name for the new configuration
-                           example: "Client Config v2"
                         configurationId:
                            type: string
                            description: ID of the configuration to duplicate
-                           example: "TY8ZiuJoxuy51fsSxXp0"
                   examples:
                      example-request:
                         summary: Duplicate a configuration
                         value:
                            name: "Client Config v2"
                            configurationId: "TY8ZiuJoxuy51fsSxXp0"
-
          responses:
             "201":
                description: Configuration duplicated successfully
@@ -3180,30 +3241,7 @@ paths:
                         type: object
                         properties:
                            data:
-                              type: object
-                              properties:
-                                 id:
-                                    type: string
-                                    description: Unique identifier of the new configuration
-                                    example: "6qwM6FzJE4o708iqTpWc"
-                                 name:
-                                    type: string
-                                    description: Name of the new configuration
-                                    example: "Client Config v2"
-                                 registrationCode:
-                                    type: string
-                                    description: Configuration code (formerly known as registration code) used for enrollment
-                                    example: "f7GbHvH"
-                                 deviceCount:
-                                    type: number
-                                    description: Number of devices using the configuration (always 0 on duplicate)
-                                    example: 0
-                     example:
-                        data:
-                           id: "6qwM6FzJE4o708iqTpWc"
-                           name: "Client Config v2"
-                           registrationCode: "f7GbHvH"
-                           deviceCount: 0
+                              $ref: "#/components/schemas/V1ConfigurationResponse"
             "403":
                description: Forbidden
                content:
@@ -3240,7 +3278,7 @@ paths:
    /v1/configurations/{id}:
       get:
          summary: Get a configuration
-         description: Retrieve a configuration by id
+         description: Retrieve a configuration by id.
          parameters:
             - name: id
               in: path
@@ -3253,7 +3291,9 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
          responses:
             "200":
                description: The requested configuration
@@ -3263,58 +3303,7 @@ paths:
                         type: object
                         properties:
                            data:
-                              type: object
-                              properties:
-                                 id:
-                                    type: string
-                                    description: Unique identifier of the configuration
-                                    example: "sFidGmedeQofSBcvRcyn"
-                                 name:
-                                    type: string
-                                    description: Name of the configuration
-                                    example: "New Configuration A"
-                                 registrationCode:
-                                    type: string
-                                    description: Configuration code (formerly known as registration code) used for enrollment
-                                    example: "ad39kda"
-                                 deviceCount:
-                                    type: number
-                                    example: 15
-                                    description: Number of devices using the configuration
-                                 deviceExperience:
-                                    type: string
-                                    enum:
-                                       - HOME_SCREEN
-                                       - KIOSK
-                                       - KIOSK_VIDEO
-                                       - DEFAULT
-                                    description: Device experience set on the configuration. Default is Home Screen.
-                                 content:
-                                    type: array
-                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ContentAppManaged"
-                                          - $ref: "#/components/schemas/V1ContentVideo"
-                                          - $ref: "#/components/schemas/V1ContentLink"
-                                       discriminator:
-                                          propertyName: contentType
-                                          mapping:
-                                             app: "#/components/schemas/V1ContentAppManaged"
-                                             video: "#/components/schemas/V1ContentVideo"
-                                             link: "#/components/schemas/V1ContentLink"
-                                 files:
-                                    type: array
-                                    description: An array of files deployed on the configuration.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ManagedFile"
-                                 wifiNetworks:
-                                    type: array
-                                    description: An array of Wi-Fi networks deployed on the configuration.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1WifiNetwork"
+                              $ref: "#/components/schemas/V1ConfigurationResponse"
             "403":
                description: Forbidden
                content:
@@ -3342,23 +3331,23 @@ paths:
                      schema:
                         type: object
                         properties:
-                           statusCode:
-                              type: number
-                              example: 404
+                           statusCode: { type: number, example: 404 }
                            message:
-                              type: string
-                              example: "Configuration not found"
-                           error:
-                              type: string
-                              example: "Not Found"
+                              {
+                                 type: string,
+                                 example: "Configuration with id sFidGmedeQofSBcvRcyn not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
                      example:
                         statusCode: 404
-                        message: "Configuration not found"
-                        error: "Not Found"
+                        message: "Configuration with id sFidGmedeQofSBcvRcyn not found"
+                        error: "ManageXR Error"
 
       patch:
          summary: Edit a configuration
-         description: Update an existing configuration to change the content deployed (e.g., update app versions, add/remove apps, videos, and webxr links)
+         description: |
+            Update an existing configuration to change the content deployed  
+            (e.g., update app versions, add/remove apps, videos, and WebXR links).
          parameters:
             - name: id
               in: path
@@ -3371,58 +3360,34 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
          requestBody:
             required: true
             content:
                application/json:
                   schema:
-                     type: object
-                     properties:
-                        name:
-                           type: string
-                           description: Updated name for the configuration
-                           example: "Client Configuration v2"
-                        vrContent:
-                           type: array
-                           description: Updated set of VR content on the configuration. Content will appear on the Home Screen in the order it appears in the vrContent array.
-                           items:
-                              oneOf:
-                                 - $ref: "#/components/schemas/V1AppReleaseIdentifier"
-                                 - $ref: "#/components/schemas/V1AppVersionIdentifier"
-                                 - $ref: "#/components/schemas/V1VideoIdentifier"
-                                 - $ref: "#/components/schemas/V1WebXRIdentifier"
+                     $ref: "#/components/schemas/V1ConfigurationVrContentPatch"
                   example:
                      name: "Client Configuration v2"
                      vrContent:
-                        [
-                           {
-                              type: "app",
-                              id:
-                                 {
-                                    packageName: "com.my.customApp",
-                                    releaseChannel: "prod",
-                                 },
-                           },
-                           { type: "video", id: "KSJ34KHDA12MR" },
-                           {
-                              type: "app",
-                              id:
-                                 {
-                                    packageName: "com.my.test1",
-                                    version: "latest",
-                                 },
-                           },
-                           {
-                              type: "app",
-                              id:
-                                 {
-                                    packageName: "com.my.test1",
-                                    version:
-                                       { versionCode: 1, versionName: "1.0" },
-                                 },
-                           },
-                        ]
+                        - type: app
+                          id:
+                             packageName: "com.my.customApp"
+                             releaseChannel: "prod"
+                        - type: video
+                          id: "KSJ34KHDA12MR"
+                        - type: app
+                          id:
+                             packageName: "com.my.test1"
+                             version: "latest"
+                        - type: app
+                          id:
+                             packageName: "com.my.test1"
+                             version:
+                                versionCode: 1
+                                versionName: "1.0"
          responses:
             "200":
                description: The updated configuration
@@ -3432,135 +3397,60 @@ paths:
                         type: object
                         properties:
                            data:
-                              type: object
-                              properties:
-                                 id:
-                                    type: string
-                                    description: Unique identifier of the configuration
-                                    example: "sFidGmedeQofSBcvRcyn"
-                                 name:
-                                    type: string
-                                    description: Name of the configuration
-                                    example: "Client Configuration v2"
-                                 registrationCode:
-                                    type: string
-                                    description: Configuration code (formerly known as registration code) used for enrollment
-                                    example: "ad39kda"
-                                 deviceCount:
-                                    type: number
-                                    example: 12
-                                    description: Number of devices using the configuration
-                                 deviceExperience:
-                                    type: string
-                                    enum:
-                                       - HOME_SCREEN
-                                       - KIOSK
-                                       - KIOSK_VIDEO
-                                       - DEFAULT
-                                    description: Device experience set on the configuration. Default is Home Screen.
-                                 content:
-                                    type: array
-                                    description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ContentAppManaged"
-                                          - $ref: "#/components/schemas/V1ContentVideo"
-                                          - $ref: "#/components/schemas/V1ContentLink"
-                                       discriminator:
-                                          propertyName: contentType
-                                          mapping:
-                                             app: "#/components/schemas/V1ContentAppManaged"
-                                             video: "#/components/schemas/V1ContentVideo"
-                                             link: "#/components/schemas/V1ContentLink"
-                                 files:
-                                    type: array
-                                    description: An array of files deployed on the configuration.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1ManagedFile"
-                                 wifiNetworks:
-                                    type: array
-                                    description: An array of Wi-Fi networks deployed on the configuration.
-                                    items:
-                                       oneOf:
-                                          - $ref: "#/components/schemas/V1WifiNetwork"
+                              $ref: "#/components/schemas/V1ConfigurationResponse"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
                      example:
-                        data:
-                           id: "sFidGmedeQofSBcvRcyn"
-                           name: "Client Configuration v2"
-                           registrationCode: "ad39kda"
-                           deviceCount: 12
-                           deviceExperience: "HOME_SCREEN"
-                           content:
-                              - contentType: app
-                                id: "com.my.customApp"
-                                title: "Custom App"
-                                iconUrl: "https://storage.example.com/apps/com.my.customApp/icon.png"
-                                createdAt: 1719855774748
-                                updatedAt: 1719855779899
-                                type: managed
-                                versionCode: 17
-                                versionName: "2.3.0"
-                                releaseChannelName: "prod"
-                                apkSize: 1204975930
-                                obbSize: 0
-                                selfHosted: false
-                                configurationDeployments:
-                                   sFidGmedeQofSBcvRcyn: 12
-                              - contentType: video
-                                id: "KSJ34KHDA12MR"
-                                title: "Onboarding Intro"
-                                iconUrl: "https://storage.example.com/videos/onboarding-intro/icon.jpg"
-                                size: 553657
-                                type: "_360"
-                                display: "MONO"
-                                mapping: "EQUIRECTANGULAR"
-                                packing: "NONE"
-                                md5: "abc123xyz456=="
-                                createdAt: 1719840000000
-                                updatedAt: 1719849999999
-                              - contentType: app
-                                id: "com.my.test1"
-                                title: "Test App"
-                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
-                                createdAt: 1719850000000
-                                updatedAt: 1719857777777
-                                type: managed
-                                versionCode: 22
-                                versionName: "3.0.0"
-                                configurationDeployments:
-                                   sFidGmedeQofSBcvRcyn: 12
-                              - contentType: app
-                                id: "com.my.test1"
-                                title: "Test App"
-                                iconUrl: "https://storage.example.com/apps/com.my.test1/icon.png"
-                                createdAt: 1719800000000
-                                updatedAt: 1719851111111
-                                type: managed
-                                versionCode: 1
-                                versionName: "1.0"
-                                configurationDeployments:
-                                   sFidGmedeQofSBcvRcyn: 12
-                           files: []
-                           wifiNetworks: []
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: Configuration not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Configuration with id sFidGmedeQofSBcvRcyn not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "Configuration with id sFidGmedeQofSBcvRcyn not found"
+                        error: "ManageXR Error"
+
       delete:
          summary: Delete a configuration
-         description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
-
+         description: |
+            Removes a configuration from ManageXR.  
+            You cannot delete configurations that are currently applied to devices.
          parameters:
             - name: id
               in: path
               required: true
-              schema: { type: string }
+              schema:
+                 type: string
               description: Unique identifier of the configuration
             - name: organizationId
               in: query
               required: false
-              schema: { type: string }
+              schema:
+                 type: string
               description: |
                  Unique identifier of the organization.  
                  Defaults to the organization associated with the API key.
-
          responses:
             "200":
                description: Configuration deleted successfully
@@ -3800,13 +3690,137 @@ paths:
                            message:
                               type: string
                               example: "Tag with id sFidGmedeQofSBcvRcyn not found"
+   ##################################################
+   # Wi-Fi Networks
+   ##################################################
+   /v1/wifi-networks:
+      get:
+         summary: List Wi‑Fi networks
+         description: Returns all Wi‑Fi networks stored in the organization’s library.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+         responses:
+            "200":
+               description: A list of Wi-Fi networks
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1WifiNetwork"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   ##################################################
+   # Videos
+   ##################################################
+   /v1/videos:
+      get:
+         summary: List Videos
+         description: Returns all videos stored in the organization’s library.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+         responses:
+            "200":
+               description: A list of videos
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1ContentVideo"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   ##################################################
+   # Links
+   ##################################################
+   /v1/links:
+      get:
+         summary: List WebXR links
+         description: Returns all WebXR links stored in the organization’s library.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+         responses:
+            "200":
+               description: A list of WebXR links
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1ContentLink"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+
    # v0 Endpoints:
    ##################################################
    # Devices
    ##################################################
    /organizations/{orgId}/devices:
       get:
-         summary: Get devices
+         summary: List Devices
          description: Retrieve a list of devices
          parameters:
             - name: orgId
@@ -5466,6 +5480,15 @@ components:
          type: string
          description: Unique identifier of app version, video, or link on ManageXR
          example: "LAKDJFLAKJ21JK34"
+      V1VrContentProperties:
+         type: object
+         description: Optional per item properties.
+         properties:
+            hidden:
+               type: boolean
+               description: |
+                  When **true**, the content item is hidden on the Home Screen.
+                  Omit this field (or set to false) to show the item.
       V1VideoIdentifier:
          type: object
          title: Video
@@ -5492,6 +5515,8 @@ components:
                enum:
                   - link
                example: link
+            properties:
+               $ref: "#/components/schemas/V1VrContentProperties"
       V1AppVersionIdentifier:
          type: object
          title: App (Specific Version)
@@ -5531,9 +5556,21 @@ components:
                           description: Unique identifier of app version on ManageXR. You can retrieve this using the List App Versions endpoint.
             type:
                type: string
-               enum:
-                  - app
+               enum: [app]
                example: app
+            properties:
+               $ref: "#/components/schemas/V1VrContentProperties"
+
+      example:
+         id:
+            packageName: "com.example.app"
+            version:
+               versionCode: 42
+               versionName: "4.2.0"
+         type: app
+         properties:
+            hidden: true
+
       V1AppReleaseIdentifier:
          type: object
          title: App (Release Channel)
@@ -5559,6 +5596,199 @@ components:
                enum:
                   - app
                example: app
+            properties:
+               $ref: "#/components/schemas/V1VrContentProperties"
+      V1ConfigurationVrContentPatch:
+         type: array
+         description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+         items:
+            oneOf:
+               - $ref: "#/components/schemas/V1AppVersionIdentifier"
+               - $ref: "#/components/schemas/V1VideoIdentifier"
+               - $ref: "#/components/schemas/V1WebXRIdentifier"
+      V1ConfigurationVrContentResponse:
+         type: array
+         description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
+         items:
+            oneOf:
+               - $ref: "#/components/schemas/V1AppVersionResponse"
+               - $ref: "#/components/schemas/V1ContentVideo"
+               - $ref: "#/components/schemas/V1ContentLink"
+      V1AppVersionResponse:
+         title: Apps
+         description: Apps deployed on the configuration will include the attributes listed below
+         type: object
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the app version
+               example: "av_123"
+            type:
+               type: string
+               enum: [managed, shared, external, instant]
+               description: Type of the app version
+               example: "managed"
+            configurationDeployments:
+               type: object
+               additionalProperties:
+                  type: number
+               description: Map of configuration ids to device count using application
+               example: { "config_123": 1, "config_456": 0 }
+            createdAt:
+               type: number
+               description: Creation timestamp
+               example: 1645615777448
+            updatedAt:
+               type: number
+               description: Last update timestamp
+               example: 1687352117203
+            versionCode:
+               type: number
+               description: Version code of the app
+               example: 83894522
+            versionName:
+               type: string
+               description: Version name of the app
+               example: "8.7.8.1206"
+            versionLabel:
+               type: string
+               description: Label for uniqueness among app versions
+               example: "Quest"
+            apkSize:
+               type: number
+               description: Size of the APK file in bytes
+               example: 72633861
+            obbSize:
+               type: number
+               description: Size of the OBB file in bytes
+               example: 1024
+            selfHosted:
+               type: boolean
+               description: Whether the app is self-hosted
+               example: true
+            apkUrl:
+               type: string
+               description: URL of the APK file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.apk"
+            obbUrl:
+               type: string
+               description: URL of the OBB file (self-hosted apps only)
+               example: "https://storage.example.com/apps/com.example.app.obb"
+            sharingOrganizationName:
+               type: string
+               description: Name of the organization sharing the app (shared apps only)
+               example: "XR Developer"
+            releaseChannelName:
+               type: string
+               description: Name of the release channel (shared apps only)
+               example: "Production"
+            supportedDeviceModels:
+               type: array
+               items:
+                  type: string
+                  example: "Quest 3"
+               description: List of supported device models for Instant App (instant apps only)
+               example:
+                  - "Quest 3"
+                  - "Quest 3S"
+                  - "Pico 4 Ultra Enterprise"
+      V1ConfigurationPatchDto:
+         type: object
+         description: Full representation of a configuration.
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the configuration.
+               example: "sFidGmedeQofSBcvRcyn"
+
+            name:
+               type: string
+               description: Name of the configuration.
+               example: "Education"
+
+            registrationCode:
+               type: string
+               description: Configuration code (formerly known as registration code) used for enrollment.
+               example: "f7GbHvH"
+
+            deviceCount:
+               type: number
+               description: Number of devices using the configuration.
+               example: 15
+
+            deviceExperienceMode:
+               type: string
+               description: Device experience set on the configuration. Default is Home Screen.
+               enum: [HOME_SCREEN, KIOSK, KIOSK_VIDEO, DEFAULT]
+               example: HOME_SCREEN
+
+            vrContent:
+               $ref: "#/components/schemas/V1ConfigurationVrContentPatch"
+
+            files:
+               type: array
+               description: Files deployed on the configuration.
+               items:
+                  oneOf:
+                     - $ref: "#/components/schemas/V1ManagedFile"
+
+            wifiNetworks:
+               type: array
+               description: Wi‑Fi network profiles deployed on the configuration.
+               items:
+                  oneOf:
+                     - $ref: "#/components/schemas/V1WifiNetwork"
+
+      V1ConfigurationResponse:
+         type: object
+         description: Full representation of a configuration.
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the configuration.
+               example: "sFidGmedeQofSBcvRcyn"
+
+            name:
+               type: string
+               description: Name of the configuration.
+               example: "Education"
+
+            registrationCode:
+               type: string
+               description: Configuration code (formerly known as registration code) used for enrollment.
+               example: "f7GbHvH"
+
+            deviceCount:
+               type: number
+               description: Number of devices using the configuration.
+               example: 15
+
+            deviceExperienceMode:
+               type: string
+               description: Device experience set on the configuration. Default is Home Screen.
+               enum: [HOME_SCREEN, KIOSK, KIOSK_VIDEO, DEFAULT]
+               example: HOME_SCREEN
+
+            vrContent:
+               $ref: "#/components/schemas/V1ConfigurationVrContentResponse"
+
+            files:
+               type: array
+               description: Files deployed on the configuration.
+               items:
+                  oneOf:
+                     - $ref: "#/components/schemas/V1ManagedFile"
+            wifiNetworks:
+               type: array
+               description: Wi‑Fi network profiles deployed on the configuration.
+               items:
+                  oneOf:
+                     - $ref: "#/components/schemas/V1WifiNetwork"
+               kioskAppId:
+                  type: string
+                  example:
+                     available: 10707AB329856
+                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
       V1Device:
          type: object
          description: Full representation of a device managed in ManageXR
