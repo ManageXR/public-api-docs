@@ -46,9 +46,10 @@
                 "pages": ["api-reference/endpoint/list-configurations",
                 "api-reference/endpoint/v1/get-configuration", 
                 "api-reference/endpoint/v1/create-configuration",
+                "api-reference/endpoint/v1/duplicate-configuration",
                 "api-reference/endpoint/v1/edit-configuration",
-                "api-reference/endpoint/v1/delete-configuration",
-                "api-reference/endpoint/v1/duplicate-configuration-v1"]
+                "api-reference/endpoint/v1/delete-configuration"
+                ]
               },
               {
                 "group": "Apps",

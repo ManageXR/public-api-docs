@@ -1827,18 +1827,14 @@ paths:
 
    /v1/apps/{packageName}/versions/{versionId}:
       delete:
-         summary: Delete version
+         summary: Delete app version
          description: |
-            Deletes **one specific version** of an app from ManageXR.
+            Deletes a specific app version
 
-            **Behavior by type**
-
-            | type      | Deletion scope |
-            |-----------|---------------|
-            | managed   | Deletes the specified managed version. |
-            | shared    | Deletes the specified shared version for *your* organization only (owner org keeps its copy). |
-            | instant   | Deletes the specified instant version for *your* organization only (owner org keeps its copy). |
-            | external  | Deletes the specified external version. |
+            | App type      | Deletion scope |
+            |---------------|---------------|
+            | managed  app | Deletes the specified managed app version |
+            | shared   app | Deletes the specified shared version in the recipient organization only (owner org keeps its copy) |
 
          parameters:
             - name: packageName
@@ -2527,9 +2523,7 @@ paths:
       delete:
          summary: Delete release channel
          description: |
-            Deletes an app release channel from ManageXR.
-            Deleting a release channel un-shares the app with any organizations that have access to the release channel.
-
+           Deletes an app release channel. If shared with client organizations, deleting also unshares the release channel.
          parameters:
             - name: packageName
               in: path
@@ -3141,7 +3135,7 @@ paths:
                         error: "ManageXR Error"
    /v1/configurations/duplicate:
       post:
-         summary: Duplicate an existing configuration
+         summary: Duplicate configuration
          description: |
             Creates a new configuration by cloning an existing one.
 
@@ -3198,7 +3192,7 @@ paths:
                                     example: "Client Config v2"
                                  registrationCode:
                                     type: string
-                                    description: Registration code for the new configuration
+                                    description: Configuration code (formerly known as registration code) used for enrollment
                                     example: "f7GbHvH"
                                  deviceCount:
                                     type: number
@@ -3554,7 +3548,7 @@ paths:
          description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
 
          parameters:
-            - name: configurationId
+            - name: id
               in: path
               required: true
               schema: { type: string }
