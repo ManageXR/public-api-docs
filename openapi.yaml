@@ -17,18 +17,75 @@ paths:
          summary: List devices
          description: Retrieve a list of devices
          parameters:
-            - name: id
-              in: path
-              required: true
-              schema:
-                 type: string
-              description: Unique identifier (serial number) of the device
             - name: organizationId
               in: query
               required: false
               schema:
                  type: string
               description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+            - name: names
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by device name. Allows partial matching. Separate multiple name parameters by comma.
+            - name: serials
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by device serial. Allows partial matching. Separate multiple serial parameters by comma.
+            - name: configurations
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by configuration unique identifier. Separate multiple configuration id parameters by comma.
+            - name: tags
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by tag unique identifier. Separate multiple tag id parameters by comma.
+            - name: models
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by model name. Separate multiple model parameters by comma.
+            - name: manufacturers
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by manufacturer name. Separate multiple manufacturer parameters by comma.
+            - name: firmwareVersions
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Query by firmware version. Separate multiple firmware version parameters by comma.
+            - name: filters
+              in: query
+              required: false
+              schema:
+                 type: string
+                 enum:
+                    - online
+                    - offline
+                    - upToDate
+                    - outOfDate
+                    - updateError
+                    - updating
+                    - paused
+                    - lowBattery
+                    - activeToday
+                    - activeWeek
+                    - activeMonth
+                    - activeOther
+                    - factoryResetPending
+                    - factoryReset
+              description: Query by filter.
          responses:
             "200":
                description: A list of devices
