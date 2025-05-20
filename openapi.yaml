@@ -1394,6 +1394,89 @@ paths:
       delete:
          summary: Delete app
          description: Removes application and all versions from ManageXR.
+
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema: { type: string }
+              description: The package name of the app
+            - name: type
+              in: query
+              required: false
+              schema:
+                 type: string
+                 enum: [managed, shared, instant, external]
+                 default: managed
+              description: |
+                 App **type** to delete.  
+                 • If not set, defaults to **managed**.  
+
+                  **Behavior by type**
+
+                  | type      | Deletion scope |
+                  |-----------|---------------|
+                  | managed   | Deletes the managed app and **all managed versions**. |
+                  | shared    | Deletes the shared app for *your* organization only (the owner org keeps its copy). |
+                  | instant   | Deletes the instant app for *your* organization only (the owner org keeps its copy). |
+                  | external  | Deletes the external app. |
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+
+         responses:
+            "200":
+               description: App deleted successfully
+            "400":
+               description: Invalid app type
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 400 }
+                           message:
+                              { type: string, example: "Invalid app type: foo" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 400
+                        message: "Invalid app type: foo"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: App not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "App with package name com.example.app not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "App with package name com.example.app not found"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}/versions:
       get:
          summary: List app versions
@@ -1741,6 +1824,73 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
+
+   /v1/apps/{packageName}/versions/{versionId}:
+      delete:
+         summary: Delete app version
+         description: |
+            Deletes a specific app version
+
+            | App type      | Deletion scope |
+            |---------------|---------------|
+            | managed  app | Deletes the specified managed app version |
+            | shared   app | Deletes the specified shared version in the recipient organization only (owner org keeps its copy) |
+
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema: { type: string }
+              description: The package name of the app
+            - name: versionId
+              in: path
+              required: true
+              schema: { type: string }
+              description: Unique identifier of the app version
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+
+         responses:
+            "200":
+               description: App version deleted successfully
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: App version not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "App version with id av_123 not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "App version with id av_123 not found"
+                        error: "ManageXR Error"
+
    /v1/apps/{packageName}/release-channels:
       get:
          summary: List app release channels
@@ -2370,6 +2520,83 @@ paths:
                         statusCode: 404
                         message: "Release channel with id rc_123 not found"
                         error: "ManageXR Error"
+      delete:
+         summary: Delete release channel
+         description: |
+           Deletes an app release channel. If shared with client organizations, deleting also unshares the release channel.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema: { type: string }
+              description: Package name of the app
+            - name: releaseChannelId
+              in: path
+              required: true
+              schema: { type: string }
+              description: Unique identifier of the release channel
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: Unique identifier of the organization.
+                 Defaults to the organization associated with the API key when omitted.
+
+         responses:
+            "200":
+               description: Release channel deleted successfully
+            "400":
+               description: Release channel package name mismatch
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Release channel with id rc_123 does not match the provided package name com.example.app"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: Release channel not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Release channel with id rc_123 not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "Release channel with id rc_123 not found"
+                        error: "ManageXR Error"
    /v1/apps/{packageName}/release-channels/{releaseChannelId}/share:
       post:
          summary: Share a release channel
@@ -2906,6 +3133,110 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
+   /v1/configurations/duplicate:
+      post:
+         summary: Duplicate configuration
+         description: |
+            Creates a new configuration by cloning an existing one.
+
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     required: [name, configurationId]
+                     properties:
+                        name:
+                           type: string
+                           description: Name for the new configuration
+                           example: "Client Config v2"
+                        configurationId:
+                           type: string
+                           description: ID of the configuration to duplicate
+                           example: "TY8ZiuJoxuy51fsSxXp0"
+                  examples:
+                     example-request:
+                        summary: Duplicate a configuration
+                        value:
+                           name: "Client Config v2"
+                           configurationId: "TY8ZiuJoxuy51fsSxXp0"
+
+         responses:
+            "201":
+               description: Configuration duplicated successfully
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the new configuration
+                                    example: "6qwM6FzJE4o708iqTpWc"
+                                 name:
+                                    type: string
+                                    description: Name of the new configuration
+                                    example: "Client Config v2"
+                                 registrationCode:
+                                    type: string
+                                    description: Configuration code (formerly known as registration code) used for enrollment
+                                    example: "f7GbHvH"
+                                 deviceCount:
+                                    type: number
+                                    description: Number of devices using the configuration (always 0 on duplicate)
+                                    example: 0
+                     example:
+                        data:
+                           id: "6qwM6FzJE4o708iqTpWc"
+                           name: "Client Config v2"
+                           registrationCode: "f7GbHvH"
+                           deviceCount: 0
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: Source configuration not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Configuration with id TY8ZiuJoxuy51fsSxXp0 not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "Configuration with id TY8ZiuJoxuy51fsSxXp0 not found"
+                        error: "ManageXR Error"
+
    /v1/configurations/{id}:
       get:
          summary: Get a configuration
@@ -3215,6 +3546,74 @@ paths:
       delete:
          summary: Delete a configuration
          description: Removes a configuration from ManageXR. You cannot delete configurations that are currently applied to devices.
+
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema: { type: string }
+              description: Unique identifier of the configuration
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+
+         responses:
+            "200":
+               description: Configuration deleted successfully
+            "400":
+               description: Configuration is applied to devices
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 400 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Cannot delete a configuration that is currently applied to devices. This configuration is referenced by 2 devices.",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 400
+                        message: "Cannot delete a configuration that is currently applied to devices. This configuration is referenced by 2 devices."
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: Configuration not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 404 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Configuration with id sFidGmedeQofSBcvRcyn not found",
+                              }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 404
+                        message: "Configuration with id sFidGmedeQofSBcvRcyn not found"
+                        error: "ManageXR Error"
    ##################################################
    # Tags
    ##################################################
@@ -4362,7 +4761,7 @@ paths:
                            registrationCode:
                               type: string
                               example: f7GbHvH
-                              description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                              description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                            deviceCount:
                               type: number
                               example: 15
@@ -4605,7 +5004,7 @@ paths:
                                  description: Name of the configuration
                               registrationCode:
                                  type: string
-                                 description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                                 description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                               deviceCount:
                                  type: number
                                  description: Number of devices using the configuration
@@ -4620,7 +5019,7 @@ paths:
                              deviceCount: 30
    /organizations/{orgId}/configurations/duplicate:
       post:
-         summary: Duplicate an existing configuration
+         summary: Duplicate configuration
          description: Create a new configuration by duplicating an existing one.
          parameters:
             - name: orgId
@@ -4667,7 +5066,7 @@ paths:
                               description: Name of the configuration
                            registrationCode:
                               type: string
-                              description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                              description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                            deviceCount:
                               type: number
                               description: Number of devices using the configuration
