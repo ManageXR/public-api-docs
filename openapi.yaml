@@ -2591,7 +2591,7 @@ paths:
       delete:
          summary: Delete release channel
          description: |
-           Deletes an app release channel. If shared with client organizations, deleting also unshares the release channel.
+            Deletes an app release channel. If shared with client organizations, deleting also unshares the release channel.
          parameters:
             - name: packageName
               in: path
@@ -3368,7 +3368,21 @@ paths:
             content:
                application/json:
                   schema:
-                     $ref: "#/components/schemas/V1ConfigurationVrContentPatch"
+                     type: object
+                     properties:
+                        name:
+                           type: string
+                           description: Updated name for the configuration
+                           example: "Client Configuration v2"
+                        vrContent:
+                           $ref: "#/components/schemas/V1ConfigurationVrContentPatch"
+                           description: Updated set of VR content on the configuration. Content will appear on the Home Screen in the order it appears in the vrContent array.
+                        wifiNetworkIds:
+                           type: array
+                           description: Unique identifiers of wi-fi networks to deploy on the configuration
+                           items:
+                              type: string
+                           exmaple: ["1390KJDL139PJD", "KAFJ39UT124P98"]
                   example:
                      name: "Client Configuration v2"
                      vrContent:
@@ -3388,6 +3402,7 @@ paths:
                              version:
                                 versionCode: 1
                                 versionName: "1.0"
+                     wifiNetworkIds: ["1390KJDL139PJD", "KAFJ39UT124P98"]
          responses:
             "200":
                description: The updated configuration
@@ -5502,6 +5517,8 @@ components:
                enum:
                   - video
                example: video
+            properties:
+               $ref: "#/components/schemas/V1VrContentProperties"
       V1WebXRIdentifier:
          type: object
          title: WebXR Link
@@ -5603,6 +5620,7 @@ components:
          description: An array of VR content deployed on the configuration. Fields vary by content type. Objects are ordered in the manner they appear on the Home Screen.
          items:
             oneOf:
+               - $ref: "#/components/schemas/V1AppReleaseIdentifier"
                - $ref: "#/components/schemas/V1AppVersionIdentifier"
                - $ref: "#/components/schemas/V1VideoIdentifier"
                - $ref: "#/components/schemas/V1WebXRIdentifier"
@@ -5694,7 +5712,7 @@ components:
                   - "Pico 4 Ultra Enterprise"
       V1ConfigurationPatchDto:
          type: object
-         description: Full representation of a configuration.
+         description: Configuration object
          properties:
             id:
                type: string
