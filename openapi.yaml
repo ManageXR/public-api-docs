@@ -4362,7 +4362,7 @@ paths:
                            registrationCode:
                               type: string
                               example: f7GbHvH
-                              description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                              description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                            deviceCount:
                               type: number
                               example: 15
@@ -4605,7 +4605,7 @@ paths:
                                  description: Name of the configuration
                               registrationCode:
                                  type: string
-                                 description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                                 description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                               deviceCount:
                                  type: number
                                  description: Number of devices using the configuration
@@ -4620,7 +4620,7 @@ paths:
                              deviceCount: 30
    /organizations/{orgId}/configurations/duplicate:
       post:
-         summary: Duplicate an existing configuration
+         summary: Duplicate configuration
          description: Create a new configuration by duplicating an existing one.
          parameters:
             - name: orgId
@@ -4667,7 +4667,7 @@ paths:
                               description: Name of the configuration
                            registrationCode:
                               type: string
-                              description: Registration code for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
+                              description: Configuration code (formerly known as Registration Code) for the configuration. [Learn More](https://help.managexr.com/en/articles/5345978-register-a-device-using-a-registration-code)
                            deviceCount:
                               type: number
                               description: Number of devices using the configuration
