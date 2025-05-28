@@ -347,7 +347,7 @@ paths:
 
             <small>Available Commands: Launch App, Play/Pause Video, Launch Web Url, Disable/Enable Kiosk, Restart, Power Off, Set Volume, Set Brightness, Uninstall App, Sync, Enable/Disable Tutorial Mode</small>
          parameters:
-            - name: deviceId
+            - name: id
               in: path
               required: true
               schema:
