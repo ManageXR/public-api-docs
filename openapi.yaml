@@ -3893,10 +3893,7 @@ paths:
    /organizations/{orgId}/devices:
       get:
          summary: List Devices
-         description: | 
-            Retrieve a list of devices
-
-            _Note, this endpoint will be upgraded to API v1 format in June 2025 and the url will change. You may continue using the v0 version._
+         description: Retrieve a list of devices
          parameters:
             - name: orgId
               in: path
