@@ -5471,7 +5471,7 @@ components:
                example: "Introductory training video for new hires"
             directory:
                type: string
-               description: Path to the file within the organization's file system
+               description: Path to the file within the devices's file system
                example: "Android/obb/your.app.package/bundles/Onboarding"
          example:
             id: "file_123abc"
