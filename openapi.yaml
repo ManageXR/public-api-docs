@@ -464,7 +464,7 @@ paths:
                           properties:
                              action:
                                 type: string
-                                description: Remotely turn off device. Supported on Pico Neo 3s PUI 5+ and Pico 4 Ultra Enterprise devices.
+                                description: Remotely turn off device. Supported on Meta Quest v77+ enrolled through MHMS, Pico Neo 3s PUI 5+, Pico 4 Ultra Enterprise devices.
                                 enum:
                                    - POWER_OFF
                                 example: POWER_OFF
@@ -788,7 +788,7 @@ paths:
                                 description: List of unique identifiers (serial numbers) of devices
                              action:
                                 type: string
-                                description: Remotely turn off devices. Supported on Pico Neo 3s PUI 5+ and Pico 4 Ultra Enterprise devices.
+                                description: Remotely turn off devices. Supported on Meta Quest v77+ enrolled through MHMS, Pico Neo 3s PUI 5+, Pico 4 Ultra Enterprise devices.
                                 enum:
                                    - POWER_OFF
                                 example: POWER_OFF
@@ -4149,7 +4149,7 @@ paths:
                           properties:
                              action:
                                 type: string
-                                description: Remotely turn off device. Supported on Meta Quest devices enrolled via MHMS, Pico Neo 3s PUI 5+, and Pico 4 Ultra Enterprise devices.
+                                description: Remotely turn off device. Supported on Meta Quest v77+ enrolled through MHMS, Pico Neo 3s PUI 5+, Pico 4 Ultra Enterprise devices.
                                 enum:
                                    - POWER_OFF
                                 example: POWER_OFF
@@ -4417,7 +4417,7 @@ paths:
                                 description: List of unique identifiers (serial numbers) of devices
                              action:
                                 type: string
-                                description: Remotely turn off device. Supported on Meta Quest devices enrolled via MHMS, Pico Neo 3s PUI 5+, and Pico 4 Ultra Enterprise devices.
+                                description: Remotely turn off device. Supported on Meta Quest v77+ enrolled through MHMS, Pico Neo 3s PUI 5+, Pico 4 Ultra Enterprise devices.
                                 enum:
                                    - POWER_OFF
                                 example: POWER_OFF
