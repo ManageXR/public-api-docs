@@ -1,0 +1,85 @@
+## Instructions
+
+### Step 1: Generate a streaming SDK token
+
+See our [API Docs](https://docs.managexr.com/api-reference/introduction) for instructions on authenticating API requests.
+
+You must first generate a token for the devices you want to stream. This token authorizes the SDK to access only the specified devices.
+
+**API Request:**
+```bash
+curl --request POST \
+  --url https://managexrapi.com/v1/devices/generate-streaming-sdk-token \
+  --header 'Authorization: Basic <encoded-value>' \
+  --header 'Content-Type: application/json' \
+  --data '{ "deviceIds": ["device_id_1", "device_id_2"] }' 
+  ```
+
+  **Example API Response:**
+  ```
+  { "token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" }
+  ```
+👉 Use this token when initializing the stream in your React app.
+
+### Step 2: Render an instance of useDeviceStream for each device
+The connection process will start as soon as the hook is rendered. To end the stream, simply stop rendering the component that contains the hook.
+```
+import { useDeviceStream } from '@managexr/react-streaming'
+
+const StreamingComponent = ({ deviceId, token }) => {
+   const { videoRef } = useDeviceStream(deviceId, token)
+
+   return (
+      <div>
+         <video ref={videoRef} />
+      </div>
+   )
+}
+```
+
+## API reference
+```useDeviceStream(deviceId: string, token: string, options?: DeviceStreamOptions) => DeviceStream```
+
+| Argument   | Description                                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------- |
+| `deviceId` | ID (serial) of the device to stream from (must be enrolled in ManageXR with the Admin App installed). |
+| `token`    | Token generated via the `generate-streaming-sdk-token` API.                                           |
+| `options`  | *(optional)* Configuration options (see below).                                                       |
+
+
+```DeviceStreamOptions```
+
+| Option                        | Default | Description                                                                                         |
+| ----------------------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `endOtherStreamAutomatically` | `false` | Ends any existing stream on the device before starting this one (avoids `error_already_streaming`). |
+
+
+```DeviceStream```
+| Property           | Description                                                                   |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `videoRef`         | Set this as the `ref` of the `<video>` element that should display the stream.|
+| `status`           | Current stream status (see DeviceStreamStatus below).                         |
+| `reloadVideo()`    | To change which `<video>` element is displaying the stream, call this after setting `ref={videoRef}` on the new element.              |
+| `retryStream()`    | Retry the stream if an error (other than `error_already_streaming`) occurred. |
+| `endOtherStream()` | Ends any existing stream when `error_already_streaming` is encountered.       |
+
+
+```DeviceStreamStatus```
+| Status                       | Description                                       |
+| ---------------------------- | ------------------------------------------------- |
+| `pending_online`             | Device is offline; will connect once online.      |
+| `pending_permission`         | Waiting for in-headset screen capture permission. |
+| `pending_connection`         | Connecting after permission granted.              |
+| `connected`                  | Stream is live and visible if `videoRef` is set.  |
+| `reconnecting`               | Network disconnection; attempting reconnect.      |
+| `error_request_failed`       | Device did not respond to start request.          |
+| `error_permission_dismissed` | User dismissed screen capture prompt.             |
+| `error_permission_denied`    | User denied screen capture permission.            |
+| `error_failed_to_start`      | Stream failed despite granted permission.         |
+| `error_terminated_on_device` | Stream ended by device (e.g., sleep mode).        |
+| `error_connection`           | Network issue ended an active stream.             |
+| `error_already_streaming`    | Device is already streaming to another client.    |
+
+## Support
+
+Developer support: Contact support@managexr.com for assistance.

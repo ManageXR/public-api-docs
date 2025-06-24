@@ -134,12 +134,23 @@
         ]
       },
       {
-        "tab": "SDK",
+        "tab": "Device SDK",
         "groups": [
           {
             "group": "Unity SDK Reference",
             "pages": [
               "sdk-reference/introduction"
+            ]
+          }
+        ]
+      },       
+      {
+        "tab": "Streaming SDK",
+        "groups": [
+          {
+            "group": "Streaming SDK Reference",
+            "pages": [
+              "streaming-sdk-reference/introduction", "streaming-sdk-reference/usage"
             ]
           }
         ]
