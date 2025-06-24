@@ -38,6 +38,8 @@ const StreamingComponent = ({ deviceId, token }) => {
 ```
 
 ## API reference
+### ```useDeviceStream```
+
 ```useDeviceStream(deviceId: string, token: string, options?: DeviceStreamOptions) => DeviceStream```
 
 | Argument   | Description                                                                                           |
@@ -47,14 +49,14 @@ const StreamingComponent = ({ deviceId, token }) => {
 | `options`  | *(optional)* Configuration options (see below).                                                       |
 
 
-```DeviceStreamOptions```
+### ```DeviceStreamOptions```
 
 | Option                        | Default | Description                                                                                         |
 | ----------------------------- | ------- | --------------------------------------------------------------------------------------------------- |
 | `endOtherStreamAutomatically` | `false` | Ends any existing stream on the device before starting this one (avoids `error_already_streaming`). |
 
 
-```DeviceStream```
+### ```DeviceStream```
 | Property           | Description                                                                   |
 | ------------------ | ----------------------------------------------------------------------------- |
 | `videoRef`         | Set this as the `ref` of the `<video>` element that should display the stream.|
@@ -64,7 +66,7 @@ const StreamingComponent = ({ deviceId, token }) => {
 | `endOtherStream()` | Ends any existing stream when `error_already_streaming` is encountered.       |
 
 
-```DeviceStreamStatus```
+### ```DeviceStreamStatus```
 | Status                       | Description                                       |
 | ---------------------------- | ------------------------------------------------- |
 | `pending_online`             | Device is offline; will connect once online.      |
