@@ -71,7 +71,7 @@
                 "api-reference/endpoint/v1/unshare-app-release-channel",
                 "api-reference/endpoint/v1/delete-app-release-channel"]
               },
-              { "group": "Library", "pages": [  "api-reference/endpoint/v1/list-wifi-networks", "api-reference/endpoint/v1/list-videos", "api-reference/endpoint/v1/list-links"]  },
+              { "group": "Library", "pages": [  "api-reference/endpoint/v1/list-files", "api-reference/endpoint/v1/list-wifi-networks", "api-reference/endpoint/v1/list-videos", "api-reference/endpoint/v1/list-links"]  },
               {
                 "group": "Tags",
                 "pages": ["api-reference/endpoint/v1/create-tag",

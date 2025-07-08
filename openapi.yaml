@@ -1001,7 +1001,33 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
-
+   ##################################################
+   # Files
+   ##################################################
+   /v1/files/:
+      get:
+         summary: List files in organization
+         description: List all files present in the organization's library
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+         responses:
+            "200":
+               description: An array of all files in the organization 
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 oneOf:
+                                    - $ref: "#/components/schemas/V1ManagedFile"
    ##################################################
    # Apps
    ##################################################
@@ -5469,10 +5495,10 @@ components:
                type: string
                description: Optional description of the file's contents or purpose
                example: "Introductory training video for new hires"
-            directory:
+            libraryDirectoryPath:
                type: string
                description: Path to the file within the devices's file system
-               example: "Android/obb/your.app.package/bundles/Onboarding"
+               example: "/"
          example:
             id: "file_123abc"
             url: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
@@ -5480,7 +5506,7 @@ components:
             size: 1204975930
             md5: "7ah69cMtXyaz5OfsCRtOjQ=="
             description: "Introductory training video for new hires"
-            directory: "Android/obb/your.app.package/bundles/Onboarding"
+            libraryDirectoryPath: "/"
       V1WifiNetwork:
          type: object
          description: A Wi-Fi network profile that can be deployed to devices.
