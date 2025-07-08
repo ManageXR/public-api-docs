@@ -1,7 +1,7 @@
 ### Start your project
 * Create (or open) a Unity project. Ensure the Unity version is _Unity 2021.3 or below_
 * Import the URP `12.1.14` package
-* Create a URP Asset in your Assets window using `Right Click>Create>Rendering>URP Asset (with Universal Renderer)`
+* Create a URP Asset in your Project view using `Right Click>Create>Rendering>URP Asset (with Universal Renderer)`
 * Set the URP Asset in your Graphics Settings by going to `Project Settings>Graphics>Scriptable Render Pipeline Settings`
 
 ### Create your environment
@@ -32,3 +32,18 @@
     * ![image info](export-violations.gif)
     * To see the full list of validation issues, see the "Limitations" section.
 * If you have no export preventing issues, you'll see the `Export Scene` button that will allow you to export the file to your preferred location
+
+### Post Export
+After your `mxrus` file is finished building and has exported, you'll see a build report that will show the different assets that have been packaged.
+Clicking on these assets will highlight them in your Project view.
+
+By selecting from the asset type dropdown, you can see the different assets that have contributed to the file size. 
+  
+The ManageXR web console has a size limit on how large mxrus files you can upload.
+  
+Often times, especially when using third party 3D assets, textures are imported at very high resolutions that add significantly to the file size.
+
+This view can be used to identify assets that are adding significantly to your export size and take file size reductions steps like reducing resolution, increasing compression or removing assets that that don't add much to the visuals.
+
+Tip: The official ManageXR Bungalow scene largely uses low-medium resolution diffuse/albedo textures and relies on lighting for its visuals and aesthetics. It has additional texture maps only for limited objects.
+![image info](build-report.gif)
