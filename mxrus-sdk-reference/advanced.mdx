@@ -1,0 +1,75 @@
+## What's inside an mxrus file
+The .mxrus format is a .zip renamed comprising of AssetBundles and some metadata files.
+
+The scene is exported as a collection of three AssetBundles:
+* `assets` (assets used in your scene)
+* `scene` (scene hiararchy)
+* `*.unitygenerated` (Unity generated metadata, file name is same as the Unity scene exported)
+
+Along with the above, the file also has some metadata:
+* `build_report.txt` (A prettified BuildReport of the AssetBundle exports)
+* `mxr_env_preview.jpg` (A preview of the environment seen from the user starting position and direction)
+
+## Loading mxrus files at runtime
+If you're making a custom homescreen (not the official ManageXR Homescreen application), you will need to detect when an environment has been deployed to the device's configuration.
+
+When an environment is deployed, an `EnvironmentFile` would be made available in the runtime settings summary. 
+
+The EnvironmentFile class is defined as:
+```
+    public class EnvironmentFile {
+        public string id = string.Empty;
+        public string name = string.Empty;
+        public string path = string.Empty;
+        public long size = 0;
+        public EnvironmentFileType fileType = EnvironmentFileType.MXRUS;
+    }
+```
+
+Note:
+* This object can be accessed using `MXRManager.System.RuntimeSettingsSummary.customLauncherSettings.backgroundSettings.environmentFile`
+* `MXRManager.System.OnRuntimeSettingsSummaryChange` is fired every time runtime settings summary is updated
+
+The key fields in `EnvironmentFile` class are:
+- `id` can be used to uniquely identify an environment file
+- `path` is the sub path inside the ManageXR directory where the mxrus file is located
+
+A `SceneLoader` class in mxrus-sdk allows you to load mxrus files at runtime. Using the `Load` method, you can load the mxrus file into memory.
+
+Here's an example of a simple:
+
+```
+// Defined outside
+SceneLoader sceneLoader = new SceneLoader();
+string shownSceneName;
+
+// This method gets called when a new environmentFile is found. 
+// Use the OnRuntimeSettingsSummaryChange event and check environmentFile.id to detect when this happens
+async void ShowEnvironment() {
+    string path = MXRManager.System.RuntimeSettingsSummary.customLauncherSettings.backgroundSettings.environmentFile.path;
+
+    // path is a subpath inside the ManageXR directory, get the full path
+    string fullPath = MXRStorage.GetFullPath(path);
+
+    // Try to load the mxrus file into memory
+    bool success = await sceneLoader.Load(fullPath);
+    if(success) {
+        // If mxrus file was loaded successfully, load the Unity scene using sceneLoader.SceneName
+        await SceneManager.LoadSceneAsync(sceneLoader.SceneName, LoadSceneMode.Additive);
+        var scene = SceneManager.GetSceneByName(sceneLoader.SceneName);
+
+        // Check if the scene was successfully loaded by Unity into the scene hierarchy
+        // If so, set that as the active scene and 
+        if (scene != null && scene.IsValid() && scene.isLoaded) {
+            SceneManager.SetActiveScene(scene);
+            shownSceneName = sceneLoader.SceneName;
+        }
+    }
+}
+
+// This method is called when environmentFile in runtime settings summary becomes null.
+async void HideEnvironment() {
+    await SceneManager.UnloadSceneAsync(shownSceneName);
+    shownSceneName = string.Empty;
+}
+```
