@@ -1028,6 +1028,44 @@ paths:
                               items:
                                  oneOf:
                                     - $ref: "#/components/schemas/V1ManagedFile"
+      post:
+         summary: Create self-hosted files
+         description: | 
+            Create self-hosted files in your ManageXR Files library. 
+            
+            Once created, you can use Edit App Version or [Edit Configuration](https://docs.managexr.com/api-reference/endpoint/v1/edit-configuration) to deploy the file with an app version or on a configuration, respectively.
+            
+            To create files hosted on ManageXR's servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/introduction)
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: array
+                     description: Array of self-hosted files to create. 
+                     items:
+                        oneOf:
+                           - $ref: "#/components/schemas/V1ManagedFileDto"
+                  example:
+                     -  url: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
+                        name: "main_assets_all.bundle"
+                        size: 1204975930
+                        md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+                        description: "Content bundle for training app"
+                        libraryDirectoryPath: "/com.managexr.demoTrainingApp/"   
+                     -  url: "https://my-bucket-name.s3.amazonaws.com/module2-assets.bundle"
+                        name: "module2-assets.bundle"
+                        size: 1204975930
+                        md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+                        description: "Assets for module 2 of training app"
+                        libraryDirectoryPath: "/com.managexr.demoTrainingApp/"                
    ##################################################
    # Apps
    ##################################################
@@ -5507,6 +5545,41 @@ components:
             md5: "7ah69cMtXyaz5OfsCRtOjQ=="
             description: "Content bundle for training app"
             libraryDirectoryPath: "/"
+      V1ManagedFileDto:
+         type: object
+         properties:
+            url:
+               type: string
+               format: uri
+               description: Publicly accessible direct URL to download the file. ManageXR will use this url to download the file to devices.
+               example: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
+            name:
+               type: string
+               description: Name of the file, including extension
+               example: "main_assets_all.bundle"
+            size:
+               type: number
+               description: Size of the file in bytes
+               example: 1204975930
+            md5:
+               type: string
+               description: MD5 hash of the file for integrity verification
+               example: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description:
+               type: string
+               description: Optional description of the file's contents or purpose
+               example: "Content bundle for training app"
+            libraryDirectoryPath:
+               type: string
+               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library. 
+               example: "/"
+         example:
+            url: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
+            name: "main_assets_all.bundle"
+            size: 1204975930
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description: "Content bundle for training app"
+            libraryDirectoryPath: "/"   
       V1WifiNetwork:
          type: object
          description: A Wi-Fi network profile that can be deployed to devices.
