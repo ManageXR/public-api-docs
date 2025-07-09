@@ -76,6 +76,7 @@
                 "pages": [  "api-reference/endpoint/v1/list-files", 
                 "api-reference/endpoint/v1/create-files", 
                 "api-reference/endpoint/v1/list-wifi-networks", 
+                "api-reference/endpoint/v1/create-wifi-network",
                 "api-reference/endpoint/v1/list-videos", 
                 "api-reference/endpoint/v1/list-links"]  
               },
