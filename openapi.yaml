@@ -5680,7 +5680,7 @@ components:
                type: string
                description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library.
                example: "/"
-            deviceDirectoryPath:
+            deviceDirectoryPaths:
                type: array
                description: Directory paths where the file is placed on the device. This is an array because, although uncommon, you can deploy a file to more than one location on a device.
                items:
