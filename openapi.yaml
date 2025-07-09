@@ -5648,6 +5648,53 @@ components:
             md5: "7ah69cMtXyaz5OfsCRtOjQ=="
             description: "Content bundle for training app"
             libraryDirectoryPath: "/"
+      V1ManagedFileDeployed:
+         type: object
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the file
+               example: "DLO133U5NFLMAL1"
+            url:
+               type: string
+               format: uri
+               description: Direct URL to download the file. If hosted on ManageXR, the link will begin with `gs://`. If self-hosted, it will be the url you supplied when creating the file.
+               example: "gs://mighty-platform-prod/organizations/GMrDmBCRcUm4bf61nqH2/files/e75058f2-ee65-4a79-802e-b97af54b6b26"
+            name:
+               type: string
+               description: Name of the file, including extension
+               example: "main_assets_all.bundle"
+            size:
+               type: number
+               description: Size of the file in bytes
+               example: 1204975930
+            md5:
+               type: string
+               description: MD5 hash of the file for integrity verification
+               example: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description:
+               type: string
+               description: Optional description of the file's contents or purpose
+               example: "Content bundle for training app"
+            libraryDirectoryPath:
+               type: string
+               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library.
+               example: "/"
+            deviceDirectoryPath:
+               type: array
+               description: Directory paths where the file is placed on the device. This is an array because, although uncommon, you can deploy a file to more than one location on a device.
+               items:
+                  type: string
+               example: [ "/Android/obb/com.managexr.exampleApp/files" ]
+         example:
+            id: "DLO133U5NFLMAL1"
+            url: "https://storage.googleapis.com/managexr-files/org_456/files/file_123abc.mp4"
+            name: "main_assets_all.bundle"
+            size: 1204975930
+            md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+            description: "Content bundle for training app"
+            libraryDirectoryPath: "/"
+            deviceDirectoryPaths: [ "/Android/obb/com.managexr.exampleApp/files"]
       V1ManagedFileDto:
          type: object
          properties:
@@ -6072,7 +6119,7 @@ components:
                description: Files deployed on the configuration.
                items:
                   oneOf:
-                     - $ref: "#/components/schemas/V1ManagedFile"
+                     - $ref: "#/components/schemas/V1ManagedFileDeployed"
             wifiNetworks:
                type: array
                description: Wi‑Fi network profiles deployed on the configuration.
