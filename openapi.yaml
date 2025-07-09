@@ -3973,6 +3973,82 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
+      post:
+         summary: Create a Wi-Fi Network
+         description: | 
+          Add a new Open, WPA2 or WPA2-Enterprise Wi-Fi network to your Library
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization.  
+                 Defaults to the organization associated with the API key.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     description: Wi-Fi network credentials and information 
+                     $ref: "#/components/schemas/CreateWifiNetworkDto"
+         responses:
+            "200":
+               description: The created wi-fi network
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              $ref: "#/components/schemas/V1WifiNetwork"    
+            "400":
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Password must be set for this network type."
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Password must be set for this network type."
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"        
+
+                     
+
+         
+
    ##################################################
    # Videos
    ##################################################
@@ -5753,7 +5829,7 @@ components:
                - "/Android/obb/com.managexr.exampleApp/files"
       V1WifiNetwork:
          type: object
-         description: A Wi-Fi network profile that can be deployed to devices.
+         description: A Wi-Fi network profile summary
          properties:
             id:
                type: string
@@ -6326,6 +6402,103 @@ components:
                         version:
                            type: string
                            example: "v14"
+      WifiNetworkType:
+         type: string
+         enum: [OPEN, WPA, WPA_ENTERPRISE, UNKNOWN]
+      EapMethod:
+         type: string
+         enum: [PEAP, TLS, TTLS, PWD, NONE]
+      Phase2Method:
+         type: string
+         enum: [PAP, MSCHAP, MSCHAPV2, GTC, NONE]
+      ProxySettingType:
+         type: string
+         enum: [PAC, MANUAL, NONE]
+      KeySize:
+         type: string
+         enum: [NONE, '1024', '2048']
+      KeyUsage:
+         type: string
+         enum: [NONE, DIGITAL_SIGNATURE, KEY_ENCIPHERMENT]
+      ExtendedKeyUsage:
+         type: string
+         enum: [NONE, CLIENT_AUTHENTICATION, SERVER_AUTHENTICATION, ANY_PURPOSE]
+      SubjectAlternativeNameIdType:
+         type: string
+         enum: [EMAIL_ADDRESS, USER_PRINCIPAL_NAME, DNS, URI]
+      DynamicFieldValue:
+         type: string
+         enum: ['%device_name%', '%device_serial%', '%device_mac%']
+      CreateWifiNetworkDto:
+         type: object
+         properties:
+            ssid:
+               type: string
+               minLength: 2
+               maxLength: 32
+               description: Name of the Wi-Fi network to connect to.
+            password:
+               type: string
+               description: Password. Optional if the Wi-Fi type is OPEN.
+            nickname:
+               type: string
+               description: Optional user-friendly label for the network.
+            type:
+               $ref: '#/components/schemas/WifiNetworkType'
+               description: Type of the network. Note, WPA is WPA2. WPA_ENTERPRISE is WPA2 Enterprise.
+            hidden:
+               type: boolean
+               description: Whether the network is hidden (SSID not broadcast).
+            eapMethod:
+               $ref: '#/components/schemas/EapMethod'
+               description: Enterprise EAP method (PEAP, TLS, TTLS, etc).
+            phase2Method:
+               $ref: '#/components/schemas/Phase2Method'
+               description: Inner authentication method used with the EAP method. Required for EAP methods PEAP and TTLS.
+            identity:
+               type: string
+               description: Identity used for enterprise network authentication. Required for WPA2-Enterprise network types.
+            anonymousIdentity:
+               type: string
+               description: Anonymous identity used in outer identity requests. Required for EAP-PEAP and EAP-TTLS networks.
+            domain:
+               type: string
+               description: Radius Server Domain. Required for EAP-PEAP, EAP-TLS, and EAP-TTLS WPA2-Enterprise networks on devices running Android 14 and above. This includes many of the latest Meta Quest and Pico devices. This field validates the certificate the server presents to the device, and prevents security vulnerabilities.
+            userCertificatePem:
+               type: string
+               description: PEM-encoded user certificate, required for EAP-TLS networks.
+            caCertificatePem:
+               type: string
+               description: PEM-encoded certificate authority certificate for server validation. Required for EAP-PEAP, EAP-TLS, and EAP-TTLS WPA2-Enterprise networks on devices running Android 14 and above. This includes many of the latest Meta Quest and Pico devices. Learn about [certificate formatting](https://help.managexr.com/en/articles/7131251-deploying-enterprise-wi-fi-certificates-on-managexr)
+            proxySettingType:
+               $ref: '#/components/schemas/ProxySettingType'
+               description: "Defines how proxy is configured: PAC, MANUAL, or NONE."
+            proxyHost:
+               type: string
+               description: Hostname or IP of the manual proxy server.
+            proxyPort:
+               type: number
+               minimum: 0
+               maximum: 65535
+               description: Port number of the manual proxy server.
+            proxyHostExclusionList:
+               type: array
+               items:
+                  type: string
+               description: List of hostnames that bypass the proxy.
+            proxyPacUrl:
+               type: string
+               description: URL to a PAC (proxy auto-config) file.
+         required:
+         - ssid
+         - type
+         example:
+            ssid: "AcmeCorpSecure"
+            nickname: "Office WiFi"
+            type: WPA
+            password: password 
+            hidden: false
+
    securitySchemes:
       basicAuth:
          type: http
