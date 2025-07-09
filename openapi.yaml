@@ -3607,6 +3607,9 @@ paths:
                            items:
                               type: string
                            exmaple: ["1390KJDL139PJD", "KAFJ39UT124P98"]
+                        files:
+                           $ref: "#/components/schemas/V1BundledFileEditDto"
+
                   example:
                      name: "Client Configuration v2"
                      vrContent:
@@ -5739,7 +5742,7 @@ components:
                example: "DLO133U5NFLMAL1"
             deviceDirectoryPaths:
                type: array
-               description: Array of directory paths to deploy the file on the device. Each entry in the array should include the full path as a string. This field is an array because you can deploy the same file to multiple different locations on a device.
+               description: Array of directory paths to deploy the file on the device. Each entry in the array should include the full path as a string. This field is an array because, although uncommon, you can deploy the same file to multiple different locations on a device.
                items:
                   type: string
                   desciption: "Full directory path to location for file on device."
