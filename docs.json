@@ -63,6 +63,7 @@
                 "group": "App Versions & Release Channels",
                 "pages": [ "api-reference/endpoint/v1/list-app-versions",
                 "api-reference/endpoint/v1/create-app-version", 
+                "api-reference/endpoint/v1/edit-app-version", 
                 "api-reference/endpoint/v1/delete-app-version",
                 "api-reference/endpoint/v1/list-app-release-channels",
                 "api-reference/endpoint/v1/create-app-release-channel",

@@ -1017,7 +1017,7 @@ paths:
               description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
          responses:
             "200":
-               description: An array of all files in the organization 
+               description: An array of all files in the organization
                content:
                   application/json:
                      schema:
@@ -1030,11 +1030,11 @@ paths:
                                     - $ref: "#/components/schemas/V1ManagedFile"
       post:
          summary: Create self-hosted files
-         description: | 
+         description: |
             Create self-hosted files in your ManageXR Files library. 
-            
+
             Once created, you can use Edit App Version or [Edit Configuration](https://docs.managexr.com/api-reference/endpoint/v1/edit-configuration) to deploy the file with an app version or on a configuration, respectively.
-            
+
             To create files hosted on ManageXR's servers, use the [ManageXR CLI](https://docs.managexr.com/cli-reference/introduction)
          parameters:
             - name: organizationId
@@ -1049,23 +1049,23 @@ paths:
                application/json:
                   schema:
                      type: array
-                     description: Array of self-hosted files to create. 
+                     description: Array of self-hosted files to create.
                      items:
                         oneOf:
                            - $ref: "#/components/schemas/V1ManagedFileDto"
                   example:
-                     -  url: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
-                        name: "main_assets_all.bundle"
-                        size: 1204975930
-                        md5: "7ah69cMtXyaz5OfsCRtOjQ=="
-                        description: "Content bundle for training app"
-                        libraryDirectoryPath: "/com.managexr.demoTrainingApp/"   
-                     -  url: "https://my-bucket-name.s3.amazonaws.com/module2-assets.bundle"
-                        name: "module2-assets.bundle"
-                        size: 1204975930
-                        md5: "7ah69cMtXyaz5OfsCRtOjQ=="
-                        description: "Assets for module 2 of training app"
-                        libraryDirectoryPath: "/com.managexr.demoTrainingApp/"                
+                     - url: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
+                       name: "main_assets_all.bundle"
+                       size: 1204975930
+                       md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+                       description: "Content bundle for training app"
+                       libraryDirectoryPath: "/com.managexr.demoTrainingApp/"
+                     - url: "https://my-bucket-name.s3.amazonaws.com/module2-assets.bundle"
+                       name: "module2-assets.bundle"
+                       size: 1204975930
+                       md5: "7ah69cMtXyaz5OfsCRtOjQ=="
+                       description: "Assets for module 2 of training app"
+                       libraryDirectoryPath: "/com.managexr.demoTrainingApp/"
    ##################################################
    # Apps
    ##################################################
@@ -2013,8 +2013,111 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
-
    /v1/apps/{packageName}/versions/{versionId}:
+      patch:
+         summary: Edit app version
+         description: Edit a managed app version. Apply a new version label or edit the app version's bundled files.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: versionId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the app version
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     type: object
+                     properties:
+                        versionLabel:
+                           type: string
+                           description: Label for uniqueness among app versions
+                           example: "Quest"
+                        files:
+                           type: array
+                           items:
+                              oneOf: 
+                                 - $ref: "#/components/schemas/V1BundledFileEditDto"
+                  example:
+                     versionLabel: "Quest"
+         responses:
+            "200":
+               description: Success
+            "400":
+               description: Invalid request
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "Invalid request"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "Invalid request"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+            "404":
+               description: Not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: App with version id {versionId} not found!
+                           error:
+                              type: string
+                              example: Not Found
+                     example:
+                        statusCode: 404
+                        message: App with version id {versionId} not found!
+                        error: Not Found
+
       delete:
          summary: Delete app version
          description: |
@@ -5535,7 +5638,7 @@ components:
                example: "Content bundle for training app"
             libraryDirectoryPath:
                type: string
-               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library. 
+               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library.
                example: "/"
          example:
             id: "DLO133U5NFLMAL1"
@@ -5571,7 +5674,7 @@ components:
                example: "Content bundle for training app"
             libraryDirectoryPath:
                type: string
-               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library. 
+               description: Path to the file in the Library > Files section of ManageXR. A libraryDirectoryPath of "/" indicates that it is at the root of the Files library.
                example: "/"
          example:
             url: "https://my-bucket-name.s3.amazonaws.com/main_assets_all.bundle"
@@ -5579,7 +5682,25 @@ components:
             size: 1204975930
             md5: "7ah69cMtXyaz5OfsCRtOjQ=="
             description: "Content bundle for training app"
-            libraryDirectoryPath: "/"   
+            libraryDirectoryPath: "/"
+      V1BundledFileEditDto:
+         type: object
+         properties:
+            id:
+               type: string
+               description: Unique identifier of the file
+               example: "DLO133U5NFLMAL1"
+            deviceDirectoryPaths:
+               type: array
+               description: Array of directory paths to deploy the file on the device. Each entry in the array should include the full path as a string. This field is an array because you can deploy the same file to multiple different locations on a device.
+               items:
+                  type: string
+                  desciption: "Full directory path to location for file on device."
+                  example: "/Android/obb/com.managexr.exampleApp/files"
+         example:
+            id: "DLO133U5NFLMAL1"
+            deviceDirectoryPaths:
+               - "/Android/obb/com.managexr.exampleApp/files"
       V1WifiNetwork:
          type: object
          description: A Wi-Fi network profile that can be deployed to devices.
