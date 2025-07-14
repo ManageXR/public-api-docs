@@ -1,0 +1,23 @@
+> ⚠️ This SDK is in beta testing. We appreciate your patience while we continue to improve this SDK. Please report any issues via GitHub or contact support@managexr.com
+
+The mxrus-sdk repository is available [on GitHub here](https://github.com/ManageXR/mxrus-sdk/tree/main)
+
+MXRUS (ManageXR Unity Scene) files with the `.mxrus` extension allow you to export Unity scenes and supporting metadata for deploying to your ManageXR enrolled device. Using this package you can easily export your Unity scene with just a few clicks. 
+
+If you're creating your own custom homescreen application, it also allows you to load `.mxrus` files at runtime and display them at runtime.
+
+## Features
+This SDK allows you to export Unity scenes as `mxrus` files which provides some great benefits during your environment design process:
+* A well understood Unity workflow for prototyping and composing your 3D scenes
+* Realtime and baked lighting 
+* Unity Terrain System, Particle Systems, UI Canvas, TextMeshPro and Animation
+* Custom shaders
+* Embedding audio in your scene using AudioSource
+* Access to a vast catalog of the third party assets from the [Unity Asset Store](https://assetstore.unity.com/)
+* Profiling tools to optimize your environment
+
+If you're making a custom homescreen, the `SceneLoader` class provides an easy to use API that automatically handles extraction and loading of the file at runtime. 
+  
+The environment can then be instantiated in your homescreen as a Unity Scene which makes it available to you in the scene hierarchy and Unity APIs can be used to further drive behaviour.
+  
+For more information on loading an mxrus file at runtime inside your Unity app, see the "Advanced" section.

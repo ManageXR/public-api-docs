@@ -1,0 +1,19 @@
+## Requirements
+To work with the mxrus-sdk package, you need to design your environments in a Unity project that:
+* Is on Unity 2021.3.x (recommended) or older
+* Uses Universal Render Pipeline (URP) version 12.1.14
+
+## Installation  
+> ⚠️  
+> We recommend installing the latest version of the SDK.  
+> Version name are in the format `vx.x.x`, for example `v0.2.0`  
+> [Version history can be found here](https://github.com/ManageXR/mxrus-sdk/releases)  
+
+Go to your project manifest json file located at `Packages/manifest.json`.
+Add this line to your dependency list
+* `"com.mxr.mxrus.sdk":"https://www.github.com/ManageXR/mxrus-sdk.git#VERSION"` 
+    * `VERSION` is the SDK version you want to install
+    * For example, if you want to install version `v0.2.0`, the line should be `"com.mxr.mxrus.sdk":"https://www.github.com/ManageXR/mxrus-sdk.git#v0.2.0"`
+
+### Changing the SDK version
+If you want to move to a different SDK version (for example, when a new version is released and you want to upgrade), open `Packages/manifest.json` and change the version in the `"com.mxr.mxrus.sdk"` dependency line and refresh your Unity project.
