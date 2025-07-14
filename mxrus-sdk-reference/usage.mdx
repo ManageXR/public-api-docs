@@ -12,7 +12,7 @@
     * The walkable area shows how far they can walk. Going out of these bounds will fade out the screen.
     * Change the `Walkable Radius` value of the `MonoCircularUserAreaProvider` component. The concentric circles will update to reflect the new value. Set this value to match the area you want the user to be able to walk around in.
   
-![image info](mono-circular-user-area-provider.gif)
+![image info](img/mono-circular-user-area-provider.gif)
 
 ## Design tips
 * Changing your render pipeline to URP may result in some materials turning pink if they're using shaders incompatible with URP (for example the Stardard shader used in Built-In Render Pipeline)
@@ -29,7 +29,7 @@
 * Click on the `Validate` button. This will validate your scene and violations in your scene (if any) will be highlighted. Click on an issue to expand the GameObjects or assets that are causing it.
     * Issues shown in red will _prevent_ export unless you address them
     * Issues shown in yellow are warnings which don't prevent exporting but highlight potential compatibility or performance problems.
-    * ![image info](export-violations.gif)
+    * ![](img/export-violations.gif)
     * To see the full list of validation issues, see the "Limitations" section.
 * If you have no export preventing issues, you'll see the `Export Scene` button that will allow you to export the file to your preferred location
 
@@ -46,4 +46,4 @@ Often times, especially when using third party 3D assets, textures are imported 
 This view can be used to identify assets that are adding significantly to your export size and take file size reductions steps like reducing resolution, increasing compression or removing assets that that don't add much to the visuals.
 
 Tip: The official ManageXR Bungalow scene largely uses low-medium resolution diffuse/albedo textures and relies on lighting for its visuals and aesthetics. It has additional texture maps only for limited objects.
-![image info](build-report.gif)
+![image info](img/build-report.gif)

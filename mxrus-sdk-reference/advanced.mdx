@@ -37,14 +37,14 @@ Unity to significantly reduce their size.
 
 The Unity inspector provides a dropdown under `Advanced/Non-Power of 2` that allows you to change the import resolution without making the changes to the original image file.
 
-![](npot-dropdown.png)
+![](img/npot-dropdown.png)
 
 Here's an example of a 502x512 image which as an NPOT texture is significantly large at 1.3MB, but addressing the issue reduces it to 341KB. 
 (See the )
 
 |Original|Fixed|
 |-|-|
-|![](npot-uncompressed.png)|![](npot-compressed.png)|
+|![](img/npot-uncompressed.png)|![](img/npot-compressed.png)|
 
 
 __Double check texture references after shader change__  
@@ -62,12 +62,12 @@ the material is still referencing the old texture files.
 
 To solve this, change your inspector to Debug mode by pressing the ellipses button on the top right of the inspector panel and change from `Normal` to `Debug`
 
-![](inspector-debug-mode.png)
+![](img/inspector-debug-mode.png)
 
 This will allow you to see the referenced but non-visible textures on the material under `Saved Properties/Tex Envs`. Expand all entries and find 
 any references to a texture you don't need.
 
-![](material-inspector-debug-mode.png)
+![](img/material-inspector-debug-mode.png)
 
 ## ⬇️ Loading mxrus files at runtime
 If you're making a custom homescreen (not the official ManageXR Homescreen application), you will need to detect when an environment has been deployed to the device's configuration.
