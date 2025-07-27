@@ -29,7 +29,7 @@ Shaders under the following name hierarchies are supported.
 Validating your scene may bring up the following issues. Note that some of these are warnings and don't prevent you from exporting your scene.
 | Issue | Prevents Export | Cause | Fix |  
 |-|-|-|-|  
-|`UnsupportedShader`|No|You're using a custom shader that's not supported. It may or may not run as expected. It is advised you test your environment on a small number of devices before deploying them at scale.|Use a URP shader if possible|
+|`UnsupportedShader`|No|You're using a custom shader that's not supported. It may or may not run as expected. It is advised you test your environment on a small number of devices before deploying them at scale.|Use one of the supported shaders if possible|
 |`NonBakedLight`|No|You're using a realtime or mixed light which may cause performance issues.|Unless really required, bake your lighting for better performance.|
 |`UnsupportedRenderPipeline`|Yes|Render Pipeline is not URP|Create a `URP Asset (with Universal )` and set that in your Graphics Settings|
 |`CustomScriptFound`|Yes|You've attached a custom MonoBehaviour script on a GameObject in your scene|Remove the component, custom scripts are not supported|

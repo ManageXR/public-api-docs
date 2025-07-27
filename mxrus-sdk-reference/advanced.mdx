@@ -1,11 +1,11 @@
 ## 🔍 What's inside an mxrus file?
-The .mxrus format is a .zip renamed comprising of AssetBundles and some metadata files. You can use 7zip or a similar tool to extract an mxrus 
+The .mxrus format is a .zip renamed and comprises of AssetBundles and some metadata files. You can use 7zip or a similar tool to extract an mxrus 
 file and see what's inside.
 
 The scene is exported as a collection of three AssetBundles:
 * `assets` (assets used in your scene)
 * `scene` (scene hiararchy)
-* `*.unitygenerated` (Unity generated metadata, file name is same as the Unity scene exported)
+* `*.unitygenerated` (Unity generated metadata, name is same as the mxrus file you're exporting)
 
 Along with the above, the file also has some metadata:
 * `build_report.txt` (A prettified BuildReport of the AssetBundle exports)
@@ -15,8 +15,7 @@ Along with the above, the file also has some metadata:
 The ManageXR Web Console has limits on the size of the mxrus file you can upload. This makes export size optimization necessary. When you finish
 exporting an mxrus file, a build report is shown which lists the files that have been packaged in the export, along with their uncompressed size.
 
-Usually, textures contribute most towards the export size which is also easy to reduce. This is especially the case if you're using 3rd party asset packs 
-to design your environment.
+Usually, textures contribute the most to the export size and is also easy to reduce.
 
 __Eliminate textures you don't need__  
 A material may be using several maps for example base/albedo, normal, height, metallic, normal and illumination. You can often remove most of them 
@@ -54,23 +53,23 @@ Often times a 3rd party asset uses a custom shader. Consider for example that ha
 * alpha
 * waterMask
 
-If you change the shader of a material using this to `Universal Render Pipeline/Lit`, you might see the inspector correctly showing
+If you change a material from this shader to `Universal Render Pipeline/Lit`, you might see the inspector correctly showing
 albedo and normal in the new `Lit` shader slots and alpha and waterMask not longer listed.
 
 However, when you export your environment, you may still see the alpha and waterMask textures listed in the build report. The reason is that 
-the material is still referencing the old texture files.  
+the material is still referencing the old texture files, those texture slots are just not serialized, so you can't see them in the inspector.  
 
 To solve this, change your inspector to Debug mode by pressing the ellipses button on the top right of the inspector panel and change from `Normal` to `Debug`
 
 ![](img/inspector-debug-mode.png)
 
-This will allow you to see the referenced but non-visible textures on the material under `Saved Properties/Tex Envs`. Expand all entries and find 
+This will allow you to see these referenced but non-serialized textures in the inspector under `Saved Properties/Tex Envs`. Expand all entries and find 
 any references to a texture you don't need.
 
 ![](img/material-inspector-debug-mode.png)
 
 ## ⬇️ Loading mxrus files at runtime
-If you're making a custom homescreen (not the official ManageXR Homescreen application), you will need to detect when an environment has been deployed to the device's configuration.
+If you're making a custom homescreen, you will need to detect when an environment has been deployed to the device's configuration.
 
 When an environment is deployed, an `EnvironmentFile` would be made available in the runtime settings summary. 
 
@@ -118,7 +117,7 @@ async void ShowEnvironment() {
         var scene = SceneManager.GetSceneByName(sceneLoader.SceneName);
 
         // Check if the scene was successfully loaded by Unity into the scene hierarchy
-        // If so, set that as the active scene and 
+        // If so, set that as the active scene
         if (scene != null && scene.IsValid() && scene.isLoaded) {
             SceneManager.SetActiveScene(scene);
             shownSceneName = sceneLoader.SceneName;
@@ -126,7 +125,8 @@ async void ShowEnvironment() {
     }
 }
 
-// This method is called when environmentFile in runtime settings summary becomes null.
+// This method is called when environmentFile in runtime settings summary becomes null or its id changes.
+// Use the OnRuntimeSettingsSummaryChange event to detect when this happens
 async void HideEnvironment() {
     await SceneManager.UnloadSceneAsync(shownSceneName);
     shownSceneName = string.Empty;
