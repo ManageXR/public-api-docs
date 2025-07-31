@@ -4,6 +4,11 @@
 * Create a URP Asset in your Project view using `Right Click > Create > Rendering > URP Asset (with Universal Renderer)`
 * Set the URP Asset in your Graphics Settings by going to `Project Settings > Graphics > Scriptable Render Pipeline Settings`
 
+<Tip>
+**Don't normally use URP?**
+Learn about a [common issue moving from Built-In to URP](../3d-environment-sdk-reference/advanced#built-in-to-urp-gotchas) and how to avoid it.
+</Tip>
+
 ### Create your environment
 1. Use the Unity workflow to design your scene
 2. Set the user's location and walkable area within your environment:
@@ -34,7 +39,7 @@ Since your Unity scene will run on standalone VR headsets, ensure that the scene
 2. Click on the `Validate` button. This will validate your scene and violations (if any) in your scene will be highlighted. Click on an issue to expand it. A brief description and any relevant GameObject or Asset will be shown.
     * Issues shown in red will _prevent_ export unless you address them
     * Issues shown in yellow are warnings which don't prevent exporting but highlight potential compatibility or performance problems.
-    * [View the list of possible validation issues](https://docs.managexr.com/3d-environment-sdk-reference/limitations#validation-issue-details) and recommended fixes
+    * [View the list of possible validation issues](../3d-environment-sdk-reference/limitations#validation-issue-details) and recommended fixes
 ![](img/export-violations.gif)
 If you have no export-preventing issues, click the `Export Scene` button to export the file ✅
 

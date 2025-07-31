@@ -1,4 +1,4 @@
-## 🔍 What's inside an mxrus file?
+## What's inside an mxrus file?
 The .mxrus format is a .zip renamed and comprises of AssetBundles and some metadata files. You can use 7zip or a similar tool to extract an mxrus 
 file and see what's inside.
 
@@ -11,7 +11,7 @@ Along with the above, the file also has some metadata:
 * `build_report.txt` (A prettified BuildReport of the AssetBundle exports)
 * `mxr_env_preview.jpg` (A preview of the environment seen from the user starting position and direction)
 
-## 📦 Reducing mxrus file size  
+## Reducing mxrus file size  
 The ManageXR Web Console has limits on the size of the mxrus file you can upload. This makes export size optimization necessary. When you finish
 exporting an mxrus file, a build report is shown which lists the files that have been packaged in the export, along with their uncompressed size.
 
@@ -68,7 +68,7 @@ any references to a texture you don't need.
 
 ![](img/material-inspector-debug-mode.png)
 
-## ⬇️ Loading mxrus files at runtime
+## Loading mxrus files at runtime
 If you're using our [Unity SDK](https://docs.managexr.com/sdk-reference/introduction) to make a custom app launcher, you will need to detect when an environment has been deployed to the device's configuration.
 
 When an environment is deployed, an `EnvironmentFile` would be made available in the runtime settings summary. 
@@ -133,7 +133,7 @@ async void HideEnvironment() {
 }
 ```
 
-## ⚙️ Built-in to URP gotchas
+## Built-in to URP gotchas
 Changing your render pipeline from Built-In to URP may result in some materials turning pink if they're using shaders incompatible with URP (for example the Stardard shader used in Built-In Render Pipeline)
 
 -> To fix, select the materials and click on `Unity toolbar > Edit > Rendering > Materials > Convert Selected Built-in Materials to URP`. Check if the material gets updated correctly. If not, resolve manually.
