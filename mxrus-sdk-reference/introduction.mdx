@@ -19,8 +19,6 @@ Being Unity Editor based, building your environment in the mxrus format has some
     * Profiling tools to optimize your environment
 * Access to a vast catalog of the third party assets from the [Unity Asset Store](https://assetstore.unity.com/)
 
-If you're making a custom homescreen, the `SceneLoader` class provides an easy to use API that automatically handles extraction and loading of the file at runtime. 
-  
-The environment can then be loaded in your application as a Unity Scene which makes it available in the scene hierarchy and Unity APIs can be used to further drive behaviour.
+If you're making a custom homescreen, the `SceneLoader` class provides an easy to use API to load mxrus files at runtime. The environment in the mxrus file can then be loaded and shown in your application as a Unity Scene. When shown, the scene gets instantiated in the Unity scene hierarchy which allows you to access and modify its GameObjects to further drive custom behaviour. 
   
 For more information on loading an mxrus file at runtime inside your Unity app, see the "Advanced" section.
