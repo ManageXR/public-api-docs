@@ -151,16 +151,16 @@
         ]
       }, 
       {
-        "tab": "Environment SDK",
+        "tab": "3D Environment SDK",
         "groups": [
           {
-            "group": "MXRUS SDK Reference",
+            "group": "3D Environment SDK Reference",
             "pages": [
-              "mxrus-sdk-reference/introduction", 
-              "mxrus-sdk-reference/setting-up", 
-              "mxrus-sdk-reference/usage",
-              "mxrus-sdk-reference/limitations",
-              "mxrus-sdk-reference/advanced"
+              "3d-environment-sdk-reference/introduction", 
+              "3d-environment-sdk-reference/setup", 
+              "3d-environment-sdk-reference/usage",
+              "3d-environment-sdk-reference/limitations",
+              "3d-environment-sdk-reference/advanced"
             ]
           }
         ]
