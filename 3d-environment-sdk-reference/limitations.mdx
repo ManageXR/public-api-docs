@@ -1,0 +1,40 @@
+Layers and tags are not supported.
+
+### List of supported components 
+* Light
+* LightProbeGroup
+* ReflectionProbe
+* LODGroup
+* MeshRenderer
+* SkinnedMeshRenderer
+* SpriteRenderer
+* TrailRenderer
+* LineRenderer
+* SortingGroup
+* ParticleSystem
+* Terrain
+* AudioSource
+* UI canvas and built-in UI elements like Image, RawImage, Text
+* TextMeshPro
+
+### List of supported shaders
+Shaders under the following name hierarchies are supported.
+* `Universal Render Pipeline/*`
+* `Unlit/*`
+* `UI/*`
+* `Sprites/*`
+* `Skybox/*`
+
+### Validation issue details
+The following issues may appear when vaidating your scene for export:
+| Issue | Prevents Export | Cause | Fix |  
+|-|-|-|-|  
+|`UnsupportedShader`|No|You're using a custom shader that's not supported. It may or may not run as expected. It is advised you test your environment on a small number of devices before deploying them at scale.|Use one of the supported shaders if possible|
+|`NonBakedLight`|No|You're using a realtime or mixed light which may cause performance issues.|Unless really required, bake your lighting for better performance.|
+|`UnsupportedRenderPipeline`|Yes|Render Pipeline is not URP|Create a `URP Asset (with Universal )` and set that in your Graphics Settings|
+|`CustomScriptFound`|Yes|You've attached a custom MonoBehaviour script on a GameObject in your scene|Remove the component, custom scripts are not supported|
+|`CameraFound`|Yes|You have a Camera on the scene|Remove the Camera from the scene|
+|`EventSystemFound`|Yes|You have an `EventSystem` component on the scene|Remove the component from the scene|
+|`NoUserAreaProviderFound`|Yes|You don't have a user area provider on the scene|Create an empty GameObject and setup the `MonoCircularUserAreaProvider` component to it|
+|`AudioListenerFound`|Yes|You have an `AudioListener` component on the scene|Remove any `AudioListener` components from the scene|
+|`SceneNameViolation`|Yes|Your scene name isn't allowed|Rename the scene you're trying to export. The following names are not allows: Launcher, Video, OculusQuest, Pico, Wave|

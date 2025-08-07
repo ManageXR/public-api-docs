@@ -151,6 +151,21 @@
             ]
           }
         ]
+      }, 
+      {
+        "tab": "3D Environment SDK",
+        "groups": [
+          {
+            "group": "3D Environment SDK Reference",
+            "pages": [
+              "3d-environment-sdk-reference/introduction", 
+              "3d-environment-sdk-reference/setup", 
+              "3d-environment-sdk-reference/usage",
+              "3d-environment-sdk-reference/limitations",
+              "3d-environment-sdk-reference/advanced"
+            ]
+          }
+        ]
       },       
       {
         "tab": "Streaming SDK",
