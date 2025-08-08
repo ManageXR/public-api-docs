@@ -12,12 +12,9 @@ Learn about a [common issue moving from Built-In to URP](../3d-environment-sdk-r
 ### Create your environment
 1. Use the Unity workflow to design your scene
 2. Set the user's location and walkable area within your environment:
-    
-    a. **Create a GameObject** and add the `MonoCircularUserAreaProvider` component to it.
-    
-    b. **Ensure that Gizmos are enabled** in your Scene view. You should see a blue avatar with concentric circles around it. The position and rotation of the avatar determine the location and direction the user will start at. The VR Home Screen menu will appear in front of the user when they are in this position in your environment.
-    
-    c. **Change the `Walkable Radius` value of the `MonoCircularUserAreaProvider` component**. The concentric circles will update to reflect the new value. Set this value to match the area you want the user to be able to walk around in.
+    1. **Create a GameObject** and add the `MonoCircularUserAreaProvider` component to it.
+    2. **Ensure that Gizmos are enabled** in your Scene view. You should see a blue avatar with concentric circles around it. The position and rotation of the avatar determine the location and direction the user will start at. The VR Home Screen menu will appear in front of the user when they are in this position in your environment.
+    3. **Change the `Walkable Radius` value of the `MonoCircularUserAreaProvider` component**. The concentric circles will update to reflect the new value. Set this value to match the area you want the user to be able to walk around in.
 ![image info](img/mono-circular-user-area-provider.gif)
 
 <Tip>
