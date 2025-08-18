@@ -1205,9 +1205,7 @@ paths:
                         - title
                         - versionCode
                         - apkUrl
-                        - apkMd5
                         - versionName
-                        - apkSize
                   example:
                      packageName: "com.example.app"
                      title: "My Awesome App"
@@ -1884,9 +1882,7 @@ paths:
                      required:
                         - versionCode
                         - apkUrl
-                        - apkMd5
                         - versionName
-                        - apkSize
                   example:
                      versionCode: 42
                      apkUrl: "https://storage.example.com/apps/com.example.app.apk"
