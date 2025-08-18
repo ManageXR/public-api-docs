@@ -5903,6 +5903,10 @@ components:
                description: |
                   When **true**, the content item is hidden on the Home Screen.
                   Omit this field (or set to false) to show the item.
+            forceInstall:
+               type: boolean
+               description: |
+                  When **true** uninstalls previous version of app before re-installing new version. Turn on Force Install if you need to downgrade or rollback an app version. [Learn More](https://help.managexr.com/en/articles/5274045-deploying-applications#h_ddb1b059c3)
       V1VideoIdentifier:
          type: object
          title: Video
@@ -6071,6 +6075,14 @@ components:
                type: string
                description: Label for uniqueness among app versions
                example: "Quest"
+            hidden: 
+               type: boolean
+               description: Whether the app is hidden from the VR home screen
+               example: false
+            forceInstall:
+               type: boolean
+               description: When **true** uninstalls previous version of app before re-installing new version. Turn on Force Install if you need to downgrade or rollback an app version. [Learn More](https://help.managexr.com/en/articles/5274045-deploying-applications#h_ddb1b059c3)
+               example: false
             apkSize:
                type: number
                description: Size of the APK file in bytes
