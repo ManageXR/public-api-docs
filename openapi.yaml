@@ -6449,6 +6449,9 @@ components:
             hidden:
                type: boolean
                description: Whether the network is hidden (SSID not broadcast).
+            disableMacRandomization:
+               type: boolean
+               description: Whether to disable mac address randomization when this network is deployed on a device
             eapMethod:
                $ref: '#/components/schemas/EapMethod'
                description: Enterprise EAP method (PEAP, TLS, TTLS, etc).
@@ -6498,6 +6501,7 @@ components:
             type: WPA
             password: password 
             hidden: false
+            disableMacRandomization: true
 
    securitySchemes:
       basicAuth:
