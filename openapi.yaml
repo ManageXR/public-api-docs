@@ -540,6 +540,12 @@ paths:
                                 enum:
                                    - SYNC
                                 example: SYNC
+                             data:
+                                type: object
+                                properties:
+                                    forceSync:
+                                       type: boolean
+                                       description: Optional parameter. If true, forces device to sync immediately regardless of update schedule set on configuration
                         - title: Enable / Disable Tutorial Mode
                           type: object
                           properties:
@@ -889,6 +895,12 @@ paths:
                                 enum:
                                    - SYNC
                                 example: SYNC
+                             data:
+                                type: object
+                                properties:
+                                    forceSync:
+                                       type: boolean
+                                       description: Optional parameter. If true, forces device to sync immediately regardless of update schedule set on configuration
                         - title: Enable / Disable Tutorial Mode
                           type: object
                           properties:
