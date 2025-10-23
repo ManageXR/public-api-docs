@@ -5309,6 +5309,8 @@ paths:
                                           - OPEN
                                           - WPA
                                           - WPA_ENTERPRISE
+                                          - WPA3
+                                          - WPA3_ENTERPRISE
                                           - UNKNOWN
                                        example: WPA_ENTERPRISE
                                        description: Type of wifi network
@@ -5858,6 +5860,8 @@ components:
                   - OPEN
                   - WPA
                   - WPA_ENTERPRISE
+                  - WPA3
+                  - WPA3_ENTERPRISE
                   - UNKNOWN
                example: WPA_ENTERPRISE
          example:
@@ -6424,7 +6428,7 @@ components:
                            example: "v14"
       WifiNetworkType:
          type: string
-         enum: [OPEN, WPA, WPA_ENTERPRISE, UNKNOWN]
+         enum: [OPEN, WPA, WPA_ENTERPRISE, WPA3, WPA3_ENTERPRISE, UNKNOWN]
       EapMethod:
          type: string
          enum: [PEAP, TLS, TTLS, PWD, NONE]
