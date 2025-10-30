@@ -6326,10 +6326,10 @@ components:
                description: Device experience set on the configuration. Default is Home Screen.
                enum: [HOME_SCREEN, KIOSK, KIOSK_VIDEO, DEFAULT]
                example: HOME_SCREEN
-
             vrContent:
                $ref: "#/components/schemas/V1ConfigurationVrContentResponse"
-
+            kioskVrContent:
+               $ref: "#/components/schemas/V1ConfigurationKioskContentPatch"
             files:
                type: array
                description: Files deployed on the configuration.
@@ -6342,11 +6342,7 @@ components:
                items:
                   oneOf:
                      - $ref: "#/components/schemas/V1WifiNetwork"
-               kioskAppId:
-                  type: string
-                  example:
-                     available: 10707AB329856
-                  description: (Optional) The unique identifier of the Kiosk App, if one is present and the configuration uses `deviceExperience` =  `KIOSK`.
+ 
       V1Device:
          type: object
          description: Full representation of a device managed in ManageXR
