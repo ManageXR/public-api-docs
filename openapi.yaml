@@ -6330,6 +6330,19 @@ components:
                $ref: "#/components/schemas/V1ConfigurationVrContentResponse"
             kioskVrContent:
                $ref: "#/components/schemas/V1ConfigurationKioskContentPatch"
+            kioskVideoSettings:
+               type: object
+               description: Only relevant if configuration `deviceExperienceMode` is `KIOSK_VIDEO`
+               properties:
+                  loopVideo: 
+                     type: boolean
+                     description: Whether to play the video on loop
+                     example: true
+                  loopVideoAfterNSecondsHeadsetOff:
+                     type: number 
+                     enum: [0, 3, 10, 20, 30, 60, 300,600]
+                     description: Reset video play position to the beginning after headset has been taken off for N seconds
+                     example: 30
             files:
                type: array
                description: Files deployed on the configuration.
