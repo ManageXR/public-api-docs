@@ -1,0 +1,53 @@
+---
+title: 'duplicate-app-version'
+description: 'Duplicate an existing app version in your ManageXR organization'
+icon: 'grid'
+---
+## Usage
+```
+Usage: mxr-cli duplicate-app-version <package_name> <version_code> <version_name> <version_label> --bundle-directory /path/to/directory /path/on/device
+
+Positionals:
+  package_name   Package name of the application (string)
+  version_code   Version code (number)
+  version_name   Version name (string)
+  version_label  Label applied to existing version you wish to duplicate (string) - You must supply the label if one exists.
+
+Options:
+  --bundle-directory, --bd   Path to a local directory containing files to upload as bundled files.
+  --new-version-label, -vl   Label to differentiate an app version from others with the same version code and name. If none set, label with timestamp will automatically be applied.
+  --release-channel, -r      Name of the release channel. If release channel with this name exists for this application, the release channel will be updated to target this app version. If it does not exist, a new release channel will be created with the name supplied.
+  -k, --api-key-file         Path to JSON file containing ManageXR API Key id and secret [string]
+  -v, --verbose              If set, log additional output on errors. [boolean]
+  -h, --help                 Show help [boolean]
+```
+## Examples
+### 1. Using JSON file auth
+```
+mxr-cli duplicate-app-version com.myapp.quest 42 "4.2.0" "Stable" --api-key-file /path/to/api_key.json
+```
+
+### 2. Using environment variable auth
+```
+MXR_API_KEY_ID="xxx" MXR_API_KEY_SECRET="xxx" mxr-cli duplicate-app-version com.myapp.quest 42 "4.2.0" "Stable"
+```
+
+### 3. Duplicate with new version label and release channel
+This example duplicates an existing app version and:
+- `--new-version-label` sets a new label "Beta" for the duplicated version
+- `--release-channel` publishes the duplicated app version to the "Dev" release channel
+
+```
+mxr-cli duplicate-app-version com.myapp.quest 42 "4.2.0" "Stable" --new-version-label "Beta" --release-channel "Dev" --api-key-file /path/to/api_key.json
+```
+
+### 4. Duplicate with bundled files
+Duplicate an app version with [bundled files](https://help.managexr.com/en/articles/8013220-bundle-files-with-your-app) and choose the location where the files should be installed on devices
+
+- `--bundle-directory` uploads files stored at /path/to/directory on local machine as bundled files
+- `/path/on/device` optional path to location on device where bundled files will be installed e.g., `Android/obb/com.your.app`
+
+```
+mxr-cli duplicate-app-version com.myapp.quest 42 "4.2.0" "Stable" --bundle-directory /path/to/directory /path/on/device --api-key-file /path/to/api_key.json
+```
+
