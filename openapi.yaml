@@ -5895,7 +5895,7 @@ components:
                example: "com.myapp.quest"
             version:
                oneOf:
-                  - "#/components/schemas/V1AppVersionIdentifier"
+                  - $ref: "#/components/schemas/V1AppVersionIdentifier"
       V1AppVersionShortcutIdentifier:
          type: string
          enum:
