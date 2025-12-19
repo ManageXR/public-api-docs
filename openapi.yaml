@@ -3626,6 +3626,16 @@ paths:
                               KIOSK is Kiosk App. Options vary by device type. See supported device information [here](https://help.managexr.com/en/articles/5281345-supported-devices).
                            enum: [HOME_SCREEN, KIOSK, KIOSK_VIDEO, DEFAULT]
                            example: HOME_SCREEN
+                        kioskModeStrictness:
+                           type: string
+                           description: |
+                              Kiosk mode strictness level.
+                              
+                              **DEFAULT** - Recommended setting. Standard kiosk experience on ManageXR. Allows access to Meta quick settings menu.
+                              
+                              **KIOSK_APP** - Forces user to only remain in kiosk app and not access anything else on the device, including quick settings or other system apps. This may impact your ability to cast the device using native casting.
+                           enum: [DEFAULT, KIOSK_APP]
+                           example: DEFAULT
                         confirmMetaDeviceModeChange:
                            type: boolean
                            description: Only required if deviceExperience change impacts Meta Horizon managed services [device mode](https://help.managexr.com/en/articles/10509502-meta-horizon-device-modes#h_8349d611b6). Supplying the flag confirms that you understand [the risks](https://help.managexr.com/en/articles/10509502-meta-horizon-device-modes#h_8349d611b6) and requirements of the mode change._
@@ -3636,6 +3646,23 @@ paths:
                            items:
                               type: string
                            exmaple: ["1390KJDL139PJD", "KAFJ39UT124P98"]
+                        timeZone:
+                           type: string
+                           description: |
+                              Time zone for the configuration. Can be set to 'UNMANAGED', 'AUTO', or a specific time zone ID.
+                              
+                              Valid time zone IDs include:
+                              - Pacific/Midway, Pacific/Honolulu, America/Anchorage, America/Los_Angeles, America/Tijuana, America/Phoenix, America/Chihuahua, America/Denver, America/Costa_Rica, America/Chicago, America/Mexico_City, America/Regina, America/Bogota, America/New_York, America/Caracas, America/Barbados, America/Halifax, America/Manaus, America/Santiago, America/St_Johns, America/Sao_Paulo, America/Argentina/Buenos_Aires, America/Godthab, America/Montevideo, Atlantic/South_Georgia, Atlantic/Azores, Atlantic/Cape_Verde, Africa/Casablanca, Europe/London, Europe/Amsterdam, Europe/Belgrade, Europe/Brussels, Europe/Sarajevo, Africa/Windhoek, Africa/Brazzaville, Asia/Amman, Europe/Athens, Asia/Beirut, Africa/Cairo, Europe/Helsinki, Asia/Jerusalem, Europe/Minsk, Africa/Harare, Asia/Baghdad, Europe/Moscow, Asia/Kuwait, Africa/Nairobi, Asia/Tehran, Asia/Baku, Asia/Tbilisi, Asia/Yerevan, Asia/Dubai, Asia/Kabul, Asia/Karachi, Asia/Oral, Asia/Yekaterinburg, Asia/Calcutta, Asia/Colombo, Asia/Katmandu, Asia/Almaty, Asia/Rangoon, Asia/Krasnoyarsk, Asia/Bangkok, Asia/Jakarta, Asia/Shanghai, Asia/Hong_Kong, Asia/Irkutsk, Asia/Kuala_Lumpur, Australia/Perth, Asia/Taipei, Asia/Seoul, Asia/Tokyo, Asia/Yakutsk, Australia/Adelaide, Australia/Darwin, Australia/Brisbane, Australia/Hobart, Australia/Sydney, Pacific/Majuro, Asia/Vladivostok, Pacific/Guam, Asia/Magadan, Pacific/Auckland, Pacific/Fiji, Pacific/Tongatapu, Etc/GMT+12, Etc/GMT+11, Etc/GMT+10, Etc/GMT+9, Etc/GMT+8, Etc/GMT+7, Etc/GMT+6, Etc/GMT+5, Etc/GMT+4, Etc/GMT+3, Etc/GMT+2, Etc/GMT+1, Etc/GMT, Etc/GMT-1, Etc/GMT-2, Etc/GMT-3, Etc/GMT-4, Etc/GMT-5, Etc/GMT-6, Etc/GMT-7, Etc/GMT-8, Etc/GMT-9, Etc/GMT-10, Etc/GMT-11, Etc/GMT-12, Etc/GMT-13, Etc/GMT-14
+                              
+                              Time zones with the Etc/GMT prefix are UTC time zones. Only the ID part needs to be supplied (e.g., "America/New_York", not the full name).
+                           oneOf:
+                              - type: string
+                                enum: [UNMANAGED]
+                              - type: string
+                                enum: [AUTO]
+                              - type: string
+                                description: Time zone ID (e.g., "America/New_York", "Europe/London", "Etc/GMT+5"). See description above for complete list of valid time zone IDs.
+                           example: "America/New_York"
                         files:
                            $ref: "#/components/schemas/V1BundledFileEditDto"
 
