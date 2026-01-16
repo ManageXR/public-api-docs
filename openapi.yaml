@@ -3646,6 +3646,12 @@ paths:
                            items:
                               type: string
                            exmaple: ["1390KJDL139PJD", "KAFJ39UT124P98"]
+                        priorityWifiNetworkId:
+                           type: string
+                           nullable: true
+                           description: The id of the wi-fi network to set as the priority network. A device will always connect to the priority network over other networks if it is in range. |
+                              Set to `null` to clear the priority. 
+                           example: 1390KJDL139PJD
                         timeZone:
                            type: string
                            description: |
@@ -5908,11 +5914,16 @@ components:
                   - WPA3_ENTERPRISE
                   - UNKNOWN
                example: WPA_ENTERPRISE
+            priorityWifiNetwork: 
+               type: boolean
+               description: Priority network. The device will always connect to this network over other networks when it is in range and available.
+               example: false
          example:
             id: "wifi_abc123"
             ssid: "MyNetwork"
             nickname: "Office Wi-Fi"
             type: WPA_ENTERPRISE
+            priorityWifiNetwork: false
       V1AppIdentifier:
          type: object
          properties:
