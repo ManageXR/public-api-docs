@@ -22,7 +22,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
             - name: names
               in: query
               required: false
@@ -154,7 +157,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A device object
@@ -220,7 +226,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -302,7 +311,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -358,7 +370,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -658,7 +673,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -1026,7 +1044,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: An array of all files in the organization
@@ -1054,7 +1075,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -1091,7 +1115,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of app profiles
@@ -1155,7 +1182,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -1363,7 +1393,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: The app profile
@@ -1453,7 +1486,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -1625,7 +1661,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
 
          responses:
             "200":
@@ -1693,7 +1732,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of app versions
@@ -1847,7 +1889,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -2043,7 +2088,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -2152,8 +2200,9 @@ paths:
               required: false
               schema: { type: string }
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
 
          responses:
             "200":
@@ -2207,7 +2256,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of release channels
@@ -2354,7 +2406,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -2578,7 +2633,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -2839,8 +2897,10 @@ paths:
               in: query
               required: false
               schema: { type: string }
-              description: Unique identifier of the organization.
-                 Defaults to the organization associated with the API key when omitted.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
 
          responses:
             "200":
@@ -2919,7 +2979,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3132,7 +3195,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3337,8 +3403,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key when omitted.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of configurations
@@ -3381,8 +3448,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3440,8 +3508,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3524,8 +3593,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: The requested configuration
@@ -3593,8 +3663,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3852,8 +3923,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: Configuration deleted successfully
@@ -3920,7 +3992,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -3995,7 +4070,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -4079,7 +4157,10 @@ paths:
               required: false
               schema:
                  type: string
-              description: Unique identifier of the organization. Defaults to the organization associated with the API key if no id supplied.
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: Tag successfully deleted
@@ -4106,8 +4187,9 @@ paths:
               required: false
               schema: { type: string }
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of Wi-Fi networks
@@ -4144,8 +4226,9 @@ paths:
               required: false
               schema: { type: string }
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
             content:
@@ -4219,8 +4302,9 @@ paths:
               required: false
               schema: { type: string }
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of videos
@@ -4260,8 +4344,9 @@ paths:
               required: false
               schema: { type: string }
               description: |
-                 Unique identifier of the organization.  
-                 Defaults to the organization associated with the API key.
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
+                 
+                 Defaults to the organizationId associated with the API key.
          responses:
             "200":
                description: A list of WebXR links
