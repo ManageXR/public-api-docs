@@ -36,6 +36,8 @@
                 "group": "Devices",
                 "pages": ["api-reference/endpoint/v1/list-devices",
                 "api-reference/endpoint/v1/get-device",
+                "api-reference/endpoint/v1/list-device-sync-status",
+                "api-reference/endpoint/v1/get-device-sync-status",
                 "api-reference/endpoint/v1/edit-device",
                 "api-reference/endpoint/v1/send-command",
                 "api-reference/endpoint/v1/batch-commands",

@@ -298,6 +298,211 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
+   /v1/devices/sync-status:
+      get:
+         summary: List device sync status
+         description: |
+            Retrieve per-content-category sync status for every device the API key has access to. Currently only `apps` is supported via the `include` query parameter.
+
+            **Authentication:** API key only. Bearer-token auth is not supported on this endpoint.
+
+            **Pagination:** Cursor-based. Pass the `nextCursor` from the previous response back as `cursor` to fetch the next page. End of stream is indicated by `nextCursor: null` — do not infer end of stream from a short page. The cursor is opaque; treat it as a black box and do not parse or construct it manually.
+
+            **Multi-org API keys:** When `organizationId` is omitted, results are aggregated across every organization the API key has access to. The Firestore `in`-operator caps this at 30 organizations per request — keys with more than 30 authorized organizations must scope each request to a specific `organizationId`.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: |
+                 Unique identifier of the organization. Only required for multi-organization API keys when scoping to a specific organization.
+
+                 Defaults to all organizations the API key has access to.
+            - name: include
+              in: query
+              required: true
+              schema:
+                 type: string
+                 enum:
+                    - apps
+              description: |
+                 Comma-separated list of content categories to include in the response. Currently only `apps` is supported. Required.
+            - name: cursor
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: |
+                 Opaque pagination cursor returned in `nextCursor` by a prior response. Treat as opaque.
+            - name: limit
+              in: query
+              required: false
+              schema:
+                 type: integer
+                 default: 500
+                 maximum: 500
+                 minimum: 1
+              description: |
+                 Maximum number of devices to return per page. Default and maximum are both 500.
+         responses:
+            "200":
+               description: A page of device sync statuses
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1DeviceSyncStatus"
+                           nextCursor:
+                              type: string
+                              nullable: true
+                              description: Opaque cursor for the next page, or `null` if this is the last page.
+            "400":
+               description: Bad request — missing/invalid `include`, malformed `cursor`, invalid `limit`, or more than 30 organizations in scope.
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "include is required"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "include is required"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
+   /v1/devices/{id}/sync-status:
+      get:
+         summary: Get device sync status
+         description: |
+            Retrieve per-content-category sync status for a single device. Currently only `apps` is supported via the `include` query parameter.
+
+            For a device's overall up-to-date status, use the top-level `outOfDate` boolean on `GET /v1/devices/{id}`. This endpoint provides per-app detail.
+         parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier (serial number) of the device.
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys.
+
+                 Defaults to the organizationId associated with the API key.
+            - name: include
+              in: query
+              required: true
+              schema:
+                 type: string
+                 enum:
+                    - apps
+              description: |
+                 Comma-separated list of content categories to include in the response. Currently only `apps` is supported. Required.
+         responses:
+            "200":
+               description: The device's sync status
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              $ref: "#/components/schemas/V1DeviceSyncStatus"
+            "400":
+               description: Bad request — missing or invalid `include`.
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: string
+                              example: "include is required"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 400
+                        message: "include is required"
+                        error: "ManageXR Error"
+            "404":
+               description: Device not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "Not found"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "Device with id 12345678901234 not found"
+                        error: "ManageXR Error"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 403
+                           message:
+                              type: string
+                              example: "Forbidden"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
    /v1/devices/set-pause-updates:
       post:
          summary: Set pause updates for devices
@@ -6776,6 +6981,74 @@ components:
                         version:
                            type: string
                            example: "v14"
+      V1DeviceSyncStatusAppVersion:
+         type: object
+         description: Version identifier for an installed or target app. All fields are optional because not every app category reports version metadata (e.g. some external/store apps).
+         properties:
+            versionCode:
+               type: number
+               description: Numeric version code.
+               example: 700402468
+            versionName:
+               type: string
+               description: Human-readable version name.
+               example: "76.0.0.0.410"
+            versionLabel:
+               type: string
+               description: Optional release-channel label associated with the version.
+               example: "stable"
+      V1DeviceSyncStatusAppEntry:
+         type: object
+         description: Sync status for a single app on a device.
+         required:
+            - packageName
+            - installed
+            - outOfDate
+            - hasError
+         properties:
+            packageName:
+               type: string
+               description: Android package name of the app.
+               example: "com.oculus.panelapp.kiosk"
+            installed:
+               type: boolean
+               description: Whether the app is currently installed on the device. Reflects managed apps only — sideloaded apps are not represented.
+               example: true
+            outOfDate:
+               type: boolean
+               description: Whether the installed version differs from the configuration's target version.
+               example: false
+            hasError:
+               type: boolean
+               description: Whether the device reported an error for this app on its last sync.
+               example: false
+            currentVersion:
+               $ref: "#/components/schemas/V1DeviceSyncStatusAppVersion"
+            targetVersion:
+               $ref: "#/components/schemas/V1DeviceSyncStatusAppVersion"
+      V1DeviceSyncStatus:
+         type: object
+         description: |
+            Per-content-category sync status for a single device. Optional content fields (e.g. `appSyncStatuses`) are populated based on the `include` query parameter — fields for unrequested categories are omitted.
+
+            For a device's overall up-to-date status, use the top-level `outOfDate` boolean on `V1Device` (returned by `GET /v1/devices` and `GET /v1/devices/{id}`).
+         required:
+            - deviceId
+            - serial
+         properties:
+            deviceId:
+               type: string
+               description: The device ID (serial number).
+               example: "340YC10G8D14ML"
+            serial:
+               type: string
+               description: Device serial number.
+               example: "340YC10G8D14ML"
+            appSyncStatuses:
+               type: array
+               description: Per-app sync entries. Present when `include=apps` was passed; absent otherwise.
+               items:
+                  $ref: "#/components/schemas/V1DeviceSyncStatusAppEntry"
       WifiNetworkType:
          type: string
          enum: [OPEN, WPA, WPA_ENTERPRISE, WPA3, WPA3_ENTERPRISE, UNKNOWN]
