@@ -340,11 +340,11 @@ paths:
               required: false
               schema:
                  type: integer
-                 default: 500
-                 maximum: 500
+                 default: 400
+                 maximum: 400
                  minimum: 1
               description: |
-                 Maximum number of devices to return per page. Default and maximum are both 500.
+                 Maximum number of devices to return per page. Default and maximum are both 400.
          responses:
             "200":
                description: A page of device sync statuses
