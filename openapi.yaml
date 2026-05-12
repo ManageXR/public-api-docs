@@ -24,7 +24,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
             - name: names
               in: query
@@ -159,7 +159,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -228,7 +228,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -302,13 +302,8 @@ paths:
       get:
          summary: List device sync status
          description: |
-            Retrieve per-content-category sync status for every device the API key has access to. Currently only `apps` is supported via the `include` query parameter.
+            Retrieve sync status details for devices. Currently supports fetching app sync statuses (installed vs. target version) only.
 
-            **Authentication:** API key only. Bearer-token auth is not supported on this endpoint.
-
-            **Pagination:** Cursor-based. Pass the `nextCursor` from the previous response back as `cursor` to fetch the next page. End of stream is indicated by `nextCursor: null` — do not infer end of stream from a short page. The cursor is opaque; treat it as a black box and do not parse or construct it manually.
-
-            **Multi-org API keys:** When `organizationId` is omitted, results are aggregated across every organization the API key has access to. The Firestore `in`-operator caps this at 30 organizations per request — keys with more than 30 authorized organizations must scope each request to a specific `organizationId`.
          parameters:
             - name: organizationId
               in: query
@@ -316,9 +311,9 @@ paths:
               schema:
                  type: string
               description: |
-                 Unique identifier of the organization. Only required for multi-organization API keys when scoping to a specific organization.
+                 Unique identifier of the organization. Defaults to all organizations the API key has access to. 
 
-                 Defaults to all organizations the API key has access to.
+                  **Multi-org API key limitation:** If your multi-org api key gives you access to more than 30 organizatinos, you must include a specific `organizationId` in this request.
             - name: include
               in: query
               required: true
@@ -334,7 +329,7 @@ paths:
               schema:
                  type: string
               description: |
-                 Opaque pagination cursor returned in `nextCursor` by a prior response. Treat as opaque.
+                 Opaque pagination cursor returned in `nextCursor` by a prior response. Treat as opaque. Pass the nextCursor from the previous response back as cursor to fetch the next page. End of stream is indicated by nextCursor: null — do not infer end of stream from a short page.
             - name: limit
               in: query
               required: false
@@ -405,9 +400,7 @@ paths:
       get:
          summary: Get device sync status
          description: |
-            Retrieve per-content-category sync status for a single device. Currently only `apps` is supported via the `include` query parameter.
-
-            For a device's overall up-to-date status, use the top-level `outOfDate` boolean on `GET /v1/devices/{id}`. This endpoint provides per-app detail.
+            Retrieve app sync status details for devices. For a device's overall up-to-date status, use the top-level `outOfDate` boolean on `GET /v1/devices/{id}`. This endpoint provides per-app detail.
          parameters:
             - name: id
               in: path
@@ -518,7 +511,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -577,7 +570,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -763,9 +756,9 @@ paths:
                              data:
                                 type: object
                                 properties:
-                                    forceSync:
-                                       type: boolean
-                                       description: Optional parameter. If true, forces device to sync immediately regardless of update schedule set on configuration
+                                   forceSync:
+                                      type: boolean
+                                      description: Optional parameter. If true, forces device to sync immediately regardless of update schedule set on configuration
                         - title: Enable / Disable Tutorial Mode
                           type: object
                           properties:
@@ -880,7 +873,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -1251,7 +1244,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -1282,7 +1275,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -1322,7 +1315,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -1389,7 +1382,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -1600,7 +1593,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -1693,7 +1686,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -1868,7 +1861,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
 
          responses:
@@ -1939,7 +1932,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -2096,7 +2089,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -2295,7 +2288,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -2406,7 +2399,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
 
          responses:
@@ -2463,7 +2456,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -2613,7 +2606,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -2840,7 +2833,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3104,7 +3097,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
 
          responses:
@@ -3186,7 +3179,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3402,7 +3395,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3609,7 +3602,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -3654,7 +3647,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3714,7 +3707,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3799,7 +3792,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -3869,7 +3862,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -3886,9 +3879,9 @@ paths:
                            $ref: "#/components/schemas/V1ConfigurationVrContentPatch"
                            description: Updated set of VR content on the configuration. Content will appear on the Home Screen in the order it appears in the vrContent array.
                         kioskVrContent:
-                           description: | 
+                           description: |
                               Set the App or video to kiosk devices into.
-                              
+
                               Requirements: 
                               - The `deviceExperience` field must also be set to `KIOSK` or `KIOSK_VIDEO`
                               - The App or Video must be included in the configurations `vrContent` already (or in this request)
@@ -3896,9 +3889,9 @@ paths:
 
                         deviceExperienceMode:
                            type: string
-                           description: | 
+                           description: |
                               Device experience 
-                              
+
                               KIOSK is Kiosk App. Options vary by device type. See supported device information [here](https://help.managexr.com/en/articles/5281345-supported-devices).
                            enum: [HOME_SCREEN, KIOSK, KIOSK_VIDEO, DEFAULT]
                            example: HOME_SCREEN
@@ -3906,9 +3899,9 @@ paths:
                            type: string
                            description: |
                               Kiosk mode strictness level.
-                              
+
                               **DEFAULT** - Recommended setting. Standard kiosk experience on ManageXR. Allows access to Meta quick settings menu.
-                              
+
                               **KIOSK_APP** - Forces user to only remain in kiosk app and not access anything else on the device, including quick settings or other system apps. This may impact your ability to cast the device using native casting.
                            enum: [DEFAULT, KIOSK_APP]
                            example: DEFAULT
@@ -3925,8 +3918,9 @@ paths:
                         priorityWifiNetworkId:
                            type: string
                            nullable: true
-                           description: The id of the wi-fi network to set as the priority network. A device will always connect to the priority network over other networks if it is in range. |
-                              Set to `null` to clear the priority. 
+                           description:
+                              The id of the wi-fi network to set as the priority network. A device will always connect to the priority network over other networks if it is in range. |
+                              Set to `null` to clear the priority.
                            example: 1390KJDL139PJD
                         files:
                            $ref: "#/components/schemas/V1BundledFileEditDto"
@@ -3934,7 +3928,7 @@ paths:
                            type: string
                            description: |
                               Time zone for the configuration. Can be set to 'UNMANAGED', 'AUTO', or a specific time zone ID.
-                              
+
                               Valid timeZoneIds include:
                               - Pacific/Midway
                               - Pacific/Honolulu
@@ -4135,7 +4129,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -4205,7 +4199,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -4283,7 +4277,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -4370,7 +4364,7 @@ paths:
                  type: string
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -4399,7 +4393,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -4438,7 +4432,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          requestBody:
             required: true
@@ -4514,7 +4508,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -4556,7 +4550,7 @@ paths:
               schema: { type: string }
               description: |
                  Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys. 
-                 
+
                  Defaults to the organizationId associated with the API key.
          responses:
             "200":
@@ -6309,7 +6303,7 @@ components:
                   - WPA3_ENTERPRISE
                   - UNKNOWN
                example: WPA_ENTERPRISE
-            priorityWifiNetwork: 
+            priorityWifiNetwork:
                type: boolean
                description: Priority network. The device will always connect to this network over other networks when it is in range and available.
                example: false
@@ -6442,7 +6436,7 @@ components:
                           description: Unique identifier of app version on ManageXR. You can retrieve this using the List App Versions endpoint.
             properties:
                $ref: "#/components/schemas/V1VrContentProperties"
-            type: 
+            type:
                type: string
                enum: [app]
                example: app
@@ -6559,13 +6553,13 @@ components:
                   kioskVideoSettings:
                      type: object
                      properties:
-                        loopVideo: 
+                        loopVideo:
                            type: boolean
                            description: Whether to play the video on loop
                            example: true
                         loopVideoAfterNSecondsHeadsetOff:
-                           type: number 
-                           enum: [0, 3, 10, 20, 30, 60, 300,600]
+                           type: number
+                           enum: [0, 3, 10, 20, 30, 60, 300, 600]
                            description: Reset video play position to the beginning after headset has been taken off for N seconds
                            example: 30
       V1ConfigurationVrContentPatch:
@@ -6587,7 +6581,7 @@ components:
          mapping:
             appRelease: "#/components/schemas/V1AppReleaseIdentifier"
             appVersion: "#/components/schemas/V1AppVersionIdentifier"
-            video:      "#/components/schemas/V1VideoIdentifier"
+            video: "#/components/schemas/V1VideoIdentifier"
 
       V1ConfigurationVrContentResponse:
          type: array
@@ -6767,13 +6761,13 @@ components:
                type: object
                description: Only relevant if configuration `deviceExperienceMode` is `KIOSK_VIDEO`
                properties:
-                  loopVideo: 
+                  loopVideo:
                      type: boolean
                      description: Whether to play the video on loop
                      example: true
                   loopVideoAfterNSecondsHeadsetOff:
-                     type: number 
-                     enum: [0, 3, 10, 20, 30, 60, 300,600]
+                     type: number
+                     enum: [0, 3, 10, 20, 30, 60, 300, 600]
                      description: Reset video play position to the beginning after headset has been taken off for N seconds
                      example: 30
             files:
@@ -6788,7 +6782,7 @@ components:
                items:
                   oneOf:
                      - $ref: "#/components/schemas/V1WifiNetwork"
- 
+
       V1Device:
          type: object
          description: Full representation of a device managed in ManageXR
