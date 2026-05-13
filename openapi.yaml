@@ -2379,7 +2379,7 @@ paths:
 
             | App type      | Deletion scope |
             |---------------|---------------|
-            | managed  app | Deletes the specified managed app version |
+            | managed  app | Deletes the specified managed app version. This also deletes all release channels that target this managed version. See [Delete release channel](https://docs.managexr.com/api-reference/endpoint/v1/delete-app-release-channel). |
             | shared   app | Deletes the specified shared version in the recipient organization only (owner org keeps its copy) |
 
          parameters:
