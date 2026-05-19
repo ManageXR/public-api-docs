@@ -5414,6 +5414,11 @@ paths:
                               type: string
                               example: 65.0.0.546.341
                               description: Device firmware version
+                           firmwareDisplayVersion:
+                              type: string
+                              nullable: true
+                              example: "2.1"
+                              description: Human-readable firmware version. Currently only set on Meta devices running Meta Horizon OS version 2.1 or greater. Null for devices on older firmware.
                            configuration:
                               type: object
                               properties:
@@ -6856,6 +6861,11 @@ components:
                type: string
                description: Firmware version reported by the device
                example: "Oculus OS 46.0.0.230"
+            firmwareDisplayVersion:
+               type: string
+               nullable: true
+               description: Human-readable firmware version. Currently only set on Meta devices running Meta Horizon OS version 2.1 or greater. Null for devices on older firmware.
+               example: "2.1"
             configuration:
                type: object
                description: The configuration assigned to this device
