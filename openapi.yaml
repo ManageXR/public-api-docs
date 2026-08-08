@@ -1947,6 +1947,10 @@ paths:
                               items:
                                  type: object
                                  properties:
+                                    fileCount:
+                                       type: number
+                                       description: Number of files this app version deploys. This list endpoint returns fileCount, not the full files list. To retrieve the files, call Get App Version for a specific version.
+                                       example: 3
                                     id:
                                        type: string
                                        description: Unique identifier of the app version
@@ -2301,6 +2305,11 @@ paths:
                            data:
                               type: object
                               properties:
+                                 files:
+                                    type: array
+                                    description: Full list of files this app version deploys. Returned only by this single-version endpoint; multi-app responses (the versions list, configurations, and release-channel lists) return fileCount instead.
+                                    items:
+                                       $ref: "#/components/schemas/V1ManagedFile"
                                  id:
                                     type: string
                                     description: Unique identifier of the app version
@@ -2624,6 +2633,10 @@ paths:
                                        type: object
                                        description: The target app version for this release channel
                                        properties:
+                                          fileCount:
+                                             type: number
+                                             description: Number of files this app version deploys. Release-channel lists return fileCount, not the full files list. To retrieve the files, call Get App Version for the specific version.
+                                             example: 3
                                           id:
                                              type: string
                                              description: Unique identifier of the app version
@@ -6038,6 +6051,10 @@ components:
             contentType:
                type: string
                enum: [app]
+            fileCount:
+               type: number
+               description: Number of files this app version deploys. Configuration responses return fileCount per app, not the full files list. To retrieve the files, call Get App Version for the specific version.
+               example: 3
             title:
                type: string
                description: Title of the app
