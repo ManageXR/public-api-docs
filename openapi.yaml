@@ -2265,6 +2265,138 @@ paths:
                         message: "Forbidden"
                         error: "ManageXR Error"
    /v1/apps/{packageName}/versions/{versionId}:
+      get:
+         summary: Get app version
+         description: Returns a single app version by its unique id.
+         parameters:
+            - name: packageName
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: The package name of the app
+            - name: versionId
+              in: path
+              required: true
+              schema:
+                 type: string
+              description: Unique identifier of the app version
+            - name: organizationId
+              in: query
+              required: false
+              schema:
+                 type: string
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys.
+
+                 Defaults to the organizationId associated with the API key.
+         responses:
+            "200":
+               description: The requested app version
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: object
+                              properties:
+                                 id:
+                                    type: string
+                                    description: Unique identifier of the app version
+                                    example: "av_123"
+                                 type:
+                                    type: string
+                                    enum: [managed, shared, external, instant]
+                                    description: Type of the app version
+                                    example: "managed"
+                                 configurationDeployments:
+                                    type: object
+                                    description: Map of configuration ids to device count using application
+                                    example: { "config_123": 1, "config_456": 0 }
+                                 createdAt:
+                                    type: number
+                                    description: Creation timestamp
+                                    example: 1645615777448
+                                 updatedAt:
+                                    type: number
+                                    description: Last update timestamp
+                                    example: 1687352117203
+                                 versionCode:
+                                    type: number
+                                    description: Version code of the app
+                                    example: 83894522
+                                 versionName:
+                                    type: string
+                                    description: Version name of the app
+                                    example: "8.7.8.1206"
+                                 versionLabel:
+                                    type: string
+                                    description: Label for uniqueness among app versions
+                                    example: "Quest"
+                                 apkSize:
+                                    type: number
+                                    description: Size of the APK file in bytes
+                                    example: 72633861
+                                 obbSize:
+                                    type: number
+                                    description: Size of the OBB file in bytes
+                                    example: 1024
+                                 selfHosted:
+                                    type: boolean
+                                    description: Whether the app is self-hosted
+                                    example: true
+                                 apkUrl:
+                                    type: string
+                                    description: URL of the APK file (self-hosted apps only)
+                                    example: "https://storage.example.com/apps/com.example.app.apk"
+                                 obbUrl:
+                                    type: string
+                                    description: URL of the OBB file (self-hosted apps only)
+                                    example: "https://storage.example.com/apps/com.example.app.obb"
+                                 sharingOrganizationName:
+                                    type: string
+                                    description: Name of the organization sharing the app (shared apps only)
+                                    example: "XR Developer"
+                                 releaseChannelName:
+                                    type: string
+                                    description: Name of the release channel (shared apps only)
+                                    example: "Production"
+                     example:
+                        data:
+                           id: "av_123"
+                           type: "managed"
+                           configurationDeployments: { "config_123": 1, "config_456": 0 }
+                           createdAt: 1645615777448
+                           updatedAt: 1687352117203
+                           versionCode: 83894522
+                           versionName: "8.7.8.1206"
+                           versionLabel: "Quest"
+                           apkSize: 72633861
+                           obbSize: 1024
+                           selfHosted: true
+                           apkUrl: "https://storage.example.com/apps/com.example.app.apk"
+                           obbUrl: "https://storage.example.com/apps/com.example.app.obb"
+            "404":
+               description: App version not found
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 404
+                           message:
+                              type: string
+                              example: "App version av_123 not found for packageName com.example.app"
+                           error:
+                              type: string
+                              example: "ManageXR Error"
+                     example:
+                        statusCode: 404
+                        message: "App version av_123 not found for packageName com.example.app"
+                        error: "ManageXR Error"
       patch:
          summary: Edit app version
          description: Edit a managed app version. Apply a new version label or edit the app version's bundled files.
