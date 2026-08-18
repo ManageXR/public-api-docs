@@ -1,6 +1,6 @@
 ---
-title: 'Introduction'
-description: 'ManageXR API keys, authentication, and rate limiting'
+title: "Introduction"
+description: "ManageXR API keys, authentication, and rate limiting"
 ---
 
 ## Base URL
@@ -9,38 +9,37 @@ The ManageXR API provides a RESTful way to access your organization and device d
 
 All requests contain the following base URL:
 
-```
+```text
 https://managexrapi.com
 ```
 
 ## Authentication
+
 ### Create an API Key
-Go to Organization Settings > API Keys to generate a key
+
+Go to Organization Settings \> API Keys to generate a key
 
 <Note>
-Email developers@managexr.com for early access to a single API key that allows you to control multiple organizations
+  Email [support@managexr.com](mailto:support@managexr.com) for early access to a single API key that allows you to control multiple organizations
 </Note>
 
 ### Authenticate Requests
 
 To authenticate each request, add an Authorization header with the contents:
 
-```
+```text
 Authorization: Basic <encoded-value>
 ```
-where `<encoded-value>` is the Base64 encoding of `api_key_id:api_key_secret`. 
 
-
+where `<encoded-value>` is the Base64 encoding of `api_key_id:api_key_secret`.
 
 ## Quotas & Limits
 
 API requests are subject to the following limits:
 
-| Limit Type         | Premium Tier   | Enterprise Tier         |
-| ------------- | ----------------- | --------------- |
-| Requests per second per organization          | 10       | Contact        |
-| Requests per month per organization        | 2,500,000       | Contact       |
+| Limit Type | Premium Tier | Enterprise Tier |
+| --- | --- | --- |
+| Requests per second per organization | 10 | Contact |
+| Requests per month per organization | 2,500,000 | Contact |
 
- 
-
-You will be given direct feedback if you are over quota and your requests will fail. If you have requirements above this and would like to discuss expanding your quota, contact us at support@managexr.com.
+You will be given direct feedback if you are over quota and your requests will fail. If you have requirements above this and would like to discuss expanding your quota, contact us at [support@managexr.com](mailto:support@managexr.com).
