@@ -3922,7 +3922,10 @@ paths:
    /v1/configurations/{id}:
       get:
          summary: Get a configuration
-         description: Retrieve a configuration by id.
+         description: |
+            Retrieve a configuration by id.
+
+            The response includes `picoTargetFirmwareVersions`, the firmware target for each Pico model.
          parameters:
             - name: id
               in: path
@@ -4191,6 +4194,29 @@ paths:
                               Time zones with the Etc/GMT prefix are the equivalent of UTC time zones. Only the ID part needs to be supplied (e.g., "America/New_York", not the full name).
                            enum: [UNMANAGED, AUTO, timeZoneId]
                            example: "America/New_York"
+                        picoTargetFirmwareVersions:
+                           type: object
+                           description: |
+                              Set the firmware target for one or more Pico models. Each key is a model name. Each value is one of these:
+                              - A firmware version for that model. To get the versions that your organization can select, call [List Firmware Versions](/api-reference/endpoint/v1/list-firmware-versions).
+                              - `DEFER_TO_DEVICE`. The headset handles its own firmware updates.
+                              - `BLOCK_FIRMWARE_UPDATES`. Headsets of that model do not update their firmware.
+                              - `null`. Removes the target for that model. ManageXR then blocks firmware updates for that model.
+
+                              Models that you do not include keep their current target.
+
+                              The allowed models are `Pico Neo 2`, `Pico Neo 3`, `Pico G2 4K`, `Pico G3`, `Pico 4`, and `Pico 4 Ultra Enterprise`. For Pico Neo 3 Eye headsets, use `Pico Neo 3`.
+
+                              If the configuration already targets a version, you can send that version again, even if it is no longer in the list.
+
+                              When you set a version and the configuration has no firmware install setting, ManageXR sets the same default as the web console. The default is "User initiated" for `HOME_SCREEN` configurations and "Prompt to install on boot" for other configurations.
+                           additionalProperties:
+                              type: string
+                              nullable: true
+                           example:
+                              Pico 4 Ultra Enterprise: "5.13.4"
+                              Pico G3: DEFER_TO_DEVICE
+                              Pico 4: null
 
                   example:
                      name: "Client Configuration v2"
@@ -4212,6 +4238,10 @@ paths:
                                 versionCode: 1
                                 versionName: "1.0"
                      wifiNetworkIds: ["1390KJDL139PJD", "KAFJ39UT124P98"]
+                     picoTargetFirmwareVersions:
+                        Pico 4 Ultra Enterprise: "5.13.4"
+                        Pico G3: DEFER_TO_DEVICE
+                        Pico 4: null
          responses:
             "200":
                description: The updated configuration
@@ -4222,6 +4252,24 @@ paths:
                         properties:
                            data:
                               $ref: "#/components/schemas/V1ConfigurationResponse"
+            "400":
+               description: Invalid request. For example, a Pico model is not allowed, or the organization cannot select the firmware version.
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 400 }
+                           message:
+                              {
+                                 type: string,
+                                 example: "Version 5.12.10 is not available for Pico 4 Ultra Enterprise. Allowed values: DEFER_TO_DEVICE, BLOCK_FIRMWARE_UPDATES, 5.15.7, 5.13.4, 5.12.6",
+                              }
+                           error: { type: string, example: "Bad Request" }
+                     example:
+                        statusCode: 400
+                        message: "Version 5.12.10 is not available for Pico 4 Ultra Enterprise. Allowed values: DEFER_TO_DEVICE, BLOCK_FIRMWARE_UPDATES, 5.15.7, 5.13.4, 5.12.6"
+                        error: "Bad Request"
             "403":
                description: Forbidden
                content:
@@ -7046,6 +7094,52 @@ components:
                items:
                   oneOf:
                      - $ref: "#/components/schemas/V1WifiNetwork"
+            picoTargetFirmwareVersions:
+               $ref: "#/components/schemas/V1PicoTargetFirmwareVersions"
+
+      V1PicoTargetFirmwareVersions:
+         type: object
+         title: Pico Target Firmware Versions
+         description: |
+            The firmware target for each Pico model on the configuration. The response always includes all six models.
+
+            Each value is one of these:
+            - A firmware version, for example `5.13.4`. Headsets of that model update to this version.
+            - `DEFER_TO_DEVICE`. The headset handles its own firmware updates.
+            - `BLOCK_FIRMWARE_UPDATES`. Headsets of that model do not update their firmware.
+            - `null`. The configuration has no target for that model. ManageXR blocks firmware updates for that model.
+         properties:
+            Pico Neo 2:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+            Pico Neo 3:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+            Pico G2 4K:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+            Pico G3:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+            Pico 4:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+            Pico 4 Ultra Enterprise:
+               type: string
+               nullable: true
+               description: A firmware version, `DEFER_TO_DEVICE`, `BLOCK_FIRMWARE_UPDATES`, or `null`
+         example:
+            Pico Neo 2: null
+            Pico Neo 3: DEFER_TO_DEVICE
+            Pico G2 4K: null
+            Pico G3: BLOCK_FIRMWARE_UPDATES
+            Pico 4: null
+            Pico 4 Ultra Enterprise: "5.13.4"
 
       V1Device:
          type: object
