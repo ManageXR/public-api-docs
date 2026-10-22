@@ -4723,6 +4723,97 @@ paths:
                         statusCode: 403
                         message: "Forbidden"
                         error: "ManageXR Error"
+   ##################################################
+   # Firmware Versions
+   ##################################################
+   /v1/firmware-versions:
+      get:
+         summary: List firmware versions
+         description: |
+            Returns the Pico firmware versions that the organization can select as a firmware target.
+
+            The list is different for each organization. Some firmware builds are hidden by default and show only for specific organizations. Other builds are hidden for specific organizations.
+
+            Use the `version` value of an entry when you select a firmware target for that model.
+
+            Results are grouped by model. Within each model, the newest version is first.
+         parameters:
+            - name: organizationId
+              in: query
+              required: false
+              schema: { type: string }
+              description: |
+                 Unique identifier of the organization. This parameter is only necessary when using multi-organization API keys.
+
+                 Defaults to the organizationId associated with the API key.
+            - name: model
+              in: query
+              required: false
+              schema:
+                 type: string
+                 enum:
+                    - Pico Neo 2
+                    - Pico Neo 3
+                    - Pico G2 4K
+                    - Pico G3
+                    - Pico 4
+                    - Pico 4 Ultra Enterprise
+              description: |
+                 Return only the firmware versions for this device model. If you do not set it, the response includes versions for all six models.
+
+                 Model names contain spaces. URL-encode the value, for example `?model=Pico%204%20Ultra%20Enterprise`.
+         responses:
+            "200":
+               description: A list of firmware versions
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           data:
+                              type: array
+                              items:
+                                 $ref: "#/components/schemas/V1FirmwareVersion"
+                     example:
+                        data:
+                           - model: "Pico 4 Ultra Enterprise"
+                             version: "5.13.4"
+            "400":
+               description: Invalid model
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode:
+                              type: number
+                              example: 400
+                           message:
+                              type: array
+                              items:
+                                 type: string
+                              example: ["model must be one of: Pico Neo 2, Pico Neo 3, Pico G2 4K, Pico G3, Pico 4, Pico 4 Ultra Enterprise"]
+                           error:
+                              type: string
+                              example: "Bad Request"
+                     example:
+                        statusCode: 400
+                        message: ["model must be one of: Pico Neo 2, Pico Neo 3, Pico G2 4K, Pico G3, Pico 4, Pico 4 Ultra Enterprise"]
+                        error: "Bad Request"
+            "403":
+               description: Forbidden
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           statusCode: { type: number, example: 403 }
+                           message: { type: string, example: "Forbidden" }
+                           error: { type: string, example: "ManageXR Error" }
+                     example:
+                        statusCode: 403
+                        message: "Forbidden"
+                        error: "ManageXR Error"
 
    # v0 Endpoints:
    ##################################################
@@ -6462,6 +6553,30 @@ components:
             nickname: "Office Wi-Fi"
             type: WPA_ENTERPRISE
             priorityWifiNetwork: false
+      V1FirmwareVersion:
+         type: object
+         title: Firmware Version
+         description: A Pico firmware version that the organization can select as a firmware target
+         required: [model, version]
+         properties:
+            model:
+               type: string
+               description: Device model that the firmware version is for
+               enum:
+                  - Pico Neo 2
+                  - Pico Neo 3
+                  - Pico G2 4K
+                  - Pico G3
+                  - Pico 4
+                  - Pico 4 Ultra Enterprise
+               example: "Pico 4 Ultra Enterprise"
+            version:
+               type: string
+               description: Firmware version. Use this value when you select a firmware target for the model.
+               example: "5.13.4"
+         example:
+            model: "Pico 4 Ultra Enterprise"
+            version: "5.13.4"
       V1AppIdentifier:
          type: object
          properties:

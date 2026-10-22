@@ -54,6 +54,10 @@
                 ]
               },
               {
+                "group": "Firmware",
+                "pages": ["api-reference/endpoint/v1/list-firmware-versions"]
+              },
+              {
                 "group": "Apps",
                 "pages": ["api-reference/endpoint/v1/list-apps",
                 "api-reference/endpoint/v1/get-app", 
